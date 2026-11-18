@@ -3,6 +3,7 @@ title: 'Markdown & Components Showcase'
 description: 'Full demonstration sandbox: typography, lists, task checkboxes, blockquotes, code blocks, tables, and interactive widgets.'
 date: '2026-11-19'
 author: 'UNVI'
+cover: '/images/admin-services.png'
 tags: ['Demo', 'Markdown', 'Typography', 'Showcase']
 faq:
   - question: 'What is the purpose of this page?'

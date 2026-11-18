@@ -11,9 +11,10 @@ interface Props {
   lang?: 'ru' | 'en';
   jsonLd?: Record<string, any> | Array<Record<string, any>>;
   type?: 'website' | 'article';
+  image?: string;
 }
 
-const { title, description, lang = 'ru', jsonLd, type = 'website' } = Astro.props;
+const { title, description, lang = 'ru', jsonLd, type = 'website', image } = Astro.props;
 ---
 
 <!doctype html>
@@ -26,13 +27,14 @@ const { title, description, lang = 'ru', jsonLd, type = 'website' } = Astro.prop
       description={description} 
       lang={lang} 
       type={type} 
-      jsonLd={jsonLd} 
+      jsonLd={jsonLd}
+      image={image}
     />
     <ClientRouter />
   </head>
   <body class="min-h-screen flex flex-col bg-[oklch(0.145_0_0)] text-[oklch(0.985_0_0)] antialiased">
     <Header lang={lang} />
-    <main class="flex-1">
+    <main class="flex-1" style="view-transition-name: page;">
       <slot />
     </main>
     <Footer lang={lang} />

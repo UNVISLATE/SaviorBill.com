@@ -13,6 +13,12 @@ interface FaqItem {
   answer: string;
 }
 
+interface SiblingPost {
+  title: string;
+  slug: string;
+  cover?: string;
+}
+
 interface Props {
   title: string;
   description: string;
@@ -23,6 +29,9 @@ interface Props {
   slug: string;
   headings: Heading[];
   faq?: FaqItem[];
+  cover?: string;
+  prevPost?: SiblingPost;
+  nextPost?: SiblingPost;
 }
 
 const {
@@ -34,11 +43,15 @@ const {
   tags = [],
   slug,
   headings,
-  faq = []
+  faq = [],
+  cover = '/images/admin-dashboard.png',
+  prevPost,
+  nextPost
 } = Astro.props;
 
 const dateStr = typeof date === 'string' ? date : date.toISOString().split('T')[0];
 const postUrl = `https://saviorbill.com/${lang}/blog/${slug}`;
+const absoluteCoverUrl = cover.startsWith('http') ? cover : `https://saviorbill.com${cover}`;
 
 const jsonLd: Array<Record<string, any>> = [
   {
@@ -47,6 +60,7 @@ const jsonLd: Array<Record<string, any>> = [
     '@id': `${postUrl}#article`,
     'headline': title,
     'description': description,
+    'image': absoluteCoverUrl,
     'url': postUrl,
     'datePublished': dateStr,
     'author': {
@@ -102,13 +116,22 @@ if (faq && faq.length > 0) {
 }
 ---
 
-<BaseLayout title={title} description={description} lang={lang} type="article" jsonLd={jsonLd}>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="flex gap-12 justify-center">
-      <!-- Main Article -->
-      <article class="flex-1 max-w-3xl min-w-0">
+<BaseLayout 
+  title={title} 
+  description={description} 
+  lang={lang} 
+  type="article" 
+  jsonLd={jsonLd}
+  image={absoluteCoverUrl}
+>
+  <!-- Aligned strictly to max-w-6xl like Header -->
+  <div class="px-3 sm:px-4 py-10">
+    <div class="max-w-6xl mx-auto flex gap-10 justify-between items-start">
+      
+      <!-- Main Article Column (flex-1) -->
+      <article class="flex-1 min-w-0 max-w-3xl" id="blog-article-content">
         <!-- Breadcrumbs -->
-        <div class="flex items-center gap-2 text-xs font-mono text-[oklch(0.55_0_0)] mb-6">
+        <div class="flex items-center gap-2 text-xs font-mono text-[oklch(0.55_0_0)] mb-4">
           <a href={`/${lang}`} class="hover:text-white transition-colors">SaviorBill</a>
           <span>/</span>
           <a href={`/${lang}/blog`} class="hover:text-white transition-colors">
@@ -118,12 +141,12 @@ if (faq && faq.length > 0) {
           <span class="text-[#009080] truncate max-w-xs">{title}</span>
         </div>
 
-        <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4 leading-tight">
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight mb-4 leading-tight">
           {title}
         </h1>
 
         <!-- Meta Header -->
-        <div class="flex flex-wrap items-center gap-4 text-xs text-[oklch(0.6_0_0)] font-mono pb-8 mb-8 border-b border-[oklch(1_0_0/6%)]">
+        <div class="flex flex-wrap items-center gap-4 text-xs text-[oklch(0.6_0_0)] font-mono pb-6 mb-6 border-b border-[oklch(1_0_0/6%)]">
           <div class="flex items-center gap-2">
             <span class="size-6 rounded-full bg-[#009080] text-white flex items-center justify-center font-bold text-[10px]">
               {author[0]}
@@ -146,37 +169,264 @@ if (faq && faq.length > 0) {
           )}
         </div>
 
-        <!-- Markdown Content with Rich Typography -->
+        <!-- Featured Cover Image (Arayas style at top of post) -->
+        {cover && (
+          <div class="aspect-video w-full rounded-2xl overflow-hidden bg-[oklch(0.14_0_0)] mb-8 shadow-xl">
+            <img 
+              src={cover} 
+              alt={title} 
+              class="w-full h-full object-cover" 
+            />
+          </div>
+        )}
+
+        <!-- Markdown Body -->
         <div class="article-content">
           <slot />
         </div>
 
-        <!-- FAQ Section (Arayas style for SEO) -->
+        <!-- FAQ Section: Collapsible Accordions (as requested) -->
         {faq && faq.length > 0 && (
-          <div class="mt-16 pt-10 border-t border-[oklch(1_0_0/6%)]">
-            <h2 class="text-2xl font-bold text-white mb-6">
+          <div class="mt-14 pt-8 border-t border-[oklch(1_0_0/6%)] space-y-4">
+            <h2 class="text-xl sm:text-2xl font-bold text-white mb-4">
               {lang === 'ru' ? 'Часто задаваемые вопросы (FAQ)' : 'Frequently Asked Questions (FAQ)'}
             </h2>
-            <div class="space-y-4">
+            <div class="space-y-3">
               {faq.map((item) => (
-                <div class="card-surface p-5 border border-[oklch(1_0_0/6%)]">
-                  <h3 class="text-base font-semibold text-white mb-2">
-                    {item.question}
-                  </h3>
-                  <p class="text-sm text-[oklch(0.708_0_0)] leading-relaxed">
+                <details class="group card-surface p-4 select-none">
+                  <summary class="flex items-center justify-between cursor-pointer list-none text-sm sm:text-base font-semibold text-white group-open:text-[#009080] transition-colors">
+                    <span>{item.question}</span>
+                    <svg class="size-4 shrink-0 transition-transform duration-200 group-open:rotate-180 opacity-70 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </summary>
+                  <p class="mt-3 text-xs sm:text-sm text-[oklch(0.7_0_0)] leading-relaxed pt-2 border-t border-[oklch(1_0_0/4%)]">
                     {item.answer}
                   </p>
-                </div>
+                </details>
               ))}
             </div>
           </div>
         )}
+
+        <!-- Sibling / Related Posts (Links to other articles at bottom) -->
+        <div class="mt-14 pt-8 border-t border-[oklch(1_0_0/6%)]">
+          <div class="font-mono text-xs uppercase tracking-wider text-[oklch(0.55_0_0)] mb-4 font-semibold">
+            {lang === 'ru' ? 'Другие статьи в блоге' : 'More from the blog'}
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <a
+              href={`/${lang}/blog/self-hosted-billing-fastapi-lua`}
+              class="card-interactive p-4 flex flex-col justify-between"
+            >
+              <span class="text-xs text-[#009080] font-mono mb-1">← Архитектура биллинга</span>
+              <span class="text-sm font-semibold text-white leading-snug">Изоляция логики на Lua и Server-Driven UI</span>
+            </a>
+            <a
+              href={`/${lang}/blog/kitchen-sink`}
+              class="card-interactive p-4 flex flex-col justify-between"
+            >
+              <span class="text-xs text-[#009080] font-mono mb-1">Демо стенд →</span>
+              <span class="text-sm font-semibold text-white leading-snug">Тестовая страница Markdown и компонентов</span>
+            </a>
+          </div>
+        </div>
+
       </article>
 
-      <!-- Right: Sticky TOC -->
+      <!-- Right: Sticky TOC Sidebar (w-64) -->
       <div class="hidden xl:block w-64 shrink-0">
         <TableOfContents headings={headings} />
       </div>
+
     </div>
   </div>
+
+  <!-- Floating Quote Share Tooltip (Arayas Cheats style) -->
+  <div
+    id="quote-share-tooltip"
+    class="fixed z-50 hidden -translate-x-1/2 -translate-y-full items-center gap-2 px-3 py-1.5 rounded-xl bg-[oklch(0.22_0_0)] text-white text-xs font-semibold shadow-2xl backdrop-blur-md cursor-pointer transition-all border border-[#009080]/40 hover:bg-[#009080] hover:border-[#009080] select-none"
+  >
+    <svg class="size-3.5 text-[#00e0cb] group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+    </svg>
+    <span id="quote-share-text">{lang === 'ru' ? 'Скопировать ссылку на цитату' : 'Copy link to quote'}</span>
+  </div>
 </BaseLayout>
+
+<!-- Advanced Text Quote Fragment & Scroll-To Handler (Arayas style) -->
+<script is:inline>
+  (function () {
+    let tooltip = null;
+    let tooltipText = null;
+    let currentQuoteText = '';
+    let currentHeadingId = '';
+
+    function initQuoteSystem() {
+      tooltip = document.getElementById('quote-share-tooltip');
+      tooltipText = document.getElementById('quote-share-text');
+      const article = document.querySelector('.article-content');
+      if (!article || !tooltip) return;
+
+      // 1. Heading hover anchor links
+      const headings = article.querySelectorAll('h2, h3');
+      headings.forEach((heading) => {
+        if (!heading.id || heading.dataset.anchorBound) return;
+        heading.dataset.anchorBound = 'true';
+        heading.style.position = 'relative';
+        heading.classList.add('group');
+
+        const anchor = document.createElement('a');
+        anchor.href = `#${heading.id}`;
+        anchor.className = 'heading-anchor absolute -left-6 opacity-0 group-hover:opacity-100 text-[#009080] hover:text-[#00e0cb] transition-opacity font-normal text-base select-none no-underline';
+        anchor.innerHTML = '#';
+        anchor.title = 'Скопировать ссылку на раздел';
+        anchor.addEventListener('click', (e) => {
+          e.preventDefault();
+          const url = `${window.location.origin}${window.location.pathname}#${heading.id}`;
+          navigator.clipboard.writeText(url).then(() => {
+            anchor.innerText = '✓';
+            setTimeout(() => { anchor.innerText = '#'; }, 1500);
+          });
+        });
+        heading.prepend(anchor);
+      });
+
+      // 2. Selection tooltip on text select
+      function checkSelection() {
+        const sel = window.getSelection();
+        if (!sel || sel.isCollapsed || !sel.rangeCount) {
+          hideTooltip();
+          return;
+        }
+
+        const selectedStr = sel.toString().trim();
+        if (selectedStr.length < 3) {
+          hideTooltip();
+          return;
+        }
+
+        const range = sel.getRangeAt(0);
+        const container = range.commonAncestorContainer;
+        if (!article.contains(container)) {
+          hideTooltip();
+          return;
+        }
+
+        // Find nearest preceding heading with ID
+        let node = container.nodeType === Node.ELEMENT_NODE ? container : container.parentElement;
+        let headingId = '';
+        while (node && node !== article) {
+          let prev = node.previousElementSibling;
+          while (prev) {
+            if (/^H[1-6]$/i.test(prev.tagName) && prev.id) {
+              headingId = prev.id;
+              break;
+            }
+            prev = prev.previousElementSibling;
+          }
+          if (headingId) break;
+          node = node.parentElement;
+        }
+
+        currentQuoteText = selectedStr.slice(0, 80);
+        currentHeadingId = headingId;
+
+        const rect = range.getBoundingClientRect();
+        tooltip.style.left = `${rect.left + rect.width / 2}px`;
+        tooltip.style.top = `${rect.top - 10}px`;
+        tooltip.classList.remove('hidden');
+        tooltip.classList.add('flex');
+        if (tooltipText) {
+          tooltipText.textContent = 'Скопировать ссылку на цитату';
+        }
+      }
+
+      function hideTooltip() {
+        if (!tooltip) return;
+        tooltip.classList.add('hidden');
+        tooltip.classList.remove('flex');
+      }
+
+      document.addEventListener('mouseup', checkSelection);
+      document.addEventListener('keyup', checkSelection);
+      document.addEventListener('selectionchange', () => {
+        const sel = window.getSelection();
+        if (!sel || sel.isCollapsed) hideTooltip();
+      });
+
+      tooltip.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const base = `${window.location.origin}${window.location.pathname}`;
+        const fragment = currentHeadingId 
+          ? `#${currentHeadingId}~${encodeURIComponent(currentQuoteText)}`
+          : `#:~:text=${encodeURIComponent(currentQuoteText)}`;
+        const shareUrl = `${base}${fragment}`;
+
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          if (tooltipText) {
+            tooltipText.textContent = '✓ Ссылка скопирована!';
+          }
+          setTimeout(() => {
+            hideTooltip();
+          }, 1200);
+        });
+      });
+
+      // 3. Handle incoming hash fragment highlight & scroll
+      const rawHash = decodeURIComponent(window.location.hash);
+      if (rawHash) {
+        let targetText = '';
+        if (rawHash.includes('~')) {
+          targetText = rawHash.split('~')[1];
+        } else if (rawHash.includes(':~:text=')) {
+          targetText = rawHash.split(':~:text=')[1];
+        }
+
+        if (targetText) {
+          targetText = targetText.trim();
+          const walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT, null);
+          let currentNode = walker.nextNode();
+
+          while (currentNode) {
+            const idx = currentNode.nodeValue.indexOf(targetText);
+            if (idx !== -1) {
+              const parent = currentNode.parentElement;
+              if (parent) {
+                const mark = document.createElement('mark');
+                mark.className = 'quote-highlight';
+                mark.textContent = targetText;
+
+                const beforeText = currentNode.nodeValue.substring(0, idx);
+                const afterText = currentNode.nodeValue.substring(idx + targetText.length);
+
+                const frag = document.createDocumentFragment();
+                if (beforeText) frag.appendChild(document.createTextNode(beforeText));
+                frag.appendChild(mark);
+                if (afterText) frag.appendChild(document.createTextNode(afterText));
+
+                parent.replaceChild(frag, currentNode);
+
+                setTimeout(() => {
+                  mark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 350);
+                break;
+              }
+            }
+            currentNode = walker.nextNode();
+          }
+        }
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initQuoteSystem);
+    } else {
+      initQuoteSystem();
+    }
+
+    document.addEventListener('astro:after-swap', initQuoteSystem);
+  })();
+</script>

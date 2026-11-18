@@ -1,5 +1,6 @@
 ---
 import { useTranslations } from '../../i18n/ui';
+import ThemeToggle from './ThemeToggle.astro';
 
 interface Props {
   lang: 'ru' | 'en';
@@ -16,17 +17,19 @@ const switchLangUrl = `/${targetLang}${cleanPath === '/' ? '' : cleanPath}`;
 
 <header class="sticky top-3 z-50 px-3 sm:px-4">
   <div class="relative mx-auto max-w-6xl">
-    <!-- Floating Island without borders (Border-none) -->
-    <div class="flex items-center justify-between gap-4 rounded-2xl bg-[oklch(0.18_0_0/85%)] px-4 py-2 sm:px-6 shadow-xl shadow-black/25 backdrop-blur-md">
+    <!-- Floating Island (Border-none, perfect alignment) -->
+    <div class="flex items-center justify-between gap-4 rounded-2xl bg-[oklch(0.18_0_0/85%)] dark:bg-[oklch(0.18_0_0/85%)] px-4 py-2 sm:px-6 shadow-xl shadow-black/25 backdrop-blur-md">
       
-      <!-- Brand Logo -->
-      <a href={`/${lang}`} class="inline-flex items-center gap-2.5 font-bold tracking-tight text-white hover:opacity-90 transition-opacity">
+      <!-- Brand Logo with Onder Font -->
+      <a href={`/${lang}`} class="inline-flex items-center gap-2.5 tracking-wide text-white hover:opacity-90 transition-opacity">
         <img 
           src="/logo.svg" 
           alt="SaviorBill" 
           class="size-8 object-contain"
         />
-        <span class="text-base sm:text-lg">Savior<span class="text-[#009080]">Bill</span></span>
+        <span class="font-onder text-lg sm:text-xl uppercase tracking-wider text-white">
+          Savior<span class="text-[#009080]">Bill</span>
+        </span>
       </a>
 
       <!-- Center Navigation -->
@@ -43,7 +46,10 @@ const switchLangUrl = `/${targetLang}${cleanPath === '/' ? '' : cleanPath}`;
       </nav>
 
       <!-- Right Actions: Uniform height h-9, no borders, perfectly aligned -->
-      <div class="flex items-center gap-2.5">
+      <div class="flex items-center gap-2">
+        <!-- Theme Toggle Button (Day / Night with ripple animation) -->
+        <ThemeToggle />
+
         <!-- GitHub Button -->
         <a 
           href="https://github.com/UNVISLATE/SaviorBill" 

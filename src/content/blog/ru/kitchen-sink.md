@@ -3,6 +3,7 @@ title: 'Тестовая страница Markdown и компонентов'
 description: 'Полный демонстрационный стенд: типографика, списки, чекбоксы, цитаты, кодовые блоки, таблицы и интерактивные виджеты.'
 date: '2026-11-19'
 author: 'UNVI'
+cover: '/images/admin-services.png'
 tags: ['Demo', 'Markdown', 'Typography', 'Showcase']
 faq:
   - question: 'Для чего нужна эта страница?'
