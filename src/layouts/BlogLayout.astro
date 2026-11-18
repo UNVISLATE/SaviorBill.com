@@ -125,7 +125,7 @@ if (faq && faq.length > 0) {
         <!-- Meta Header -->
         <div class="flex flex-wrap items-center gap-4 text-xs text-[oklch(0.6_0_0)] font-mono pb-8 mb-8 border-b border-[oklch(1_0_0/6%)]">
           <div class="flex items-center gap-2">
-            <span class="w-6 h-6 rounded-full bg-[#009080] text-white flex items-center justify-center font-bold text-[10px]">
+            <span class="size-6 rounded-full bg-[#009080] text-white flex items-center justify-center font-bold text-[10px]">
               {author[0]}
             </span>
             <span class="text-white font-medium">{author}</span>
@@ -146,8 +146,8 @@ if (faq && faq.length > 0) {
           )}
         </div>
 
-        <!-- Markdown Content -->
-        <div class="prose prose-invert max-w-none text-base leading-relaxed text-[oklch(0.85_0_0)]">
+        <!-- Markdown Content with Rich Typography -->
+        <div class="article-content">
           <slot />
         </div>
 
@@ -159,7 +159,7 @@ if (faq && faq.length > 0) {
             </h2>
             <div class="space-y-4">
               {faq.map((item) => (
-                <div class="card-surface p-5">
+                <div class="card-surface p-5 border border-[oklch(1_0_0/6%)]">
                   <h3 class="text-base font-semibold text-white mb-2">
                     {item.question}
                   </h3>

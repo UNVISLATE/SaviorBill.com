@@ -10,28 +10,30 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<section class="relative pt-20 pb-24 sm:pt-28 sm:pb-32 overflow-hidden text-center">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <!-- Release Badge -->
-    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[oklch(0.205_0_0)] text-xs font-mono text-[oklch(0.85_0_0)] mb-8">
-      <span class="w-2 h-2 rounded-full bg-[#009080] animate-pulse"></span>
-      <span>{t('hero.badge')}</span>
+<section class="relative pt-16 pb-20 sm:pt-24 sm:pb-28 overflow-hidden text-center">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <!-- Tech Badge (Subtle, no huge license block) -->
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[oklch(0.20_0_0)] text-xs font-mono text-[oklch(0.8_0_0)] mb-6 border border-[oklch(1_0_0/6%)]">
+      <span class="size-2 rounded-full bg-[#009080]"></span>
+      <span>{lang === 'ru' ? 'Self-Hosted Движок цифровых продаж' : 'Self-Hosted Digital Commerce Engine'}</span>
     </div>
 
-    <!-- Main Heading (Selected Slogan) -->
-    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 leading-[1.1]">
+    <!-- Main Title -->
+    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
       <span class="block">{t('hero.title.1')}</span>
-      <span class="block text-[oklch(0.8_0_0)]">{t('hero.title.2')}</span>
+      <span class="block text-[oklch(0.75_0_0)]">{t('hero.title.2')}</span>
       <span class="block text-[#009080]">{t('hero.title.3')}</span>
     </h1>
 
-    <!-- Subtitle -->
-    <p class="max-w-3xl mx-auto text-base sm:text-lg text-[oklch(0.708_0_0)] mb-10 leading-relaxed">
-      {t('hero.subtitle')}
+    <!-- Short, crisp Subtitle -->
+    <p class="max-w-2xl mx-auto text-sm sm:text-base text-[oklch(0.65_0_0)] mb-8 leading-relaxed">
+      {lang === 'ru'
+        ? 'Событийно-ориентированный биллинг для VPN, SaaS, хостинга и ключей. Изолированная Lua-логика и Server-Driven UI без комиссий и посредников.'
+        : 'Event-driven billing for VPN, SaaS, hosting, and license keys. Isolated Lua runtime and Server-Driven UI without commissions or third-party lock-in.'}
     </p>
 
-    <!-- Interactive Terminal -->
-    <div class="mb-10">
+    <!-- Terminal Quickstart -->
+    <div class="mb-8">
       <TerminalBlock 
         client:load 
         command="curl -fsSL https://get.saviorbill.com | bash" 
@@ -39,11 +41,11 @@ const t = useTranslations(lang);
       />
     </div>
 
-    <!-- CTA Buttons -->
-    <div class="flex flex-wrap items-center justify-center gap-4">
+    <!-- Actions -->
+    <div class="flex flex-wrap items-center justify-center gap-3">
       <a 
         href={`/${lang}/docs/quickstart`} 
-        class="inline-flex items-center justify-center px-6 py-3 text-sm font-semibold rounded-xl bg-[#009080] hover:bg-[#0c5e53] text-white shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]"
+        class="inline-flex items-center justify-center px-5 py-2.5 text-xs sm:text-sm font-semibold rounded-xl bg-[#009080] hover:bg-[#0c5e53] text-white shadow-lg transition-colors"
       >
         {t('hero.btn.docs')}
       </a>
@@ -51,9 +53,9 @@ const t = useTranslations(lang);
         href="https://github.com/UNVISLATE/SaviorBill" 
         target="_blank" 
         rel="noopener noreferrer" 
-        class="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl bg-[oklch(0.205_0_0)] hover:bg-[oklch(0.245_0_0)] text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
+        class="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-xs sm:text-sm font-semibold rounded-xl bg-[oklch(0.20_0_0)] hover:bg-[oklch(0.24_0_0)] text-white transition-colors border border-[oklch(1_0_0/6%)]"
       >
-        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+        <svg class="size-4" fill="currentColor" viewBox="0 0 24 24">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
         </svg>
         <span>{t('hero.btn.github')}</span>
