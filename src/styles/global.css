@@ -30,19 +30,19 @@
   color-scheme: dark;
 }
 
-/* Light Theme Variables (Calm muted slate, not blinding white) */
+/* Light Theme Variables (Calm muted slate background with crisp white cards) */
 html.light {
   color-scheme: light;
   --color-background: #d8e2eb;
-  --color-surface: #edf3f8;
-  --color-surface-elevated: #f5f8fb;
-  --color-surface-hover: #e2eaf2;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-surface-hover: #f8fafc;
   --color-primary: #009080;
   --color-primary-hover: #0c5e53;
   --color-foreground: #0f172a;
-  --color-muted: #334155;
+  --color-muted: #475569;
   --color-muted-dark: #64748b;
-  --color-border: rgba(15, 23, 42, 0.08);
+  --color-border: rgba(148, 163, 184, 0.35);
 }
 
 html.light body {
@@ -50,10 +50,40 @@ html.light body {
   color: #0f172a;
 }
 
+/* Header & Footer Island Floating Panels */
+html.light .header-island,
 html.light header > div > div,
 html.light footer > div {
-  background-color: rgba(237, 243, 248, 0.9) !important;
+  background-color: rgba(255, 255, 255, 0.94) !important;
+  border: 1px solid rgba(148, 163, 184, 0.4) !important;
   box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08) !important;
+}
+
+html.light .header-btn,
+html.light .footer-social-btn {
+  background-color: #f1f5f9 !important;
+  color: #334155 !important;
+  border: 1px solid rgba(148, 163, 184, 0.35) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light .header-btn:hover,
+html.light .footer-social-btn:hover {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #009080 !important;
+}
+
+html.light .hero-secondary-btn {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(148, 163, 184, 0.45) !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+}
+
+html.light .hero-secondary-btn:hover {
+  background-color: #f8fafc !important;
+  border-color: #009080 !important;
 }
 
 html.light header a,
@@ -61,6 +91,14 @@ html.light header span,
 html.light footer a,
 html.light footer span {
   color: #0f172a !important;
+}
+
+html.light footer ul a {
+  color: #475569 !important;
+}
+
+html.light footer ul a:hover {
+  color: #009080 !important;
 }
 
 html.light header .text-\[\#009080\],
@@ -75,10 +113,190 @@ html.light h4 {
   color: #0f172a !important;
 }
 
+html.light p {
+  color: #475569;
+}
+
+html.light .text-\[oklch\(0\.7_0_0\)\],
+html.light .text-\[oklch\(0\.65_0_0\)\],
+html.light .text-\[oklch\(0\.708_0_0\)\],
+html.light .text-\[oklch\(0\.6_0_0\)\],
+html.light .text-\[oklch\(0\.55_0_0\)\] {
+  color: #64748b !important;
+}
+
+/* Crisp White Cards with Clear Borders in Light Mode (No more text floating in thin air) */
+.card-surface {
+  background-color: var(--color-surface);
+  border-radius: 1rem;
+  border: 1px solid var(--color-border);
+}
+
+.card-interactive {
+  background-color: var(--color-surface);
+  border-radius: 1rem;
+  border: 1px solid var(--color-border);
+  transition: all 0.2s cubic-bezier(0.2, 1, 0.5, 1);
+}
+
 html.light .card-surface,
 html.light .card-interactive {
-  background-color: #edf3f8;
-  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+  background-color: #ffffff !important;
+  border: 1px solid rgba(148, 163, 184, 0.4) !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+}
+
+html.light .card-interactive:hover {
+  background-color: #ffffff !important;
+  border-color: #009080 !important;
+  box-shadow: 0 10px 25px -4px rgba(0, 144, 128, 0.15), 0 4px 10px rgba(15, 23, 42, 0.05) !important;
+}
+
+/* Badge Pills - Soft Teal with Mint Tint in Light Mode (replaces pitch black pills) */
+.badge-pill {
+  background-color: oklch(0.24 0 0);
+  color: #009080;
+}
+
+html.light .badge-pill,
+html.light span[class*="bg-[oklch(0.24_0_0)]"],
+html.light span[class*="bg-[oklch(0.205_0_0)]"],
+html.light span[class*="bg-[oklch(0.26_0_0)]"] {
+  background-color: rgba(0, 144, 128, 0.12) !important;
+  color: #007a6d !important;
+  border: 1px solid rgba(0, 144, 128, 0.25) !important;
+}
+
+html.light .action-badge {
+  background-color: #f1f5f9 !important;
+  color: #334155 !important;
+  border: 1px solid rgba(148, 163, 184, 0.35) !important;
+}
+
+/* Comparison Table in Light Mode */
+html.light .comparison-table th {
+  color: #64748b !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.35) !important;
+}
+
+html.light .comparison-table th:nth-child(2) {
+  color: #007a6d !important;
+}
+
+html.light .comparison-table td {
+  color: #475569 !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2) !important;
+}
+
+html.light .comparison-table td:first-child {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+html.light .comparison-table td:nth-child(2) {
+  color: #007a6d !important;
+  font-weight: 700 !important;
+}
+
+html.light .comparison-table tr:hover {
+  background-color: rgba(241, 245, 249, 0.8) !important;
+}
+
+/* Docs & Sidebar in Light Mode */
+html.light #docs-quick-search {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(148, 163, 184, 0.45) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light #docs-quick-search::placeholder {
+  color: #94a3b8 !important;
+}
+
+html.light #docs-sidebar-categories summary {
+  color: #475569 !important;
+}
+
+html.light #docs-sidebar-categories summary:hover {
+  color: #0f172a !important;
+}
+
+html.light #docs-sidebar-categories a {
+  color: #64748b !important;
+}
+
+html.light #docs-sidebar-categories a:hover {
+  color: #0f172a !important;
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid rgba(148, 163, 184, 0.25) !important;
+}
+
+html.light #docs-sidebar-categories a.active,
+html.light #docs-sidebar-categories a[class*="active"] {
+  background-color: rgba(0, 144, 128, 0.12) !important;
+  color: #007a6d !important;
+  font-weight: 600 !important;
+  border: 1px solid rgba(0, 144, 128, 0.25) !important;
+}
+
+/* Table of Contents in Light Mode */
+html.light #article-toc-nav .card-surface {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(148, 163, 184, 0.35) !important;
+}
+
+html.light #article-toc-nav .border-b {
+  border-color: rgba(148, 163, 184, 0.25) !important;
+  color: #475569 !important;
+}
+
+html.light #toc-links-list a {
+  color: #64748b !important;
+}
+
+html.light #toc-links-list a:hover {
+  color: #007a6d !important;
+}
+
+html.light #toc-links-list a.active {
+  color: #007a6d !important;
+  font-weight: 600 !important;
+}
+
+html.light #article-toc-nav .bg-\[oklch\(0\.12_0_0\)\] {
+  background-color: #e2e8f0 !important;
+}
+
+/* Feature Bento Code Previews in Light Mode */
+html.light .feature-code-box {
+  background-color: #0f172a !important;
+  color: #f1f5f9 !important;
+  border: 1px solid rgba(15, 23, 42, 0.2) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+html.light .feature-code-box span {
+  color: inherit;
+}
+
+html.light .feature-code-box .text-\[\#009080\] {
+  color: #00e0cb !important;
+}
+
+html.light .feature-code-box .text-emerald-400 {
+  color: #34d399 !important;
+}
+
+html.light .feature-code-box .text-white {
+  color: #ffffff !important;
+}
+
+/* Floating Quote Tooltip */
+html.light #selection-quote-tooltip {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* Subtle, neat text backdrop for maximum readability without altering layout */
@@ -87,7 +305,7 @@ html.light .card-interactive {
 }
 
 html.light .hero-text-backdrop {
-  background: rgba(237, 243, 248, 0.75);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
   border-radius: 1.25rem;
   padding: 1.5rem 1.75rem;

@@ -9,36 +9,36 @@ const { lang } = Astro.props;
 <section class="py-14 relative px-3 sm:px-4">
   <div class="max-w-6xl mx-auto">
     <div class="mb-10 text-center">
-      <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-white dark:text-white light:text-slate-900 tracking-tight mb-2">
         {lang === 'ru' ? 'Архитектура без компромиссов' : 'Architecture Without Compromise'}
       </h2>
-      <p class="max-w-xl mx-auto text-[oklch(0.65_0_0)] text-xs sm:text-sm">
+      <p class="max-w-xl mx-auto text-[oklch(0.65_0_0)] dark:text-[oklch(0.65_0_0)] light:text-slate-600 text-xs sm:text-sm">
         {lang === 'ru' 
           ? 'Модульные сервисы, микро-контракты и нулевая привязка к устаревшим фреймворкам.' 
           : 'Modular services, strict contracts, and zero reliance on legacy monolith frameworks.'}
       </p>
     </div>
 
-    <!-- Bento Grid (Borderless Surface, matches max-w-6xl) -->
+    <!-- Bento Grid (Balanced surfaces in dark and light themes) -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
       
       <!-- Card 1: Lua Sandbox (2 cols on md) -->
       <div class="md:col-span-2 card-surface p-6 sm:p-7 flex flex-col justify-between">
         <div>
-          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-[oklch(0.24_0_0)] text-[#009080] text-xs font-mono font-semibold mb-3">
+          <div class="badge-pill inline-flex items-center gap-2 px-2.5 py-1 rounded-md text-xs font-mono font-semibold mb-3">
             LuaJIT Sandbox
           </div>
-          <h3 class="text-lg sm:text-xl font-bold text-white mb-2">
+          <h3 class="text-lg sm:text-xl font-bold text-white dark:text-white light:text-slate-900 mb-2">
             {lang === 'ru' ? 'Изолированная логика выдачи и платежей' : 'Isolated Service Delivery & Payments'}
           </h3>
-          <p class="text-[oklch(0.7_0_0)] text-xs sm:text-sm leading-relaxed mb-5">
+          <p class="text-[oklch(0.7_0_0)] dark:text-[oklch(0.7_0_0)] light:text-slate-600 text-xs sm:text-sm leading-relaxed mb-5">
             {lang === 'ru'
               ? 'Никаких тяжелых плагинов в ядре. Скрипт получает только свой контракт задачи (ctx.action, ctx.user) и возвращает результат. Сбой или зависание внешнего API не затрагивает работу ядра биллинга.'
               : 'No heavy core plugins. Each script receives a strictly scoped context (ctx.action, ctx.user) and returns deterministic results. External API failures never affect core billing.'}
           </p>
         </div>
 
-        <div class="rounded-xl bg-[oklch(0.12_0_0)] p-4 font-mono text-xs overflow-x-auto text-[oklch(0.85_0_0)]">
+        <div class="feature-code-box rounded-xl bg-[oklch(0.12_0_0)] p-4 font-mono text-xs overflow-x-auto text-[oklch(0.85_0_0)]">
           <div class="text-[oklch(0.45_0_0)] mb-1">-- scripts/services/wireguard.lua</div>
           <span class="text-[#009080]">function</span> <span class="text-white">handle</span>(ctx)
           <div class="pl-4">
@@ -56,20 +56,20 @@ const { lang } = Astro.props;
       <!-- Card 2: Server-Driven UI (sbuiSDK) -->
       <div class="card-surface p-6 sm:p-7 flex flex-col justify-between">
         <div>
-          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-[oklch(0.24_0_0)] text-[#009080] text-xs font-mono font-semibold mb-3">
+          <div class="badge-pill inline-flex items-center gap-2 px-2.5 py-1 rounded-md text-xs font-mono font-semibold mb-3">
             Server-Driven UI
           </div>
-          <h3 class="text-lg sm:text-xl font-bold text-white mb-2">
+          <h3 class="text-lg sm:text-xl font-bold text-white dark:text-white light:text-slate-900 mb-2">
             sbuiSDK
           </h3>
-          <p class="text-[oklch(0.7_0_0)] text-xs sm:text-sm leading-relaxed mb-5">
+          <p class="text-[oklch(0.7_0_0)] dark:text-[oklch(0.7_0_0)] light:text-slate-600 text-xs sm:text-sm leading-relaxed mb-5">
             {lang === 'ru'
               ? 'Lua-скрипт возвращает декларативный JSON-манифест, а клиентский кабинет сам рендерит QR-коды, поля копирования и конфигураторы без пересборки фронтенда.'
               : 'Scripts return declarative JSON manifests. The client dashboard instantly renders QR codes, copy fields, and custom forms without rebuilding the frontend.'}
           </p>
         </div>
 
-        <div class="rounded-xl bg-[oklch(0.12_0_0)] p-3 text-xs font-mono text-[oklch(0.75_0_0)]">
+        <div class="feature-code-box rounded-xl bg-[oklch(0.12_0_0)] p-3 text-xs font-mono text-[oklch(0.75_0_0)]">
           <div class="flex items-center justify-between text-[#009080] pb-2 border-b border-[oklch(1_0_0/5%)] mb-2">
             <span>Client Dashboard</span>
             <span class="text-xs text-emerald-400">● Live Render</span>
@@ -84,13 +84,13 @@ const { lang } = Astro.props;
       <!-- Card 3: Multi-Currency & FX Engine -->
       <div class="card-surface p-6 sm:p-7 flex flex-col justify-between">
         <div>
-          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-[oklch(0.24_0_0)] text-[#009080] text-xs font-mono font-semibold mb-3">
+          <div class="badge-pill inline-flex items-center gap-2 px-2.5 py-1 rounded-md text-xs font-mono font-semibold mb-3">
             FX & Balance
           </div>
-          <h3 class="text-lg sm:text-xl font-bold text-white mb-2">
+          <h3 class="text-lg sm:text-xl font-bold text-white dark:text-white light:text-slate-900 mb-2">
             {lang === 'ru' ? 'Мультивалютный баланс' : 'Multi-Currency Balance'}
           </h3>
-          <p class="text-[oklch(0.7_0_0)] text-xs sm:text-sm leading-relaxed">
+          <p class="text-[oklch(0.7_0_0)] dark:text-[oklch(0.7_0_0)] light:text-slate-600 text-xs sm:text-sm leading-relaxed">
             {lang === 'ru'
               ? 'Фиатные и криптовалютные счета с автосинхронизацией курсов через ЦБ, биржи или кастомные Lua-источники в реальном времени.'
               : 'Fiat and crypto balance management with automated real-time rate updates via central banks or custom Lua adapters.'}
@@ -101,13 +101,13 @@ const { lang } = Astro.props;
       <!-- Card 4: Media Pipeline -->
       <div class="card-surface p-6 sm:p-7 flex flex-col justify-between">
         <div>
-          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-[oklch(0.24_0_0)] text-[#009080] text-xs font-mono font-semibold mb-3">
+          <div class="badge-pill inline-flex items-center gap-2 px-2.5 py-1 rounded-md text-xs font-mono font-semibold mb-3">
             MediaWorker
           </div>
-          <h3 class="text-lg sm:text-xl font-bold text-white mb-2">
+          <h3 class="text-lg sm:text-xl font-bold text-white dark:text-white light:text-slate-900 mb-2">
             {lang === 'ru' ? 'Конвейер медиа и S3' : 'Media Pipeline & S3'}
           </h3>
-          <p class="text-[oklch(0.7_0_0)] text-xs sm:text-sm leading-relaxed">
+          <p class="text-[oklch(0.7_0_0)] dark:text-[oklch(0.7_0_0)] light:text-slate-600 text-xs sm:text-sm leading-relaxed">
             {lang === 'ru'
               ? 'Изолированный сервис на FFmpeg: конвертация в WebP/WebM, превью товаров, раздача через локальное хранилище или Cloudflare R2 / AWS S3.'
               : 'Isolated FFmpeg worker for WebP/WebM conversion, product video previews, and seamless sync to Cloudflare R2 or AWS S3.'}
@@ -118,13 +118,13 @@ const { lang } = Astro.props;
       <!-- Card 5: Enterprise Security -->
       <div class="card-surface p-6 sm:p-7 flex flex-col justify-between">
         <div>
-          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-[oklch(0.24_0_0)] text-[#009080] text-xs font-mono font-semibold mb-3">
+          <div class="badge-pill inline-flex items-center gap-2 px-2.5 py-1 rounded-md text-xs font-mono font-semibold mb-3">
             Security
           </div>
-          <h3 class="text-lg sm:text-xl font-bold text-white mb-2">
+          <h3 class="text-lg sm:text-xl font-bold text-white dark:text-white light:text-slate-900 mb-2">
             {lang === 'ru' ? 'Безопасность по умолчанию' : 'Hardened Security'}
           </h3>
-          <p class="text-[oklch(0.7_0_0)] text-xs sm:text-sm leading-relaxed">
+          <p class="text-[oklch(0.7_0_0)] dark:text-[oklch(0.7_0_0)] light:text-slate-600 text-xs sm:text-sm leading-relaxed">
             {lang === 'ru'
               ? 'Асимметричные ключи RS256 JWT, Argon2id, шифрование секретов Fernet/Vault, Scoped App Tokens и встроенный бан сканеров.'
               : 'Asymmetric RS256 JWT, Argon2id hashing, Fernet/Vault secret storage, Scoped App Tokens, and automated scanner mitigation.'}

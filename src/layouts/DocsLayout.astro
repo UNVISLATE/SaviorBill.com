@@ -50,20 +50,20 @@ const jsonLd = {
       <!-- Center: Main Content (flex-1) -->
       <article class="flex-1 py-8 min-w-0">
         <!-- Breadcrumbs -->
-        <div class="flex items-center gap-2 text-xs font-mono text-[oklch(0.55_0_0)] mb-4">
-          <a href={`/${lang}`} class="hover:text-white transition-colors">SaviorBill</a>
+        <div class="flex items-center gap-2 text-xs font-mono text-[oklch(0.55_0_0)] dark:text-[oklch(0.55_0_0)] light:text-slate-500 mb-4">
+          <a href={`/${lang}`} class="hover:text-white dark:hover:text-white light:hover:text-slate-900 transition-colors">SaviorBill</a>
           <span>/</span>
-          <a href={`/${lang}/docs/quickstart`} class="hover:text-white transition-colors">Docs</a>
+          <a href={`/${lang}/docs/quickstart`} class="hover:text-white dark:hover:text-white light:hover:text-slate-900 transition-colors">Docs</a>
           <span>/</span>
           <span class="text-[#009080]">{title}</span>
         </div>
 
-        <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-white dark:text-white light:text-slate-900 tracking-tight mb-3">
           {title}
         </h1>
 
         {description && (
-          <p class="text-sm sm:text-base text-[oklch(0.65_0_0)] mb-8 leading-relaxed">
+          <p class="text-sm sm:text-base text-[oklch(0.65_0_0)] dark:text-[oklch(0.65_0_0)] light:text-slate-600 mb-8 leading-relaxed">
             {description}
           </p>
         )}
