@@ -1,0 +1,80 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import DocsSidebar from '../components/docs/DocsSidebar.astro';
+import TableOfContents from '../components/docs/TableOfContents.astro';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface DocItem {
+  id: string;
+  slug: string;
+  title: string;
+  category: string;
+  order: number;
+}
+
+interface Props {
+  title: string;
+  description?: string;
+  lang: 'ru' | 'en';
+  currentSlug: string;
+  docs: DocItem[];
+  headings: Heading[];
+}
+
+const { title, description = '', lang, currentSlug, docs, headings } = Astro.props;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  'headline': title,
+  'description': description,
+  'url': `https://saviorbill.com/${lang}/docs/${currentSlug}`
+};
+---
+
+<BaseLayout title={`${title} — Документация`} description={description} lang={lang} jsonLd={jsonLd}>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex gap-10">
+      <!-- Left: Navigation Sidebar -->
+      <div class="hidden lg:block">
+        <DocsSidebar lang={lang} currentSlug={currentSlug} docs={docs} />
+      </div>
+
+      <!-- Center: Main Content -->
+      <article class="flex-1 py-10 min-w-0 max-w-3xl">
+        <!-- Breadcrumbs -->
+        <div class="flex items-center gap-2 text-xs font-mono text-[oklch(0.55_0_0)] mb-6">
+          <a href={`/${lang}`} class="hover:text-white transition-colors">SaviorBill</a>
+          <span>/</span>
+          <a href={`/${lang}/docs/quickstart`} class="hover:text-white transition-colors">Docs</a>
+          <span>/</span>
+          <span class="text-[#009080]">{title}</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
+          {title}
+        </h1>
+
+        {description && (
+          <p class="text-base text-[oklch(0.708_0_0)] mb-8 leading-relaxed">
+            {description}
+          </p>
+        )}
+
+        <div class="prose prose-invert max-w-none text-sm leading-relaxed text-[oklch(0.85_0_0)]">
+          <slot />
+        </div>
+      </article>
+
+      <!-- Right: Table of Contents -->
+      <div class="hidden xl:block w-56 shrink-0 py-10">
+        <TableOfContents headings={headings} />
+      </div>
+    </div>
+  </div>
+</BaseLayout>

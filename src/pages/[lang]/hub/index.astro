@@ -1,0 +1,61 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ScriptWidget from '../../../components/hub/ScriptWidget.astro';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ru' } },
+    { params: { lang: 'en' } }
+  ];
+}
+
+const { lang } = Astro.params as { lang: 'ru' | 'en' };
+
+const hubDir = path.resolve('src/content/hub');
+const scripts: any[] = [];
+
+if (fs.existsSync(hubDir)) {
+  const dirs = fs.readdirSync(hubDir, { withFileTypes: true });
+  for (const d of dirs) {
+    if (d.isDirectory()) {
+      const mPath = path.join(hubDir, d.name, 'manifest.json');
+      if (fs.existsSync(mPath)) {
+        try {
+          const m = JSON.parse(fs.readFileSync(mPath, 'utf-8'));
+          scripts.push(m);
+        } catch (e) {}
+      }
+    }
+  }
+}
+
+const title = lang === 'ru' ? 'Каталог Lua-скриптов и интеграций' : 'Lua Scripts & Integrations Hub';
+const description = lang === 'ru'
+  ? 'Открытый каталог готовых скриптов выдачи услуг, эквайрингов и манифестов Server-Driven UI (sbuiSDK) для SaviorBill.'
+  : 'Open-source catalog of prebuilt service delivery scripts, payment gateways, and sbuiSDK manifests for SaviorBill.';
+---
+
+<BaseLayout title={title} description={description} lang={lang}>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="mb-14 text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[oklch(0.205_0_0)] text-xs font-mono text-[#009080] mb-4">
+        Community & Official Scripts
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
+        {title}
+      </h1>
+      <p class="max-w-2xl mx-auto text-[oklch(0.708_0_0)] text-sm sm:text-base">
+        {description}
+      </p>
+    </div>
+
+    <!-- Scripts List -->
+    <div class="space-y-6">
+      {scripts.map((s) => (
+        <ScriptWidget id={s.id} lang={lang} />
+      ))}
+    </div>
+  </div>
+</BaseLayout>

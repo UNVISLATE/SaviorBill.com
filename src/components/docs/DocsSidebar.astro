@@ -1,0 +1,58 @@
+---
+interface DocItem {
+  id: string;
+  slug: string;
+  title: string;
+  category: string;
+  order: number;
+}
+
+interface Props {
+  lang: 'ru' | 'en';
+  currentSlug: string;
+  docs: DocItem[];
+}
+
+const { lang, currentSlug, docs } = Astro.props;
+
+// Group docs by category
+const categories = Array.from(new Set(docs.map((d) => d.category)));
+---
+
+<aside class="w-64 shrink-0 py-8 pr-6">
+  <div class="sticky top-24 space-y-8 text-xs">
+    {categories.map((cat) => {
+      const catDocs = docs
+        .filter((d) => d.category === cat)
+        .sort((a, b) => a.order - b.order);
+
+      return (
+        <div>
+          <div class="font-mono text-[11px] font-semibold uppercase tracking-wider text-[oklch(0.55_0_0)] mb-3">
+            {cat}
+          </div>
+          <ul class="space-y-1.5">
+            {catDocs.map((doc) => {
+              const href = `/${lang}/docs/${doc.slug}`;
+              const isActive = doc.slug === currentSlug;
+              return (
+                <li>
+                  <a
+                    href={href}
+                    class={`block px-3 py-1.5 rounded-lg transition-colors ${
+                      isActive
+                        ? 'bg-[oklch(0.205_0_0)] text-[#009080] font-medium'
+                        : 'text-[oklch(0.708_0_0)] hover:text-white hover:bg-[oklch(0.18_0_0)]'
+                    }`}
+                  >
+                    {doc.title}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      );
+    })}
+  </div>
+</aside>

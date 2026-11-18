@@ -1,0 +1,182 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import TableOfContents from '../components/docs/TableOfContents.astro';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  lang: 'ru' | 'en';
+  date: string | Date;
+  author?: string;
+  tags?: string[];
+  slug: string;
+  headings: Heading[];
+  faq?: FaqItem[];
+}
+
+const {
+  title,
+  description,
+  lang,
+  date,
+  author = 'UNVI',
+  tags = [],
+  slug,
+  headings,
+  faq = []
+} = Astro.props;
+
+const dateStr = typeof date === 'string' ? date : date.toISOString().split('T')[0];
+const postUrl = `https://saviorbill.com/${lang}/blog/${slug}`;
+
+const jsonLd: Array<Record<string, any>> = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    '@id': `${postUrl}#article`,
+    'headline': title,
+    'description': description,
+    'url': postUrl,
+    'datePublished': dateStr,
+    'author': {
+      '@type': 'Person',
+      'name': author,
+      'url': 'https://unvi.xyz'
+    },
+    'publisher': {
+      '@type': 'Organization',
+      'name': 'SaviorBill',
+      'url': 'https://saviorbill.com'
+    }
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        'position': 1,
+        'name': 'SaviorBill',
+        'item': `https://saviorbill.com/${lang}`
+      },
+      {
+        '@type': 'ListItem',
+        'position': 2,
+        'name': lang === 'ru' ? 'Блог' : 'Blog',
+        'item': `https://saviorbill.com/${lang}/blog`
+      },
+      {
+        '@type': 'ListItem',
+        'position': 3,
+        'name': title,
+        'item': postUrl
+      }
+    ]
+  }
+];
+
+if (faq && faq.length > 0) {
+  jsonLd.push({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': faq.map((item) => ({
+      '@type': 'Question',
+      'name': item.question,
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': item.answer
+      }
+    }))
+  });
+}
+---
+
+<BaseLayout title={title} description={description} lang={lang} type="article" jsonLd={jsonLd}>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="flex gap-12 justify-center">
+      <!-- Main Article -->
+      <article class="flex-1 max-w-3xl min-w-0">
+        <!-- Breadcrumbs -->
+        <div class="flex items-center gap-2 text-xs font-mono text-[oklch(0.55_0_0)] mb-6">
+          <a href={`/${lang}`} class="hover:text-white transition-colors">SaviorBill</a>
+          <span>/</span>
+          <a href={`/${lang}/blog`} class="hover:text-white transition-colors">
+            {lang === 'ru' ? 'Блог' : 'Blog'}
+          </a>
+          <span>/</span>
+          <span class="text-[#009080] truncate max-w-xs">{title}</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4 leading-tight">
+          {title}
+        </h1>
+
+        <!-- Meta Header -->
+        <div class="flex flex-wrap items-center gap-4 text-xs text-[oklch(0.6_0_0)] font-mono pb-8 mb-8 border-b border-[oklch(1_0_0/6%)]">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-[#009080] text-white flex items-center justify-center font-bold text-[10px]">
+              {author[0]}
+            </span>
+            <span class="text-white font-medium">{author}</span>
+          </div>
+          <span>•</span>
+          <time datetime={dateStr}>{dateStr}</time>
+          {tags.length > 0 && (
+            <>
+              <span>•</span>
+              <div class="flex items-center gap-1.5">
+                {tags.map((tag) => (
+                  <span class="px-2 py-0.5 rounded bg-[oklch(0.205_0_0)] text-[#009080] text-[11px]">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+
+        <!-- Markdown Content -->
+        <div class="prose prose-invert max-w-none text-base leading-relaxed text-[oklch(0.85_0_0)]">
+          <slot />
+        </div>
+
+        <!-- FAQ Section (Arayas style for SEO) -->
+        {faq && faq.length > 0 && (
+          <div class="mt-16 pt-10 border-t border-[oklch(1_0_0/6%)]">
+            <h2 class="text-2xl font-bold text-white mb-6">
+              {lang === 'ru' ? 'Часто задаваемые вопросы (FAQ)' : 'Frequently Asked Questions (FAQ)'}
+            </h2>
+            <div class="space-y-4">
+              {faq.map((item) => (
+                <div class="card-surface p-5">
+                  <h3 class="text-base font-semibold text-white mb-2">
+                    {item.question}
+                  </h3>
+                  <p class="text-sm text-[oklch(0.708_0_0)] leading-relaxed">
+                    {item.answer}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </article>
+
+      <!-- Right: Sticky TOC -->
+      <div class="hidden xl:block w-64 shrink-0">
+        <TableOfContents headings={headings} />
+      </div>
+    </div>
+  </div>
+</BaseLayout>

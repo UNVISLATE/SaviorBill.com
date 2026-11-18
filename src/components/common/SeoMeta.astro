@@ -1,0 +1,59 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  lang?: 'ru' | 'en';
+  canonical?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  jsonLd?: Record<string, any> | Array<Record<string, any>>;
+}
+
+const {
+  title,
+  description,
+  lang = 'ru',
+  canonical,
+  image = 'https://saviorbill.com/og-image.png',
+  type = 'website',
+  jsonLd
+} = Astro.props;
+
+const siteUrl = 'https://saviorbill.com';
+const currentPath = Astro.url.pathname;
+const cleanPath = currentPath.replace(/^\/(ru|en)/, '');
+const canonicalUrl = canonical || `${siteUrl}${currentPath}`;
+const ruUrl = `${siteUrl}/ru${cleanPath}`;
+const enUrl = `${siteUrl}/en${cleanPath}`;
+---
+
+<!-- Primary Meta Tags -->
+<title>{title} | SaviorBill</title>
+<meta name="title" content={`${title} | SaviorBill`} />
+<meta name="description" content={description} />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="canonical" href={canonicalUrl} />
+
+<!-- Alternate Languages -->
+<link rel="alternate" hreflang="ru" href={ruUrl} />
+<link rel="alternate" hreflang="en" href={enUrl} />
+<link rel="alternate" hreflang="x-default" href={ruUrl} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:title" content={`${title} | SaviorBill`} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={image} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonicalUrl} />
+<meta property="twitter:title" content={`${title} | SaviorBill`} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={image} />
+
+<!-- Schema.org JSON-LD -->
+{jsonLd && (
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+)}

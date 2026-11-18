@@ -1,0 +1,35 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+  title?: string;
+}
+
+const { headings, title = 'На этой странице' } = Astro.props;
+const filteredHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{filteredHeadings.length > 0 && (
+  <nav class="sticky top-24 space-y-2 text-xs">
+    <div class="font-mono text-[11px] font-semibold uppercase tracking-wider text-[oklch(0.55_0_0)] mb-3">
+      {title}
+    </div>
+    <ul class="space-y-2 border-l border-[oklch(1_0_0/6%)] pl-3">
+      {filteredHeadings.map((heading) => (
+        <li class={heading.depth === 3 ? 'pl-3' : ''}>
+          <a
+            href={`#${heading.slug}`}
+            class="block text-[oklch(0.708_0_0)] hover:text-[#009080] transition-colors leading-snug py-0.5"
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}

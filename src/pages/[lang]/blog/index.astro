@@ -1,0 +1,79 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ru' } },
+    { params: { lang: 'en' } }
+  ];
+}
+
+const { lang } = Astro.params as { lang: 'ru' | 'en' };
+
+const allPosts = await getCollection('blog');
+const langPosts = allPosts
+  .filter((post) => post.id.startsWith(`${lang}/`))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+const title = lang === 'ru' ? 'Блог и статьи' : 'Blog & Engineering Notes';
+const description = lang === 'ru'
+  ? 'Инженерные разборы, архитектура биллинга, гайды по интеграции и новости платформы SaviorBill.'
+  : 'Engineering deep-dives, billing architecture, integration guides, and platform updates.';
+---
+
+<BaseLayout title={title} description={description} lang={lang}>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="mb-14 text-center">
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
+        {title}
+      </h1>
+      <p class="max-w-2xl mx-auto text-[oklch(0.708_0_0)] text-sm sm:text-base">
+        {description}
+      </p>
+    </div>
+
+    <!-- Posts List (Lunoweb-style borderless list with kinetic wipe) -->
+    {langPosts.length > 0 ? (
+      <div class="space-y-6">
+        {langPosts.map((post) => {
+          const parts = post.id.split('/');
+          const slug = parts.slice(1).join('/').replace(/\.(md|mdx)$/, '');
+          const dateStr = typeof post.data.date === 'string' ? post.data.date : post.data.date.toISOString().split('T')[0];
+
+          return (
+            <a
+              href={`/${lang}/blog/${slug}`}
+              class="block card-surface p-7 group transition-all"
+            >
+              <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 mb-3">
+                <span class="text-xs font-mono text-[oklch(0.55_0_0)]">{dateStr}</span>
+                {post.data.tags.length > 0 && (
+                  <div class="flex gap-1.5">
+                    {post.data.tags.map((tag) => (
+                      <span class="text-[11px] font-mono text-[#009080] bg-[oklch(0.26_0_0)] px-2 py-0.5 rounded">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <h2 class="text-xl sm:text-2xl font-bold text-white group-hover:text-[#009080] transition-colors mb-2">
+                {post.data.title}
+              </h2>
+
+              <p class="text-sm text-[oklch(0.708_0_0)] leading-relaxed">
+                {post.data.description}
+              </p>
+            </a>
+          );
+        })}
+      </div>
+    ) : (
+      <div class="card-surface p-12 text-center text-[oklch(0.55_0_0)] text-sm">
+        {lang === 'ru' ? 'Пока нет опубликованных статей.' : 'No articles published yet.'}
+      </div>
+    )}
+  </div>
+</BaseLayout>

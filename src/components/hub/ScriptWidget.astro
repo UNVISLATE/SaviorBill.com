@@ -1,0 +1,103 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+  id: string;
+  lang?: 'ru' | 'en';
+}
+
+const { id, lang = 'ru' } = Astro.props;
+
+let manifest: any = null;
+let luaCode = '';
+
+try {
+  const dirPath = path.resolve(`src/content/hub/${id}`);
+  const manifestPath = path.join(dirPath, 'manifest.json');
+  if (fs.existsSync(manifestPath)) {
+    manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
+  }
+
+  // Find lua file
+  const files = fs.readdirSync(dirPath);
+  const luaFile = files.find((f) => f.endsWith('.lua'));
+  if (luaFile) {
+    luaCode = fs.readFileSync(path.join(dirPath, luaFile), 'utf-8');
+  }
+} catch (e) {
+  console.error(`Error loading ScriptWidget for id: ${id}`, e);
+}
+
+const zipDownloadUrl = `/downloads/hub/${id}.zip`;
+
+const jsonLd = manifest ? {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  'name': manifest.name,
+  'programmingLanguage': 'Lua',
+  'codeRepository': 'https://github.com/UNVISLATE/SaviorBill',
+  'description': manifest.description,
+  'downloadUrl': `https://saviorbill.com${zipDownloadUrl}`
+} : null;
+---
+
+{manifest && (
+  <div class="card-surface p-6 my-6 not-prose" id={`widget-${id}`}>
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+    
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[oklch(1_0_0/6%)]">
+      <div>
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-[oklch(0.26_0_0)] text-[#009080]">
+            {manifest.category}
+          </span>
+          <span class="text-xs font-mono text-[oklch(0.55_0_0)]">v{manifest.version}</span>
+        </div>
+        <h4 class="text-base font-bold text-white">
+          {manifest.name}
+        </h4>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <a
+          href={zipDownloadUrl}
+          download
+          class="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-[#009080] hover:bg-[#0c5e53] text-white transition-all shadow-sm"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          <span>{lang === 'ru' ? 'Скачать .zip' : 'Download .zip'}</span>
+        </a>
+      </div>
+    </div>
+
+    <p class="text-xs sm:text-sm text-[oklch(0.708_0_0)] my-3 leading-relaxed">
+      {manifest.description}
+    </p>
+
+    {manifest.actions && manifest.actions.length > 0 && (
+      <div class="flex items-center gap-1.5 mb-3">
+        <span class="text-[11px] font-mono text-[oklch(0.55_0_0)]">Actions:</span>
+        {manifest.actions.map((act: string) => (
+          <span class="px-2 py-0.5 rounded bg-[oklch(0.16_0_0)] text-[oklch(0.85_0_0)] font-mono text-[10px]">
+            {act}
+          </span>
+        ))}
+      </div>
+    )}
+
+    {luaCode && (
+      <details class="mt-3 group">
+        <summary class="text-xs font-mono text-[#009080] hover:text-[#0c5e53] cursor-pointer select-none py-1 flex items-center gap-1.5">
+          <span>{lang === 'ru' ? 'Посмотреть исходный код Lua' : 'View Lua Source Code'}</span>
+          <span class="text-[10px] opacity-70 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <div class="mt-2 rounded-lg bg-[oklch(0.12_0_0)] p-3 text-xs font-mono overflow-x-auto text-[oklch(0.85_0_0)]">
+          <pre><code>{luaCode}</code></pre>
+        </div>
+      </details>
+    )}
+  </div>
+)}

@@ -1,0 +1,38 @@
+---
+import Header from '../components/common/Header.astro';
+import Footer from '../components/common/Footer.astro';
+import SeoMeta from '../components/common/SeoMeta.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  lang?: 'ru' | 'en';
+  jsonLd?: Record<string, any> | Array<Record<string, any>>;
+  type?: 'website' | 'article';
+}
+
+const { title, description, lang = 'ru', jsonLd, type = 'website' } = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang} class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <SeoMeta 
+      title={title} 
+      description={description} 
+      lang={lang} 
+      type={type} 
+      jsonLd={jsonLd} 
+    />
+  </head>
+  <body class="min-h-screen flex flex-col bg-[oklch(0.145_0_0)] text-[oklch(0.985_0_0)]">
+    <Header lang={lang} />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

@@ -1,0 +1,22 @@
+---
+// Root redirect to default locale (/ru)
+---
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="0;url=/ru/" />
+    <title>Redirecting to SaviorBill...</title>
+    <script is:inline>
+      const userLang = navigator.language || navigator.userLanguage;
+      if (userLang && userLang.toLowerCase().startsWith('en')) {
+        window.location.href = '/en/';
+      } else {
+        window.location.href = '/ru/';
+      }
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to <a href="/ru/">SaviorBill</a>...</p>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+---
+import { useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang: 'ru' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const currentPath = Astro.url.pathname;
+const cleanPath = currentPath.replace(/^\/(ru|en)/, '') || '/';
+
+const targetLang = lang === 'ru' ? 'en' : 'ru';
+const switchLangUrl = `/${targetLang}${cleanPath === '/' ? '' : cleanPath}`;
+---
+
+<header class="sticky top-0 z-50 backdrop-blur-md bg-[oklch(0.145_0_0/85%)] transition-colors">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <!-- Logo -->
+    <a href={`/${lang}`} class="flex items-center gap-2.5 text-xl font-bold tracking-tight text-white hover:opacity-90 transition-opacity">
+      <div class="w-7 h-7 rounded-lg bg-[#009080] flex items-center justify-center text-white shadow-sm font-mono text-sm">
+        SB
+      </div>
+      <span>Savior<span class="text-[#009080]">Bill</span></span>
+    </a>
+
+    <!-- Nav Links -->
+    <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-[oklch(0.708_0_0)]">
+      <a href={`/${lang}/docs/quickstart`} class="hover:text-white transition-colors kinetic-wipe py-1">
+        {t('nav.docs')}
+      </a>
+      <a href={`/${lang}/blog`} class="hover:text-white transition-colors kinetic-wipe py-1">
+        {t('nav.blog')}
+      </a>
+      <a href={`/${lang}/hub`} class="hover:text-white transition-colors kinetic-wipe py-1">
+        {t('nav.hub')}
+      </a>
+      <a 
+        href="https://github.com/UNVISLATE/SaviorBill" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        class="hover:text-white transition-colors flex items-center gap-1.5"
+      >
+        <span>{t('nav.github')}</span>
+        <svg class="w-3.5 h-3.5 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+        </svg>
+      </a>
+    </nav>
+
+    <!-- Actions: Search & Language Switcher -->
+    <div class="flex items-center gap-3">
+      <!-- Lang Switcher -->
+      <a 
+        href={switchLangUrl} 
+        class="px-2.5 py-1 text-xs font-mono font-semibold rounded-md bg-[oklch(0.205_0_0)] hover:bg-[oklch(0.245_0_0)] text-[oklch(0.985_0_0)] transition-colors"
+        title="Switch language"
+      >
+        {targetLang.toUpperCase()}
+      </a>
+
+      <!-- Quick Deploy CTA -->
+      <a 
+        href={`/${lang}/docs/quickstart`} 
+        class="hidden sm:inline-flex items-center justify-center px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-[#009080] hover:bg-[#0c5e53] text-white transition-all shadow-sm"
+      >
+        {lang === 'ru' ? 'Быстрый старт' : 'Quickstart'}
+      </a>
+    </div>
+  </div>
+</header>

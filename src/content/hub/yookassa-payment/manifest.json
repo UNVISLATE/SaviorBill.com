@@ -1,0 +1,9 @@
+{
+  "id": "yookassa-payment",
+  "name": "ЮKassa Payment Gateway",
+  "category": "Payments",
+  "author": "UNVI",
+  "version": "1.0.0",
+  "description": "Интеграция шлюза ЮKassa: генерация инвойсов, проверка статуса и безопасная обработка вебхуков.",
+  "actions": ["create", "callback", "check"]
+}

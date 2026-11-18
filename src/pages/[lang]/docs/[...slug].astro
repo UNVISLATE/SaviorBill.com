@@ -1,0 +1,52 @@
+---
+import { getCollection, render } from 'astro:content';
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+
+export async function getStaticPaths() {
+  const allDocs = await getCollection('docs');
+
+  return allDocs.map((doc) => {
+    // id is like "ru/quickstart.md" or "en/architecture.md"
+    const parts = doc.id.split('/');
+    const lang = parts[0] as 'ru' | 'en';
+    const slug = parts.slice(1).join('/').replace(/\.(md|mdx)$/, '');
+
+    return {
+      params: { lang, slug },
+      props: { doc }
+    };
+  });
+}
+
+const { doc } = Astro.props;
+const { lang, slug } = Astro.params as { lang: 'ru' | 'en'; slug: string };
+
+const { Content, headings } = await render(doc);
+
+// Get all docs for this language to populate sidebar
+const allDocs = await getCollection('docs');
+const langDocs = allDocs
+  .filter((d) => d.id.startsWith(`${lang}/`))
+  .map((d) => {
+    const parts = d.id.split('/');
+    const docSlug = parts.slice(1).join('/').replace(/\.(md|mdx)$/, '');
+    return {
+      id: d.id,
+      slug: docSlug,
+      title: d.data.title,
+      category: d.data.category,
+      order: d.data.order
+    };
+  });
+---
+
+<DocsLayout
+  title={doc.data.title}
+  description={doc.data.description}
+  lang={lang}
+  currentSlug={slug}
+  docs={langDocs}
+  headings={headings}
+>
+  <Content />
+</DocsLayout>
