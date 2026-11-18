@@ -6,20 +6,20 @@ interface Props {
 const { lang } = Astro.props;
 ---
 
-<section class="py-20 relative">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="mb-14 text-center">
-      <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
-        {lang === 'ru' ? 'Честное сравнение' : 'Honest Comparison'}
+<section class="py-14 relative">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="mb-10 text-center">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">
+        {lang === 'ru' ? 'Архитектурные отличия' : 'Architectural Differences'}
       </h2>
-      <p class="max-w-2xl mx-auto text-[oklch(0.708_0_0)] text-sm sm:text-base">
+      <p class="max-w-xl mx-auto text-[oklch(0.65_0_0)] text-xs sm:text-sm">
         {lang === 'ru'
-          ? 'Почему разработчики и создатели сервисов уходят от устаревших легаси-монстров и закрытых платформ.'
-          : 'Why modern engineers and product founders choose SaviorBill over legacy monoliths and closed SaaS.'}
+          ? 'Чем современный self-hosted подход SaviorBill отличается от устаревших монолитов и закрытых платформ.'
+          : 'How SaviorBill’s modern self-hosted architecture compares to legacy billing monoliths and closed platforms.'}
       </p>
     </div>
 
-    <!-- Comparison Table (Borderless Surface) -->
+    <!-- Comparison Table (Borderless Surface, matches max-w-6xl) -->
     <div class="card-surface overflow-hidden p-6 sm:p-8">
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
@@ -33,13 +33,13 @@ const { lang } = Astro.props;
           </thead>
           <tbody class="divide-y divide-[oklch(1_0_0/4%)] font-normal text-[oklch(0.85_0_0)]">
             <tr>
-              <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Комиссия за платежи' : 'Revenue Fee / Cut'}</td>
+              <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Комиссия с оборота' : 'Platform Fee / Cut'}</td>
               <td class="py-4 font-bold text-[#009080]">0% (Self-Hosted)</td>
               <td class="py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Дорогая лицензия' : 'Monthly License Fee'}</td>
               <td class="py-4 text-red-400">5% – 10% + fee</td>
             </tr>
             <tr>
-              <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Исполнение бизнес-логики' : 'Custom Logic Execution'}</td>
+              <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Исполнение бизнес-логики' : 'Custom Logic Runtime'}</td>
               <td class="py-4 font-medium text-[#009080]">Изолированный LuaJIT Sandbox</td>
               <td class="py-4 text-[oklch(0.65_0_0)]">PHP / Perl в ядре сервера</td>
               <td class="py-4 text-[oklch(0.65_0_0)]">Webhooks only</td>
@@ -51,13 +51,13 @@ const { lang } = Astro.props;
               <td class="py-4 text-[oklch(0.65_0_0)]">Hosted Checkout</td>
             </tr>
             <tr>
-              <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Платежные шлюзы' : 'Payment Providers'}</td>
+              <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Платежные шлюзы' : 'Payment Gateways'}</td>
               <td class="py-4 font-medium text-[#009080]">{lang === 'ru' ? 'Любые (Lua-скрипт за 10 мин)' : 'Any via custom Lua'}</td>
               <td class="py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Сложные PHP-модули' : 'Complex PHP modules'}</td>
               <td class="py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Только их шлюз' : 'Locked-in to provider'}</td>
             </tr>
             <tr>
-              <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Установка и поддержка' : 'Deployment & Stack'}</td>
+              <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Развертывание' : 'Deployment & Stack'}</td>
               <td class="py-4 font-medium text-[#009080]">Docker Compose в 1 команду</td>
               <td class="py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Сложная системная настройка' : 'Complex VM configuration'}</td>
               <td class="py-4 text-[oklch(0.65_0_0)]">Cloud only</td>

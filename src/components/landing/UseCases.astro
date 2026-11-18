@@ -8,14 +8,14 @@ const { lang } = Astro.props;
 const items = [
   {
     titleRu: 'VPN и сетевые сервисы',
-    titleEn: 'VPN & Network Services',
-    descRu: 'Выдача конфигураций WireGuard, VLESS, Outline. Векторные QR-коды прямо в интерфейсе через sbuiSDK, автопродление и заморозка.',
+    titleEn: 'VPN & Networks',
+    descRu: 'Выдача пиров WireGuard, VLESS, Outline. Векторные QR-коды прямо в интерфейсе через sbuiSDK, автопродление и заморозка.',
     descEn: 'Instant delivery for WireGuard, VLESS, and Outline configs. Vector QR-codes in client UI via sbuiSDK, auto-renew, and expiration freezes.',
     tag: 'Tiered + Lua'
   },
   {
     titleRu: 'VPS / VDS и Хостинг',
-    titleEn: 'VPS / Cloud Infrastructure',
+    titleEn: 'VPS & Cloud Infrastructure',
     descRu: 'Встроенный конфигуратор ресурсов (vCPU, RAM, NVMe), динамический пересчет тарифа и управление жизненным циклом серверов.',
     descEn: 'Dynamic resource calculator (vCPU, RAM, NVMe), automated billing updates, and lifecycle execution (create, freeze, delete).',
     tag: 'Configurable + Lua'
@@ -29,7 +29,7 @@ const items = [
   },
   {
     titleRu: 'Ключи и лицензии ПО',
-    titleEn: 'Software Licenses & Key Pools',
+    titleEn: 'Software Licenses & Keys',
     descRu: 'Выдача ключей из защищенных пулов (SKIP LOCKED) с защитой от одновременной покупки, ваучеры и активационные токены.',
     descEn: 'High-concurrency key pool distribution (SKIP LOCKED) with concurrency protection, vouchers, and markdown instructions.',
     tag: 'Key Pool + Instant'
@@ -37,31 +37,31 @@ const items = [
 ];
 ---
 
-<section class="py-20 relative">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="mb-14 text-center">
-      <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
+<section class="py-14 relative">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="mb-10 text-center">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">
         {lang === 'ru' ? 'Для чего подходит SaviorBill' : 'Supported Business Models'}
       </h2>
-      <p class="max-w-2xl mx-auto text-[oklch(0.708_0_0)] text-sm sm:text-base">
+      <p class="max-w-xl mx-auto text-[oklch(0.65_0_0)] text-xs sm:text-sm">
         {lang === 'ru'
           ? 'От единичных продаж ключей до сложных телеком- и облачных сервисов с биллингом по подписке.'
           : 'From simple software serial keys to complex telecom and cloud recurring subscriptions.'}
       </p>
     </div>
 
-    <!-- Cards Grid (Borderless) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Cards Grid (Borderless Surface, matches max-w-6xl) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
       {items.map((item) => (
         <div class="card-surface p-6 flex flex-col justify-between">
           <div>
-            <div class="inline-block px-2.5 py-1 rounded bg-[oklch(0.26_0_0)] text-[#009080] text-[11px] font-mono font-semibold mb-4">
+            <div class="inline-block px-2.5 py-1 rounded-md bg-[oklch(0.24_0_0)] text-[#009080] text-xs font-mono font-semibold mb-3">
               {item.tag}
             </div>
-            <h3 class="text-lg font-bold text-white mb-2">
+            <h3 class="text-base sm:text-lg font-bold text-white mb-2">
               {lang === 'ru' ? item.titleRu : item.titleEn}
             </h3>
-            <p class="text-[oklch(0.708_0_0)] text-xs leading-relaxed">
+            <p class="text-[oklch(0.7_0_0)] text-xs sm:text-sm leading-relaxed">
               {lang === 'ru' ? item.descRu : item.descEn}
             </p>
           </div>

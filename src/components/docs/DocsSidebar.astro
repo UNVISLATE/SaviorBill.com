@@ -19,40 +19,83 @@ const { lang, currentSlug, docs } = Astro.props;
 const categories = Array.from(new Set(docs.map((d) => d.category)));
 ---
 
-<aside class="w-64 shrink-0 py-8 pr-6">
-  <div class="sticky top-24 space-y-8 text-xs">
-    {categories.map((cat) => {
-      const catDocs = docs
-        .filter((d) => d.category === cat)
-        .sort((a, b) => a.order - b.order);
+<aside class="w-64 shrink-0 py-8 pr-6 select-none">
+  <div class="sticky top-20 space-y-6">
+    
+    <!-- Quick Search Input -->
+    <div class="relative">
+      <input
+        type="text"
+        id="docs-quick-search"
+        placeholder={lang === 'ru' ? 'Поиск по доке...' : 'Search docs...'}
+        class="w-full h-9 pl-9 pr-3 rounded-xl bg-[oklch(0.20_0_0)] text-xs text-white placeholder-[oklch(0.55_0_0)] focus:outline-none focus:ring-1 focus:ring-[#009080] transition-all"
+      />
+      <svg class="size-4 text-[oklch(0.5_0_0)] absolute left-3 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    </div>
 
-      return (
-        <div>
-          <div class="font-mono text-[11px] font-semibold uppercase tracking-wider text-[oklch(0.55_0_0)] mb-3">
-            {cat}
-          </div>
-          <ul class="space-y-1.5">
-            {catDocs.map((doc) => {
-              const href = `/${lang}/docs/${doc.slug}`;
-              const isActive = doc.slug === currentSlug;
-              return (
-                <li>
-                  <a
-                    href={href}
-                    class={`block px-3 py-1.5 rounded-lg transition-colors ${
-                      isActive
-                        ? 'bg-[oklch(0.205_0_0)] text-[#009080] font-medium'
-                        : 'text-[oklch(0.708_0_0)] hover:text-white hover:bg-[oklch(0.18_0_0)]'
-                    }`}
-                  >
-                    {doc.title}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      );
-    })}
+    <!-- Collapsible Categories -->
+    <div class="space-y-4" id="docs-sidebar-categories">
+      {categories.map((cat) => {
+        const catDocs = docs
+          .filter((d) => d.category === cat)
+          .sort((a, b) => a.order - b.order);
+
+        const hasActiveDoc = catDocs.some((d) => d.slug === currentSlug);
+
+        return (
+          <details class="group" open={hasActiveDoc || true}>
+            <summary class="flex items-center justify-between cursor-pointer list-none py-1.5 text-xs font-mono font-semibold uppercase tracking-wider text-[oklch(0.6_0_0)] hover:text-white transition-colors">
+              <span>{cat}</span>
+              <svg class="size-3.5 transition-transform duration-200 group-open:rotate-180 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </summary>
+
+            <ul class="space-y-1 mt-1 pl-1">
+              {catDocs.map((doc) => {
+                const href = `/${lang}/docs/${doc.slug}`;
+                const isActive = doc.slug === currentSlug;
+                return (
+                  <li>
+                    <a
+                      href={href}
+                      class={`block px-3 py-1.5 rounded-lg text-xs transition-colors ${
+                        isActive
+                          ? 'bg-[oklch(0.22_0_0)] text-[#009080] font-semibold'
+                          : 'text-[oklch(0.7_0_0)] hover:text-white hover:bg-[oklch(0.18_0_0)]'
+                      }`}
+                    >
+                      {doc.title}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </details>
+        );
+      })}
+    </div>
   </div>
 </aside>
+
+<script is:inline>
+  // Simple quick filter for sidebar
+  const searchInput = document.getElementById('docs-quick-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      const links = document.querySelectorAll('#docs-sidebar-categories a');
+      links.forEach((a) => {
+        const text = a.textContent.toLowerCase();
+        const li = a.parentElement;
+        if (!q || text.includes(q)) {
+          li.style.display = '';
+        } else {
+          li.style.display = 'none';
+        }
+      });
+    });
+  }
+</script>

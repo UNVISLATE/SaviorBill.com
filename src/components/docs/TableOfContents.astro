@@ -10,26 +10,147 @@ interface Props {
   title?: string;
 }
 
-const { headings, title = 'На этой странице' } = Astro.props;
+const { headings, title = 'Содержание статьи' } = Astro.props;
 const filteredHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
 {filteredHeadings.length > 0 && (
-  <nav class="sticky top-24 space-y-2 text-xs">
-    <div class="font-mono text-[11px] font-semibold uppercase tracking-wider text-[oklch(0.55_0_0)] mb-3">
-      {title}
+  <nav class="sticky top-20 space-y-4 text-xs select-none" id="article-toc-nav">
+    <!-- Reading Progress Bar (arayas-cheats style) -->
+    <div class="card-surface p-3.5 space-y-2">
+      <div class="flex items-center justify-between text-xs font-mono text-[oklch(0.6_0_0)]">
+        <span>Прогресс чтения</span>
+        <span id="reading-progress-text" class="text-[#009080] font-semibold">0%</span>
+      </div>
+      <div class="w-full h-1 rounded-full bg-[oklch(0.12_0_0)] overflow-hidden">
+        <div id="reading-progress-bar" class="h-full bg-[#009080] rounded-full transition-all duration-150 w-0"></div>
+      </div>
     </div>
-    <ul class="space-y-2 border-l border-[oklch(1_0_0/6%)] pl-3">
-      {filteredHeadings.map((heading) => (
-        <li class={heading.depth === 3 ? 'pl-3' : ''}>
-          <a
-            href={`#${heading.slug}`}
-            class="block text-[oklch(0.708_0_0)] hover:text-[#009080] transition-colors leading-snug py-0.5"
-          >
-            {heading.text}
-          </a>
-        </li>
-      ))}
-    </ul>
+
+    <!-- Table of Contents Links -->
+    <div class="card-surface p-4">
+      <div class="font-mono text-xs font-semibold uppercase tracking-wider text-[oklch(0.6_0_0)] mb-3 pb-2 border-b border-[oklch(1_0_0/6%)]">
+        {title}
+      </div>
+      <ul class="space-y-1.5" id="toc-links-list">
+        {filteredHeadings.map((heading) => (
+          <li class={heading.depth === 3 ? 'pl-3' : ''}>
+            <a
+              href={`#${heading.slug}`}
+              class="block text-[oklch(0.7_0_0)] hover:text-[#009080] transition-colors leading-snug py-1 text-xs toc-link"
+              data-slug={heading.slug}
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </nav>
 )}
+
+<!-- Floating Selection Quote Tooltip (arayas-cheats style) -->
+<div 
+  id="selection-quote-tooltip" 
+  class="fixed z-50 hidden -translate-x-1/2 -translate-y-full mb-2 px-3 py-1.5 rounded-xl bg-[oklch(0.24_0_0)] text-white text-xs font-medium shadow-2xl backdrop-blur-md flex items-center gap-1.5 cursor-pointer hover:bg-[#009080] transition-all select-none"
+>
+  <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+  </svg>
+  <span id="selection-quote-label">Скопировать ссылку на цитату</span>
+</div>
+
+<script is:inline>
+  // 1. Reading Progress calculation
+  function updateProgress() {
+    const article = document.querySelector('article') || document.body;
+    const totalHeight = article.scrollHeight - window.innerHeight;
+    const progressText = document.getElementById('reading-progress-text');
+    const progressBar = document.getElementById('reading-progress-bar');
+    if (totalHeight > 0 && progressBar && progressText) {
+      const scrollPos = window.scrollY;
+      const percent = Math.min(100, Math.max(0, Math.round((scrollPos / totalHeight) * 100)));
+      progressBar.style.width = percent + '%';
+      progressText.textContent = percent + '%';
+    }
+  }
+
+  // 2. Active Heading Highlight (ScrollSpy)
+  function highlightTOC() {
+    const headings = Array.from(document.querySelectorAll('.article-content h2, .article-content h3'));
+    const links = document.querySelectorAll('.toc-link');
+    if (!headings.length || !links.length) return;
+
+    let currentHeading = headings[0];
+    const scrollY = window.scrollY + 120;
+
+    for (const h of headings) {
+      if (h.offsetTop <= scrollY) {
+        currentHeading = h;
+      } else {
+        break;
+      }
+    }
+
+    if (currentHeading) {
+      const id = currentHeading.id;
+      links.forEach((link) => {
+        if (link.getAttribute('data-slug') === id) {
+          link.classList.add('text-[#009080]', 'font-semibold');
+          link.classList.remove('text-[oklch(0.7_0_0)]');
+        } else {
+          link.classList.remove('text-[#009080]', 'font-semibold');
+          link.classList.add('text-[oklch(0.7_0_0)]');
+        }
+      });
+    }
+  }
+
+  window.addEventListener('scroll', () => {
+    updateProgress();
+    highlightTOC();
+  }, { passive: true });
+
+  // 3. Selection Quote Link (Text Fragments #:~:text=)
+  const tooltip = document.getElementById('selection-quote-tooltip');
+  const tooltipLabel = document.getElementById('selection-quote-label');
+
+  document.addEventListener('mouseup', (e) => {
+    const selection = window.getSelection();
+    const text = selection ? selection.toString().trim() : '';
+
+    if (text && text.length >= 3 && tooltip) {
+      const range = selection.getRangeAt(0);
+      const rect = range.getBoundingClientRect();
+      if (rect.width > 0) {
+        tooltip.style.left = `${rect.left + rect.width / 2}px`;
+        tooltip.style.top = `${rect.top - 8}px`;
+        tooltip.classList.remove('hidden');
+        tooltip.dataset.text = text;
+        if (tooltipLabel) tooltipLabel.textContent = 'Скопировать ссылку на цитату';
+      }
+    } else if (tooltip && !tooltip.contains(e.target)) {
+      tooltip.classList.add('hidden');
+    }
+  });
+
+  if (tooltip) {
+    tooltip.addEventListener('click', async () => {
+      const text = tooltip.dataset.text;
+      if (!text) return;
+      const cleanUrl = window.location.href.split('#')[0];
+      const encodedText = encodeURIComponent(text);
+      const targetUrl = `${cleanUrl}#:~:text=${encodedText}`;
+
+      try {
+        await navigator.clipboard.writeText(targetUrl);
+        if (tooltipLabel) tooltipLabel.textContent = 'Скопировано!';
+        setTimeout(() => {
+          tooltip.classList.add('hidden');
+        }, 1200);
+      } catch (err) {
+        console.error('Copy failed', err);
+      }
+    });
+  }
+</script>
