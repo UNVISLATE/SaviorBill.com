@@ -30,30 +30,30 @@
   color-scheme: dark;
 }
 
-/* Light Theme Variables (stealthsurf style) */
+/* Light Theme Variables (Calm muted slate, not blinding white) */
 html.light {
   color-scheme: light;
-  --color-background: #f8fafc;
-  --color-surface: #ffffff;
-  --color-surface-elevated: #f1f5f9;
-  --color-surface-hover: #e2e8f0;
+  --color-background: #d8e2eb;
+  --color-surface: #edf3f8;
+  --color-surface-elevated: #f5f8fb;
+  --color-surface-hover: #e2eaf2;
   --color-primary: #009080;
   --color-primary-hover: #0c5e53;
   --color-foreground: #0f172a;
-  --color-muted: #475569;
+  --color-muted: #334155;
   --color-muted-dark: #64748b;
-  --color-border: rgba(0, 0, 0, 0.08);
+  --color-border: rgba(15, 23, 42, 0.08);
 }
 
 html.light body {
-  background-color: #f8fafc;
+  background-color: #d8e2eb;
   color: #0f172a;
 }
 
 html.light header > div > div,
 html.light footer > div {
-  background-color: rgba(255, 255, 255, 0.85) !important;
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08) !important;
+  background-color: rgba(237, 243, 248, 0.9) !important;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08) !important;
 }
 
 html.light header a,
@@ -77,8 +77,21 @@ html.light h4 {
 
 html.light .card-surface,
 html.light .card-interactive {
-  background-color: #ffffff;
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  background-color: #edf3f8;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+}
+
+/* Subtle, neat text backdrop for maximum readability without altering layout */
+.hero-text-backdrop {
+  background: transparent;
+}
+
+html.light .hero-text-backdrop {
+  background: rgba(237, 243, 248, 0.75);
+  backdrop-filter: blur(12px);
+  border-radius: 1.25rem;
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
 }
 
 body {

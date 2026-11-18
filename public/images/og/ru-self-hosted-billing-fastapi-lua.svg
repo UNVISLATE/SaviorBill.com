@@ -1,0 +1,46 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0a0e14" />
+      <stop offset="1" stop-color="#121820" />
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 150) rotate(135) scale(500)">
+      <stop stop-color="#009080" stop-opacity="0.35" />
+      <stop offset="1" stop-color="#009080" stop-opacity="0" />
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect width="1200" height="630" fill="url(#glow)" />
+  <rect width="1200" height="630" fill="url(#grid)" />
+
+  <!-- Brand Header -->
+  <g transform="translate(80, 80)">
+    <svg width="48" height="48" viewBox="0 0 1024 1024" fill="none">
+      <path d="M310 433H111L111 652C111 659 111 689 157.001 719L504 948L504 846C504 840 497 827 492 824L221 652C221 652 200 640 200 610V510C200 510 200 500 210.5 500C221 500 221 510 221 510V600C221 630 242 642 242 642L513 814L784 642C784 642 805 630 805 600V220C805 220 805 210 815.5 210C826 210 826 220 826 220V610C826 640 805 652 805 652L534 824C529 827 522 840 522.001 846L522 948L869.001 719C915 689 915 659 915 652V44L746 145C716 163 716 163 716 219.75V549L513.001 696L310 549V433Z" fill="#009080"/>
+      <path d="M310.001 342C310.001 312 279 300 244 288C209 276 203 259.5 203 228V102L111 44V411H310.001V342Z" fill="#009080"/>
+    </svg>
+    <text x="64" y="34" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="800" letter-spacing="-0.5px">
+      Savior<tspan fill="#009080">Bill</tspan>
+    </text>
+    <rect x="250" y="8" width="130" height="32" rx="16" fill="rgba(0, 144, 128, 0.15)" stroke="#009080" stroke-opacity="0.3" />
+    <text x="315" y="29" fill="#00e0cb" font-family="monospace" font-size="14" font-weight="700" text-anchor="middle">#FastAPI</text>
+  </g>
+
+  <!-- Title -->
+  <text x="80" y="280" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="46" font-weight="800" letter-spacing="-1px">
+    <tspan x="80" dy="0">Архитектура биллинга без</tspan><tspan x="80" dy="58">монолитов: почему изоляция</tspan><tspan x="80" dy="58">логики на Lua побеждает</tspan><tspan x="80" dy="58">спагетти-плагины</tspan>
+  </text>
+
+  <!-- Footer Info -->
+  <g transform="translate(80, 520)">
+    <circle cx="20" cy="20" r="20" fill="#009080" />
+    <text x="20" y="26" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" text-anchor="middle">U</text>
+    <text x="56" y="26" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="600">UNVI</text>
+    <text x="1040" y="26" fill="rgba(255, 255, 255, 0.45)" font-family="monospace" font-size="18" text-anchor="end">saviorbill.com/blog</text>
+  </g>
+</svg>

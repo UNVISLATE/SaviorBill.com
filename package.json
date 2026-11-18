@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "node scripts/pack-hub.js && astro build && pagefind --site dist",
+    "build": "node scripts/pack-hub.js && node scripts/generate-og-covers.js && astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro"
   },

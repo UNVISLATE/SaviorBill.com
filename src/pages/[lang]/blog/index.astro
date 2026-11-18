@@ -20,35 +20,102 @@ const title = lang === 'ru' ? 'Блог и статьи' : 'Blog & Engineering N
 const description = lang === 'ru'
   ? 'Инженерные разборы, архитектура биллинга, гайды по интеграции и новости платформы SaviorBill.'
   : 'Engineering deep-dives, billing architecture, integration guides, and platform updates.';
+
+const featuredPost = langPosts[0];
+const remainingPosts = langPosts.slice(1);
 ---
 
 <BaseLayout title={title} description={description} lang={lang}>
   <!-- Aligned strictly to max-w-6xl like Header -->
   <div class="px-3 sm:px-4 py-12 sm:py-16">
-    <div class="max-w-6xl mx-auto">
-      <div class="mb-12 text-center">
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-3">
+    <div class="max-w-6xl mx-auto space-y-10">
+      
+      <!-- Top Title Group -->
+      <div class="text-center max-w-2xl mx-auto">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white dark:text-white light:text-slate-900 tracking-tight mb-3">
           {title}
         </h1>
-        <p class="max-w-xl mx-auto text-[oklch(0.65_0_0)] text-sm sm:text-base">
+        <p class="text-[oklch(0.65_0_0)] dark:text-[oklch(0.65_0_0)] light:text-slate-600 text-sm sm:text-base">
           {description}
         </p>
       </div>
 
-      <!-- Cards Grid (Arayas Cheats style: images, 2-3 cols, max-w-6xl) -->
-      {langPosts.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {langPosts.map((post) => {
+      {featuredPost && (() => {
+        const parts = featuredPost.id.split('/');
+        const slug = parts.slice(1).join('/').replace(/\.(md|mdx)$/, '');
+        const dateStr = typeof featuredPost.data.date === 'string' ? featuredPost.data.date : featuredPost.data.date.toISOString().split('T')[0];
+        const coverImg = featuredPost.data.cover || `/images/og/${lang}-${slug}.svg`;
+        const author = featuredPost.data.author || 'UNVI';
+
+        return (
+          <!-- Featured Wide Card (Arayas style data-variant="wide") -->
+          <a
+            href={`/${lang}/blog/${slug}`}
+            class="group card-interactive p-5 sm:p-7 block rounded-2xl transition-all duration-300"
+          >
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+              <!-- Left Cover (cols 1..6) -->
+              <div class="md:col-span-6 aspect-video w-full rounded-xl overflow-hidden bg-[oklch(0.14_0_0)] relative">
+                <img
+                  src={coverImg}
+                  alt={featuredPost.data.title}
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="eager"
+                />
+              </div>
+
+              <!-- Right Content (cols 7..12) -->
+              <div class="md:col-span-6 space-y-3 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center gap-2 mb-2.5">
+                    <span class="text-xs font-mono font-bold text-[#00e0cb] bg-[#009080]/15 px-2.5 py-1 rounded-md">
+                      #{featuredPost.data.tags[0] || 'Featured'}
+                    </span>
+                    <span class="text-xs text-[oklch(0.55_0_0)] font-mono">• Главный материал</span>
+                  </div>
+
+                  <h2 class="text-xl sm:text-2xl font-bold text-white dark:text-white light:text-slate-900 group-hover:text-[#009080] transition-colors leading-snug mb-3">
+                    {featuredPost.data.title}
+                  </h2>
+
+                  <p class="text-xs sm:text-sm text-[oklch(0.65_0_0)] dark:text-[oklch(0.65_0_0)] light:text-slate-600 leading-relaxed line-clamp-3">
+                    {featuredPost.data.description}
+                  </p>
+                </div>
+
+                <div class="pt-4 border-t border-[oklch(1_0_0/6%)] flex items-center justify-between text-xs font-mono text-[oklch(0.6_0_0)]">
+                  <div class="flex items-center gap-2">
+                    <span class="size-6 rounded-full bg-[#009080] text-white flex items-center justify-center font-bold text-[10px]">
+                      {author[0]}
+                    </span>
+                    <span class="text-white dark:text-white light:text-slate-900 font-medium">{author}</span>
+                    <span>•</span>
+                    <time datetime={dateStr}>{dateStr}</time>
+                  </div>
+                  <span class="text-[#009080] font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                    {lang === 'ru' ? 'Читать' : 'Read'} →
+                  </span>
+                </div>
+              </div>
+            </div>
+          </a>
+        );
+      })()}
+
+      <!-- Remaining Posts Grid -->
+      {remainingPosts.length > 0 && (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+          {remainingPosts.map((post) => {
             const parts = post.id.split('/');
             const slug = parts.slice(1).join('/').replace(/\.(md|mdx)$/, '');
             const dateStr = typeof post.data.date === 'string' ? post.data.date : post.data.date.toISOString().split('T')[0];
-            const coverImg = post.data.cover || '/images/admin-dashboard.png';
+            const coverImg = post.data.cover || `/images/og/${lang}-${slug}.svg`;
             const author = post.data.author || 'UNVI';
 
             return (
               <a
                 href={`/${lang}/blog/${slug}`}
-                class="group card-interactive p-5 flex flex-col justify-between"
+                class="group card-interactive p-5 flex flex-col justify-between rounded-xl"
               >
                 <div>
                   <!-- Cover Image (16:9) with zoom on hover -->
@@ -64,7 +131,7 @@ const description = lang === 'ru'
                   <!-- Meta bar -->
                   <div class="flex items-center justify-between text-xs font-mono text-[oklch(0.55_0_0)] mb-2.5">
                     <div class="flex items-center gap-2">
-                      <span class="text-white font-medium">{author}</span>
+                      <span class="text-white dark:text-white light:text-slate-900 font-medium">{author}</span>
                       <span>•</span>
                       <time datetime={dateStr}>{dateStr}</time>
                     </div>
@@ -76,12 +143,12 @@ const description = lang === 'ru'
                   </div>
 
                   <!-- Title -->
-                  <h2 class="text-base sm:text-lg font-bold text-white group-hover:text-[#009080] transition-colors mb-2 line-clamp-2 leading-snug">
+                  <h3 class="text-base sm:text-lg font-bold text-white dark:text-white light:text-slate-900 group-hover:text-[#009080] transition-colors mb-2 line-clamp-2 leading-snug">
                     {post.data.title}
-                  </h2>
+                  </h3>
 
                   <!-- Description -->
-                  <p class="text-xs sm:text-sm text-[oklch(0.65_0_0)] leading-relaxed line-clamp-3 mb-4">
+                  <p class="text-xs sm:text-sm text-[oklch(0.65_0_0)] dark:text-[oklch(0.65_0_0)] light:text-slate-600 leading-relaxed line-clamp-3 mb-4">
                     {post.data.description}
                   </p>
                 </div>
@@ -94,11 +161,8 @@ const description = lang === 'ru'
             );
           })}
         </div>
-      ) : (
-        <div class="card-surface p-12 text-center text-[oklch(0.55_0_0)] text-sm">
-          {lang === 'ru' ? 'Пока нет опубликованных статей.' : 'No articles published yet.'}
-        </div>
       )}
+
     </div>
   </div>
 </BaseLayout>
