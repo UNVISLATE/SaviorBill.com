@@ -8,7 +8,7 @@ interface Props {
 
 export default function TerminalBlock({
   command = 'curl -fsSL https://get.saviorbill.com | bash',
-  copiedText = 'Скопировано в буфер'
+  copiedText = 'Скопировано!'
 }: Props) {
   const [copied, setCopied] = useState(false);
 
@@ -39,26 +39,31 @@ export default function TerminalBlock({
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-4 font-mono text-xs sm:text-sm">
-        <div className="flex items-center gap-2.5 text-[oklch(0.95_0_0)] overflow-x-auto py-1 scrollbar-none">
-          <span className="text-[#009080] select-none font-bold">$</span>
-          <span className="select-all tracking-wide">{command}</span>
+      <div className="flex items-center justify-between gap-3 font-mono text-xs sm:text-sm">
+        <div className="flex items-center gap-2 text-[oklch(0.95_0_0)] whitespace-nowrap min-w-0 flex-1 overflow-x-auto py-1 scrollbar-none">
+          <span className="text-[#009080] select-none font-bold shrink-0">$</span>
+          <span className="select-all tracking-wide whitespace-nowrap">{command}</span>
         </div>
 
+        {/* Fixed-width button: Prevents ANY layout reflow or wrapping when toggling 'Copy' <-> 'Скопировано!' */}
         <button
           onClick={handleCopy}
           type="button"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[oklch(0.24_0_0)] hover:bg-[#009080] hover:text-white text-[oklch(0.85_0_0)] text-xs font-medium transition-all shrink-0 cursor-pointer active:scale-95"
+          className={`flex items-center justify-center gap-1.5 w-28 sm:w-32 h-8 rounded-lg text-xs font-medium transition-all shrink-0 cursor-pointer active:scale-95 select-none ${
+            copied
+              ? 'bg-[#009080] text-white shadow-xs'
+              : 'bg-[oklch(0.24_0_0)] hover:bg-[#009080] hover:text-white text-[oklch(0.85_0_0)]'
+          }`}
           title="Копировать команду"
         >
           {copied ? (
             <>
-              <Check className="w-3.5 h-3.5 text-white" />
-              <span className="text-white font-sans">{copiedText}</span>
+              <Check className="w-3.5 h-3.5 text-white shrink-0" />
+              <span className="text-white font-sans truncate">{copiedText}</span>
             </>
           ) : (
             <>
-              <Copy className="w-3.5 h-3.5" />
+              <Copy className="w-3.5 h-3.5 shrink-0" />
               <span className="font-sans">Copy</span>
             </>
           )}

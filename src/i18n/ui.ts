@@ -19,7 +19,7 @@ export const ui = {
     'hero.quickstart': 'Быстрый запуск одной командой:',
     'hero.btn.docs': 'Перейти к документации',
     'hero.btn.github': 'GitHub Репозиторий',
-    'hero.copied': 'Скопировано в буфер!',
+    'hero.copied': 'Скопировано!',
     'features.title': 'Ключевые преимущества',
     'features.subtitle': 'Разработано для разработчиков, инди-хакеров и селлеров цифровых услуг',
     'comparison.title': 'Почему SaviorBill?',
