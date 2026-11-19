@@ -1,0 +1,197 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import { createMarkdownProcessor } from '@astrojs/markdown-remark';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+
+export function getStaticPaths() {
+  const languages: ('ru' | 'en')[] = ['ru', 'en'];
+  const hubDir = path.resolve('src/content/hub');
+  if (!fs.existsSync(hubDir)) return [];
+
+  const paths: { params: { lang: 'ru' | 'en'; slug: string; filename: string } }[] = [];
+
+  const dirs = fs.readdirSync(hubDir, { withFileTypes: true });
+  for (const d of dirs) {
+    if (!d.isDirectory()) continue;
+    const slug = d.name;
+    const scriptDir = path.join(hubDir, slug);
+    const files = fs.readdirSync(scriptDir)
+      .filter((f) => !f.toLowerCase().startsWith('readme') && !f.startsWith('.') && !f.endsWith('.zip'));
+
+    for (const lang of languages) {
+      for (const filename of files) {
+        paths.push({
+          params: { lang, slug, filename }
+        });
+      }
+    }
+  }
+
+  return paths;
+}
+
+const { lang, slug, filename } = Astro.params as { lang: 'ru' | 'en'; slug: string; filename: string };
+
+const safeFile = path.basename(filename);
+const filePath = path.resolve('src/content/hub', slug, safeFile);
+
+let fileContent = '';
+let fileSize = 0;
+let lineCount = 0;
+let manifest: any = { name: slug };
+
+if (fs.existsSync(filePath)) {
+  fileContent = fs.readFileSync(filePath, 'utf-8');
+  const stat = fs.statSync(filePath);
+  fileSize = stat.size;
+  lineCount = fileContent.split('\n').length;
+}
+
+const manifestPath = path.resolve('src/content/hub', slug, 'manifest.json');
+if (fs.existsSync(manifestPath)) {
+  try {
+    manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
+  } catch (e) {}
+}
+
+const ext = filename.split('.').pop()?.toLowerCase() || '';
+const langMode = ext === 'lua' ? 'lua' : ext === 'json' ? 'json' : ext === 'sh' ? 'bash' : 'text';
+
+const processor = await createMarkdownProcessor();
+const markdownWrapped = '```' + langMode + '\n' + fileContent + '\n```';
+const { code: highlightedHtml } = await processor.render(markdownWrapped);
+
+const sizeFormatted = fileSize > 1024 ? `${(fileSize / 1024).toFixed(1)} KB` : `${fileSize} B`;
+
+const pageTitle = `${filename} — ${manifest.name} — SaviorBill Hub`;
+const pageDescription = `Просмотр исходного файла ${filename} для модуля ${manifest.name} в каталоге SaviorBill.`;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} lang={lang}>
+  <div class="px-3 sm:px-4 py-10 sm:py-14">
+    <div class="max-w-5xl mx-auto space-y-6">
+      
+      <!-- Breadcrumbs & Navigation -->
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-2 text-xs font-mono text-[oklch(0.55_0_0)]">
+          <a href={`/${lang}`} class="hover:text-[#009080] transition-colors">SaviorBill</a>
+          <span>/</span>
+          <a href={`/${lang}/hub`} class="hover:text-[#009080] transition-colors">
+            {lang === 'ru' ? 'Каталог Lua' : 'Lua Hub'}
+          </a>
+          <span>/</span>
+          <a href={`/${lang}/hub/${slug}`} class="hover:text-[#009080] transition-colors">
+            {manifest.name}
+          </a>
+          <span>/</span>
+          <span class="text-[#009080] font-semibold">{filename}</span>
+        </div>
+
+        <a
+          href={`/${lang}/hub/${slug}`}
+          class="inline-flex items-center gap-1.5 text-xs font-mono text-[oklch(0.6_0_0)] hover:text-white transition-colors"
+        >
+          <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          <span>{lang === 'ru' ? 'Назад к описанию' : 'Back to module'}</span>
+        </a>
+      </div>
+
+      <!-- File Header Card -->
+      <div class="card-surface p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <span class={`px-2 py-1 rounded text-xs font-bold font-mono ${
+            ext === 'lua' 
+              ? 'bg-[#009080]/20 text-[#00e0cb] border border-[#009080]/30' 
+              : ext === 'json' 
+                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' 
+                : 'bg-neutral-800 text-neutral-300 border border-neutral-700'
+          }`}>
+            {ext.toUpperCase()}
+          </span>
+          <div>
+            <h1 class="text-base sm:text-lg font-bold text-white font-mono flex items-center gap-2">
+              {filename}
+            </h1>
+            <p class="text-xs font-mono text-[oklch(0.55_0_0)]">
+              {lineCount} {lang === 'ru' ? 'строк' : 'lines'} • {sizeFormatted}
+            </p>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center gap-2 shrink-0">
+          <a
+            href={`/${lang}/hub/${slug}/raw/${filename}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="h-9 px-3 rounded-lg bg-[oklch(0.18_0_0)] hover:bg-[oklch(0.24_0_0)] text-neutral-200 hover:text-white text-xs font-mono inline-flex items-center gap-1.5 border border-[oklch(1_0_0/8%)] transition-colors shadow-xs"
+            title="Открыть raw версию в новой вкладке"
+          >
+            <svg class="size-3.5 text-[#009080]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            <span>Raw</span>
+          </a>
+
+          <button
+            type="button"
+            id="copy-code-btn"
+            data-code={fileContent}
+            class="h-9 px-3.5 rounded-lg bg-[#009080] hover:bg-[#0c5e53] text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-colors shadow-xs cursor-pointer"
+          >
+            <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+            </svg>
+            <span id="copy-btn-text">{lang === 'ru' ? 'Скопировать' : 'Copy'}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Code Block View -->
+      <div class="card-surface p-0 overflow-hidden rounded-xl border border-[oklch(1_0_0/8%)]">
+        <div class="article-content code-fullview" set:html={highlightedHtml} />
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .code-fullview :global(pre) {
+    margin: 0 !important;
+    border-radius: 0 !important;
+    border: none !important;
+    max-height: none !important;
+    padding: 1.5rem !important;
+    font-size: 0.8125rem !important;
+    line-height: 1.65 !important;
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    function initCopy() {
+      const btn = document.getElementById('copy-code-btn');
+      const textSpan = document.getElementById('copy-btn-text');
+      if (btn && textSpan) {
+        btn.addEventListener('click', () => {
+          const code = btn.getAttribute('data-code');
+          if (code) {
+            navigator.clipboard.writeText(code).then(() => {
+              const orig = textSpan.textContent;
+              textSpan.textContent = '✓ Скопировано!';
+              setTimeout(() => { textSpan.textContent = orig; }, 1500);
+            });
+          }
+        });
+      }
+    }
+
+    initCopy();
+    document.addEventListener('astro:page-load', initCopy);
+    document.addEventListener('astro:after-swap', initCopy);
+  })();
+</script>

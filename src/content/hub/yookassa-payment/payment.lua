@@ -66,9 +66,10 @@ local function do_create(ctx)
   local amount_val = string.format("%.2f", tonumber(pay.amount) or 0)
   local return_target = pay.return_url or s.return_url or "https://example.com/billing"
 
-  local idempotence_key = string.format("sb_yk_%s_%s", tostring(pay.id or 0), tostring(os.time()))
+  -- Deterministic idempotency key: 24h protection against duplicates on retries
+  local idempotence_key = string.format("sb_yk_pay_%s", tostring(pay.id or 0))
 
-  local req_body = json.encode({
+  local payload = {
     amount = {
       value = amount_val,
       currency = pay.currency or "RUB",
@@ -83,7 +84,49 @@ local function do_create(ctx)
       payment_id = pay.id,
       user_id = (ctx.user or {}).id,
     },
-  })
+  }
+
+  -- 54-FZ online cash register receipt (optional, required if cash register is enabled in YooKassa)
+  if s.send_receipt == true then
+    local user = ctx.user or {}
+    local email = user.email or (pay.customer or {}).email
+    local phone = user.phone or (pay.customer or {}).phone
+
+    local customer = {}
+    if email and email ~= "" then
+      customer.email = email
+    end
+    if phone and phone ~= "" then
+      customer.phone = tostring(phone)
+    end
+
+    if not customer.email and not customer.phone then
+      error("YooKassa 54-FZ receipt requires customer email or phone in user profile")
+    end
+
+    local vat = tonumber(s.vat_code) or 1
+    local subj = s.payment_subject or "service"
+    local mode = s.payment_mode or "full_payment"
+
+    payload.receipt = {
+      customer = customer,
+      items = {
+        {
+          description = string.format("Payment #%s | SaviorBill", tostring(pay.id or 0)),
+          quantity = "1.00",
+          amount = {
+            value = amount_val,
+            currency = pay.currency or "RUB",
+          },
+          vat_code = vat,
+          payment_subject = subj,
+          payment_mode = mode,
+        }
+      }
+    }
+  end
+
+  local req_body = json.encode(payload)
 
   local resp = http({
     url = "https://api.yookassa.ru/v3/payments",
@@ -153,7 +196,8 @@ local function do_refund(ctx)
   local external_id = pay.external_id or ((pay.private_data or {}).external_id)
   assert(external_id, "Missing external_id for refund")
 
-  local idempotence_key = string.format("sb_refund_%s_%s", tostring(pay.id or 0), tostring(os.time()))
+  -- Deterministic refund idempotency key
+  local idempotence_key = string.format("sb_yk_rf_%s", tostring(pay.id or 0))
   local amount_val = string.format("%.2f", tonumber(pay.amount) or 0)
 
   local req_body = json.encode({
