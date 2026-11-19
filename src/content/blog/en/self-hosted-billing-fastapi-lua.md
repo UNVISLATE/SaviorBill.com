@@ -1,13 +1,13 @@
 ---
 title: 'Self-Hosted Billing on FastAPI and Lua: How SaviorBill is Built and Why We Abandoned Monolithic Plugins'
-description: 'Deep dive into SaviorBill architecture: isolating service delivery in LuaJIT, Server-Driven UI (sbuiSDK), and eliminating legacy spaghetti code.'
+description: 'Deep dive into SaviorBill architecture: isolating service delivery in Lua 5.4, Server-Driven UI (sbuiSDK), and eliminating legacy spaghetti code.'
 date: '2026-11-18'
 author: 'Andrey UNVI'
 authorAvatar: '/images/avatars/andrey-unvi.jpg'
 tags: ['FastAPI', 'Lua', 'Billing', 'SelfHosted', 'Architecture']
 faq:
   - question: 'Why Lua instead of Python for integrations?'
-    answer: 'Lua is an ultra-lightweight embeddable language with instantaneous startup (LuaJIT). All custom delivery workflows and payment hooks execute inside an isolated sandbox without risking the core FastAPI runtime.'
+    answer: 'Lua is an ultra-lightweight embeddable language with instantaneous startup. All custom delivery workflows and payment hooks execute inside an isolated Lua 5.4 sandbox without risking the core FastAPI runtime.'
   - question: 'What can you sell with SaviorBill?'
     answer: 'SaviorBill is built to sell digital license keys, VPN subscriptions (WireGuard/VLESS), VPS/hosting with resource calculators, SaaS subscriptions, and AI API credits.'
   - question: 'How do you deploy SaviorBill?'

@@ -7,7 +7,7 @@ order: 30
 
 ## Global Sandbox Libraries
 
-All Lua scripts execute in a sandboxed LuaJIT 2.1 runtime with the following built-in globals:
+All Lua scripts execute in a sandboxed Lua 5.4 runtime with the following built-in globals:
 
 1. **`http(opts)` / `http.request(opts)`**: Fast synchronous HTTP client (`resp.ok`, `resp.status`, `resp.headers`, `resp.body`).
 2. **`json.encode(tbl)` / `json.decode(str)`**: C-based high performance JSON parser.

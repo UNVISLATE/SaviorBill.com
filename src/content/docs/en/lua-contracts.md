@@ -7,7 +7,7 @@ order: 20
 
 ## SaviorBill Contract Architecture
 
-All external integrations execute inside an isolated **LuaWorker** (LuaJIT) sandbox using strict micro-contracts.
+All external integrations execute inside an isolated **LuaWorker** (Lua 5.4) sandbox using strict micro-contracts.
 
 Every script exposes a single entrypoint:
 ```lua
