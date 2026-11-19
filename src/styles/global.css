@@ -861,7 +861,6 @@ html[data-curtain-active="true"]::view-transition-new(*) {
   pointer-events: none !important;
 }
 
-#lunoweb-curve-wrapper:popover-open,
 #lunoweb-curve-wrapper,
 #lunoweb-curve-svg,
 #lunoweb-curve-route,
@@ -870,7 +869,21 @@ html[data-curtain-active="true"]::view-transition-new(*) {
   padding: 0 !important;
   margin: 0 !important;
   background: transparent !important;
+}
+
+#lunoweb-curve-wrapper {
+  z-index: 2147483647 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  position: fixed !important;
   inset: 0 !important;
+}
+
+#lunoweb-curve-svg {
+  z-index: 2147483646 !important;
+}
+
+#lunoweb-curve-route {
   z-index: 2147483647 !important;
 }
 

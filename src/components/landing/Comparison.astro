@@ -60,12 +60,13 @@ const { lang } = Astro.props;
               <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Развертывание' : 'Deployment & Stack'}</td>
               <td class="py-4 font-medium text-[#009080]">{lang === 'ru' ? '1 команда' : '1 command'}</td>
               <td class="py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Сложная системная настройка' : 'Complex VM configuration'}</td>
-              <td class="py-4 text-[#00e0cb]">
-                <span class="inline-flex items-center gap-1.5 font-medium">
-                  <span class="text-xs">✓</span>
-                  <span>{lang === 'ru' ? 'Cloud only (Регистрация за 5 минут)' : 'Cloud only (5-min signup)'}</span>
-                </span>
-              </td>
+              <td class="py-4 font-medium text-[#009080]">{lang === 'ru' ? 'Cloud only (Регистрация за 5 минут)' : 'Cloud only (5-min signup)'}</td>
+            </tr>
+            <tr>
+              <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Зрелость и история' : 'Maturity & History'}</td>
+              <td class="py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Молодой проект (активная разработка)' : 'Young project (active development)'}</td>
+              <td class="py-4 font-medium text-[#009080]">{lang === 'ru' ? '15+ лет на рынке' : '15+ years on market'}</td>
+              <td class="py-4 font-medium text-[#009080]">{lang === 'ru' ? '14+ лет, развитая экосистема' : '14+ years, massive ecosystem'}</td>
             </tr>
           </tbody>
         </table>

@@ -1,38 +1,38 @@
 ---
 ---
 
-<!-- Lunoweb 1:1 SVG Curved Morphing Curtain Transition in Top Layer -->
+<!-- Lunoweb 1:1 SVG Curved Morphing Curtain Transition with AppLike Logo -->
 <div 
   id="lunoweb-curve-wrapper" 
-  popover="manual"
   transition:persist="lunoweb-curve"
-  class="fixed inset-0 pointer-events-none select-none overflow-hidden m-0 p-0 border-0 bg-transparent w-screen h-screen"
-  style="z-index: 2147483647;"
+  class="fixed inset-0 pointer-events-none select-none overflow-hidden m-0 p-0 border-0"
+  style="z-index: 2147483647; display: none;"
   aria-hidden="true"
 >
-  <!-- Curved Morphing SVG -->
+  <!-- Curved Morphing SVG Background -->
   <svg 
     id="lunoweb-curve-svg" 
     class="pointer-events-none fixed top-0 left-0 w-screen"
-    style="height: calc(100vh + 600px); will-change: transform;"
+    style="height: calc(100vh + 600px); z-index: 2147483646; will-change: transform;"
   >
     <path id="lunoweb-curve-path" style="will-change: d;" />
   </svg>
 
-  <!-- Centered Route & Logo Label -->
+  <!-- Centered Route & AppLike Logo Label -->
   <div 
     id="lunoweb-curve-route" 
-    class="fixed left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-5 sm:gap-6 text-center pointer-events-none"
-    style="top: 47.5%; opacity: 0; will-change: transform, opacity;"
+    class="fixed left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-5 sm:gap-7 text-center pointer-events-none"
+    style="top: 47.5%; opacity: 0; z-index: 2147483647; will-change: transform, opacity;"
   >
     <img 
-      src="/logo.svg" 
+      id="lunoweb-curve-logo"
+      src="/images/logo-applike-white.svg" 
       alt="SaviorBill" 
-      class="size-12 sm:size-16 object-contain drop-shadow-lg" 
+      class="size-16 sm:size-20 md:size-24 object-contain drop-shadow-2xl" 
     />
     <span 
       id="lunoweb-curve-title" 
-      class="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-widest uppercase font-sans drop-shadow-md"
+      class="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-widest uppercase font-sans drop-shadow-md select-none"
     >
       БЛОГ
     </span>
@@ -117,39 +117,16 @@
     let isTransitionActive = false;
     let animFrame = null;
 
-    function showOverlay(wrapper) {
-      try {
-        if (typeof wrapper.showPopover === 'function') {
-          wrapper.showPopover();
-        } else {
-          wrapper.style.display = 'block';
-        }
-      } catch (e) {
-        wrapper.style.display = 'block';
-      }
-    }
-
-    function hideOverlay(wrapper) {
-      try {
-        if (typeof wrapper.hidePopover === 'function') {
-          wrapper.hidePopover();
-        } else {
-          wrapper.style.display = 'none';
-        }
-      } catch (e) {
-        wrapper.style.display = 'none';
-      }
-    }
-
     // 1. Enter Phase: Triggered before page navigation swap
     document.addEventListener('astro:before-preparation', (event) => {
       const wrapper = document.getElementById('lunoweb-curve-wrapper');
       const svg = document.getElementById('lunoweb-curve-svg');
       const path = document.getElementById('lunoweb-curve-path');
       const route = document.getElementById('lunoweb-curve-route');
+      const logoEl = document.getElementById('lunoweb-curve-logo');
       const titleEl = document.getElementById('lunoweb-curve-title');
 
-      if (!wrapper || !svg || !path || !route || !titleEl) return;
+      if (!wrapper || !svg || !path || !route || !titleEl || !logoEl) return;
 
       const fromPath = window.location.pathname;
       const toPath = event.to.pathname;
@@ -166,21 +143,25 @@
         const width = window.innerWidth;
         const height = window.innerHeight;
 
-        // Theme colors: Light theme vs Dark theme
+        // Theme colors:
+        // Dark theme: pitch black #000000, white AppLike logo, white text
+        // Light theme: pure white #ffffff, gray AppLike logo, dark text
         const isLight = document.documentElement.classList.contains('light');
-        const curtainBg = isLight ? '#f1f5f9' : '#070b12';
-        const textColor = isLight ? '#0f172a' : '#ebf9ff';
+        const curtainBg = isLight ? '#ffffff' : '#000000';
+        const textColor = isLight ? '#1e293b' : '#ffffff';
+        const logoSrc = isLight ? '/images/logo-applike-gray.svg' : '/images/logo-applike-white.svg';
 
         svg.style.fill = curtainBg;
         titleEl.style.color = textColor;
+        logoEl.src = logoSrc;
 
         // Set destination title
         const lang = toPath.startsWith('/en') ? 'en' : 'ru';
         const sectionTitle = SECTION_NAMES[lang]?.[toSec] || toSec.toUpperCase();
         titleEl.textContent = sectionTitle;
 
-        // Open in top layer
-        showOverlay(wrapper);
+        // Show wrapper
+        wrapper.style.display = 'block';
         wrapper.style.pointerEvents = 'auto';
 
         // Initial positions (below viewport)
@@ -192,7 +173,7 @@
         const originalLoader = event.loader;
         event.loader = async () => {
           await new Promise((resolve) => {
-            const duration = 460; // Lunoweb duration
+            const duration = 460; // 0.46s Lunoweb curve duration
             const startTime = performance.now();
 
             function frame(now) {
@@ -207,7 +188,7 @@
               // 2. SVG path morph from 0 to 1
               path.setAttribute('d', buildPath(width, height, tSlide));
 
-              // 3. Route text: delay 160ms, duration 280ms, slide from 47.5% to 40% & fade in
+              // 3. Route text & logo: delay 160ms, duration 280ms, slide from 47.5% to 40% & fade in
               const textDelay = 160;
               const textDuration = 280;
               if (elapsed >= textDelay) {
@@ -232,7 +213,7 @@
             animFrame = requestAnimationFrame(frame);
           });
 
-          // Allow Astro to swap DOM behind the covered screen
+          // Allow Astro to swap DOM behind covered screen
           await originalLoader();
         };
       }
@@ -252,13 +233,14 @@
       const width = window.innerWidth;
       const height = window.innerHeight;
 
-      // Keep curtain solidly covering viewport during DOM swap
+      // Keep curtain solidly covering viewport during DOM insertion
+      wrapper.style.display = 'block';
       svg.style.transform = `translate3d(0, -300px, 0)`;
       path.setAttribute('d', buildPath(width, height, 1));
       route.style.top = '40%';
       route.style.opacity = '1';
 
-      // Start exit animation smoothly on next animation frame
+      // Start exit animation smoothly on next frame
       requestAnimationFrame(() => {
         const duration = 480; // 0.48s
         const startTime = performance.now();
@@ -277,8 +259,8 @@
           // 2. SVG path morph from 1 back to 0
           path.setAttribute('d', buildPath(width, height, 1 - tSlide));
 
-          // 3. Route text: slide up to -100px and fade out
-          const textTop = 40 - 60 * tSlide;
+          // 3. Route text & logo: slide up to -120px and fade out
+          const textTop = 40 - 65 * tSlide;
           route.style.top = `${textTop}%`;
           route.style.opacity = `${Math.max(0, 1 - tSlide * 1.5)}`;
 
@@ -286,7 +268,7 @@
             animFrame = requestAnimationFrame(exitFrame);
           } else {
             // Clean up when animation finishes
-            hideOverlay(wrapper);
+            wrapper.style.display = 'none';
             wrapper.style.pointerEvents = 'none';
             document.documentElement.removeAttribute('data-curtain-active');
             isTransitionActive = false;
