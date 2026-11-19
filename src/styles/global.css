@@ -852,6 +852,9 @@ html[data-curtain-active="true"]::view-transition-new(root) {
   opacity: 0 !important;
 }
 
+#lunoweb-curve-wrapper,
+#lunoweb-curve-svg,
+#lunoweb-curve-route,
 #lunoweb-curtain {
   z-index: 2147483647 !important;
 }

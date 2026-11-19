@@ -1,19 +1,37 @@
 ---
 ---
 
-<!-- Lunoweb-style Fullscreen Curtain Transition (transition:persist ensures the element is never discarded during Astro page swap) -->
+<!-- Lunoweb 1:1 SVG Curved Morphing Curtain Transition -->
 <div 
-  id="lunoweb-curtain" 
-  transition:persist="lunoweb-curtain"
-  class="fixed inset-0 pointer-events-none flex flex-col items-center justify-center bg-[#070b12] text-white select-none translate-y-full"
-  style="z-index: 2147483647; will-change: transform;"
+  id="lunoweb-curve-wrapper" 
+  transition:persist="lunoweb-curve"
+  class="fixed inset-0 pointer-events-none select-none overflow-hidden"
+  style="z-index: 2147483647; display: none;"
   aria-hidden="true"
 >
-  <div class="flex flex-col items-center gap-5">
-    <img src="/logo.svg" alt="SaviorBill" class="size-14 sm:size-16 object-contain" />
+  <!-- Curved Morphing SVG -->
+  <svg 
+    id="lunoweb-curve-svg" 
+    class="pointer-events-none fixed top-0 left-0 w-screen"
+    style="height: calc(100vh + 600px); fill: #070b12; will-change: transform;"
+  >
+    <path id="lunoweb-curve-path" style="will-change: d;" />
+  </svg>
+
+  <!-- Centered Route & Logo Label -->
+  <div 
+    id="lunoweb-curve-route" 
+    class="fixed left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-5 sm:gap-7 text-center pointer-events-none"
+    style="top: 47.5%; opacity: 0; will-change: transform, opacity;"
+  >
+    <img 
+      src="/logo.svg" 
+      alt="SaviorBill" 
+      class="size-12 sm:size-16 object-contain drop-shadow-lg" 
+    />
     <span 
-      id="lunoweb-curtain-title" 
-      class="text-2xl sm:text-4xl font-extrabold tracking-widest uppercase font-sans text-white"
+      id="lunoweb-curve-title" 
+      class="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-widest uppercase font-sans text-[#ebf9ff] drop-shadow-md"
     >
       БЛОГ
     </span>
@@ -39,10 +57,8 @@
 
     function getRootSection(pathname) {
       if (!pathname) return 'home';
-      // Strip language prefix /ru or /en
       const clean = pathname.replace(/^\/(ru|en)(\/|$)/, '') || '';
       const firstSegment = clean.split('/')[0].trim();
-
       if (!firstSegment || firstSegment === '') return 'home';
       if (firstSegment === 'blog') return 'blog';
       if (firstSegment === 'docs') return 'docs';
@@ -50,67 +66,196 @@
       return 'other';
     }
 
-    let isCurtainActive = false;
+    // Exact cubic-bezier curve evaluator from Lunoweb
+    function cubicBezier(p1x, p1y, p2x, p2y) {
+      const cx = 3 * p1x;
+      const bx = 3 * (p2x - p1x) - cx;
+      const ax = 1 - cx - bx;
 
-    // 1. Before preparation: slide curtain in from bottom to cover screen
+      const cy = 3 * p1y;
+      const by = 3 * (p2y - p1y) - cy;
+      const ay = 1 - cy - by;
+
+      function sampleCurveX(t) {
+        return ((ax * t + bx) * t + cx) * t;
+      }
+      function sampleCurveY(t) {
+        return ((ay * t + by) * t + cy) * t;
+      }
+      function solveCurveX(x) {
+        let t0 = x;
+        for (let i = 0; i < 8; i++) {
+          const x2 = sampleCurveX(t0) - x;
+          if (Math.abs(x2) < 1e-4) return t0;
+          const d2 = (3 * ax * t0 + 2 * bx) * t0 + cx;
+          if (Math.abs(d2) < 1e-4) break;
+          t0 -= x2 / d2;
+        }
+        return t0;
+      }
+      return function(x) {
+        return sampleCurveY(solveCurveX(Math.max(0, Math.min(1, x))));
+      };
+    }
+
+    // Lunoweb easing functions:
+    // easeSlide: [0.76, 0, 0.24, 1]
+    // easeText: [0.33, 1, 0.68, 1]
+    const easeSlide = cubicBezier(0.76, 0, 0.24, 1);
+    const easeText = cubicBezier(0.33, 1, 0.68, 1);
+
+    // Exact Bezier SVG path formulas from Lunoweb
+    // p = 0: targetPath (flat bottom at height)
+    // p = 1: initialPath (curved downward bottom to height + 600)
+    function buildPath(width, height, p) {
+      const bottomEdge = height + 300 * p;
+      const controlY = height + 600 * p;
+      return `M0 300 Q${width / 2} 0 ${width} 300 L${width} ${bottomEdge} Q${width / 2} ${controlY} 0 ${bottomEdge} L0 0`;
+    }
+
+    let isTransitionActive = false;
+    let animFrame = null;
+
+    // 1. Enter Phase: Triggered before page navigation swap
     document.addEventListener('astro:before-preparation', (event) => {
-      const curtain = document.getElementById('lunoweb-curtain');
-      const titleEl = document.getElementById('lunoweb-curtain-title');
-      if (!curtain || !titleEl) return;
+      const wrapper = document.getElementById('lunoweb-curve-wrapper');
+      const svg = document.getElementById('lunoweb-curve-svg');
+      const path = document.getElementById('lunoweb-curve-path');
+      const route = document.getElementById('lunoweb-curve-route');
+      const titleEl = document.getElementById('lunoweb-curve-title');
+
+      if (!wrapper || !svg || !path || !route || !titleEl) return;
 
       const fromPath = window.location.pathname;
       const toPath = event.to.pathname;
 
       const fromSec = getRootSection(fromPath);
       const toSec = getRootSection(toPath);
-
       const validRoots = ['home', 'blog', 'docs', 'hub'];
 
       // Only trigger curtain when changing ROOT section
       if (fromSec !== toSec && validRoots.includes(fromSec) && validRoots.includes(toSec)) {
-        isCurtainActive = true;
+        isTransitionActive = true;
         document.documentElement.setAttribute('data-curtain-active', 'true');
+
+        const width = window.innerWidth;
+        const height = window.innerHeight;
 
         // Set destination title
         const lang = toPath.startsWith('/en') ? 'en' : 'ru';
         const sectionTitle = SECTION_NAMES[lang]?.[toSec] || toSec.toUpperCase();
         titleEl.textContent = sectionTitle;
 
-        // Slide in from bottom
-        curtain.style.pointerEvents = 'auto';
-        curtain.style.transition = 'transform 360ms cubic-bezier(0.77, 0, 0.175, 1)';
-        curtain.style.transform = 'translateY(0%)';
+        // Prepare elements
+        wrapper.style.display = 'block';
+        wrapper.style.pointerEvents = 'auto';
+
+        // Initial positions (below viewport)
+        svg.style.transform = `translate3d(0, ${height}px, 0)`;
+        path.setAttribute('d', buildPath(width, height, 0));
+        route.style.top = '47.5%';
+        route.style.opacity = '0';
 
         const originalLoader = event.loader;
         event.loader = async () => {
-          // Wait for curtain to fully cover viewport
-          await new Promise((r) => setTimeout(r, 370));
+          await new Promise((resolve) => {
+            const duration = 480; // Lunoweb duration: 0.48s
+            const startTime = performance.now();
+
+            function frame(now) {
+              const elapsed = now - startTime;
+              const progress = Math.min(1, elapsed / duration);
+
+              // 1. SVG slide up from height to -300px
+              const tSlide = easeSlide(progress);
+              const currentY = height - (height + 300) * tSlide;
+              svg.style.transform = `translate3d(0, ${currentY}px, 0)`;
+
+              // 2. SVG path morph from 0 to 1
+              path.setAttribute('d', buildPath(width, height, tSlide));
+
+              // 3. Route text: delay 0.18s, duration 0.30s, slide from 47.5% to 40% & fade in
+              const textDelay = 180;
+              const textDuration = 300;
+              if (elapsed >= textDelay) {
+                const textProgress = Math.min(1, (elapsed - textDelay) / textDuration);
+                const tText = easeText(textProgress);
+                const currentTop = 47.5 - 7.5 * tText; // from 47.5% to 40%
+                route.style.top = `${currentTop}%`;
+                route.style.opacity = `${tText}`;
+              }
+
+              if (progress < 1) {
+                animFrame = requestAnimationFrame(frame);
+              } else {
+                svg.style.transform = `translate3d(0, -300px, 0)`;
+                path.setAttribute('d', buildPath(width, height, 1));
+                route.style.top = '40%';
+                route.style.opacity = '1';
+                resolve();
+              }
+            }
+
+            animFrame = requestAnimationFrame(frame);
+          });
+
+          // Allow Astro to swap DOM behind covered screen
           await originalLoader();
         };
       }
     });
 
-    // 2. After swap: new DOM is painted behind curtain; slide curtain out to top
+    // 2. Exit Phase: After new DOM is swapped into place
     document.addEventListener('astro:after-swap', () => {
-      if (!isCurtainActive) return;
+      if (!isTransitionActive) return;
 
-      const curtain = document.getElementById('lunoweb-curtain');
-      if (!curtain) return;
+      const wrapper = document.getElementById('lunoweb-curve-wrapper');
+      const svg = document.getElementById('lunoweb-curve-svg');
+      const path = document.getElementById('lunoweb-curve-path');
+      const route = document.getElementById('lunoweb-curve-route');
 
+      if (!wrapper || !svg || !path || !route) return;
+
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      // Small pause (100ms) before reveal, matching Lunoweb delay
       setTimeout(() => {
-        // Slide out toward top
-        curtain.style.transition = 'transform 380ms cubic-bezier(0.77, 0, 0.175, 1)';
-        curtain.style.transform = 'translateY(-100%)';
+        const duration = 480; // 0.48s
+        const startTime = performance.now();
+        const startY = -300;
+        const targetY = -(height + 600);
 
-        setTimeout(() => {
-          // Silently reset curtain back below viewport
-          curtain.style.transition = 'none';
-          curtain.style.transform = 'translateY(100%)';
-          curtain.style.pointerEvents = 'none';
-          document.documentElement.removeAttribute('data-curtain-active');
-          isCurtainActive = false;
-        }, 390);
-      }, 50);
+        function exitFrame(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(1, elapsed / duration);
+          const tSlide = easeSlide(progress);
+
+          // 1. SVG slide up from -300px to targetY
+          const currentY = startY + (targetY - startY) * tSlide;
+          svg.style.transform = `translate3d(0, ${currentY}px, 0)`;
+
+          // 2. SVG path morph from 1 back to 0
+          path.setAttribute('d', buildPath(width, height, 1 - tSlide));
+
+          // 3. Route text: slide up to -100px and fade out
+          const textTop = 40 - 60 * tSlide;
+          route.style.top = `${textTop}%`;
+          route.style.opacity = `${1 - tSlide}`;
+
+          if (progress < 1) {
+            animFrame = requestAnimationFrame(exitFrame);
+          } else {
+            // Clean up when animation finishes
+            wrapper.style.display = 'none';
+            wrapper.style.pointerEvents = 'none';
+            document.documentElement.removeAttribute('data-curtain-active');
+            isTransitionActive = false;
+          }
+        }
+
+        animFrame = requestAnimationFrame(exitFrame);
+      }, 100);
     });
   })();
 </script>
