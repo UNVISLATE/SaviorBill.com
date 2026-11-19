@@ -288,24 +288,34 @@ html.light .hero-title-3 {
   color: #009080 !important;
 }
 html.light .hero-subtitle {
-  color: #475569 !important;
+  color: #334155 !important;
 }
 
-/* Real SaviorBill Admin Mockup Strict Isolation */
+/* Real SaviorBill Admin Mockup: Strict Isolation & Zero Theme Leakage */
 .hero-mockup-wrapper {
-  mask-image: linear-gradient(to bottom, black calc(100% - 70px), transparent 100%),
+  mask-image: linear-gradient(to bottom, black calc(100% - 24px), transparent 100%),
               linear-gradient(to right, black calc(100% - 60px), transparent 100%);
-  -webkit-mask-image: -webkit-linear-gradient(top, black calc(100% - 70px), transparent 100%),
+  -webkit-mask-image: -webkit-linear-gradient(top, black calc(100% - 24px), transparent 100%),
                       -webkit-linear-gradient(left, black calc(100% - 60px), transparent 100%);
   mask-composite: intersect;
   -webkit-mask-composite: source-in;
 }
 
-.sb-admin-mockup-root,
+.sb-admin-mockup-root {
+  color: #f4f4f5 !important;
+  color-scheme: dark !important;
+  background-color: #0f0f11 !important;
+}
+
 .sb-admin-mockup-root * {
   color-scheme: dark !important;
 }
 
+/* Force exact dark theme palette on every element inside the mockup regardless of global theme */
+.sb-admin-mockup-root h1,
+.sb-admin-mockup-root h2,
+.sb-admin-mockup-root h3,
+.sb-admin-mockup-root h4,
 html.light .sb-admin-mockup-root h1,
 html.light .sb-admin-mockup-root h2,
 html.light .sb-admin-mockup-root h3,
@@ -313,27 +323,49 @@ html.light .sb-admin-mockup-root h4 {
   color: #ffffff !important;
 }
 
-html.light .sb-admin-mockup-root .text-white {
-  color: #ffffff !important;
-}
-
-html.light .sb-admin-mockup-root .text-\[\#a1a1aa\] {
+.sb-admin-mockup-root p,
+html.light .sb-admin-mockup-root p {
   color: #a1a1aa !important;
 }
 
-html.light .sb-admin-mockup-root .text-\[\#71717a\] {
+.sb-admin-mockup-root [class*="text-white"],
+html.light .sb-admin-mockup-root [class*="text-white"] {
+  color: #ffffff !important;
+}
+
+.sb-admin-mockup-root [class*="text-white/90"],
+html.light .sb-admin-mockup-root [class*="text-white/90"] {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.sb-admin-mockup-root [class*="text-white/80"],
+html.light .sb-admin-mockup-root [class*="text-white/80"] {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.sb-admin-mockup-root [class*="text-white/70"],
+html.light .sb-admin-mockup-root [class*="text-white/70"] {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.sb-admin-mockup-root [class*="text-[#a1a1aa]"],
+html.light .sb-admin-mockup-root [class*="text-[#a1a1aa]"] {
+  color: #a1a1aa !important;
+}
+
+.sb-admin-mockup-root [class*="text-[#71717a]"],
+html.light .sb-admin-mockup-root [class*="text-[#71717a]"] {
   color: #71717a !important;
 }
 
-/* ============================================================
-   LIGHT THEME HEADINGS & PARAGRAPHS (Excluding Admin Mockup)
-   ============================================================ */
-html.light :not(.sb-admin-mockup-root *) > h1,
-html.light :not(.sb-admin-mockup-root *) > h2,
-html.light :not(.sb-admin-mockup-root *) > h3,
-html.light :not(.sb-admin-mockup-root *) > h4 {
-  color: #0f172a;
+.sb-admin-mockup-root [class*="text-[#f4f4f5]"],
+html.light .sb-admin-mockup-root [class*="text-[#f4f4f5]"] {
+  color: #f4f4f5 !important;
 }
+
+/* ============================================================
+   LIGHT THEME HEADINGS & PARAGRAPHS
+   ============================================================ */
 
 html.light .article-main-title,
 html.light .faq-section-title {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface LightboxItem {
@@ -10,6 +11,11 @@ export default function MediaLightbox() {
   const [isOpen, setIsOpen] = useState(false);
   const [items, setItems] = useState<LightboxItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const openLightbox = useCallback((images: LightboxItem[], startIndex: number) => {
     setItems(images);
@@ -85,30 +91,33 @@ export default function MediaLightbox() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, closeLightbox, handlePrev, handleNext]);
 
-  if (!isOpen || items.length === 0) return null;
+  if (!isOpen || items.length === 0 || !isMounted) return null;
 
   const current = items[currentIndex];
 
-  return (
+  const lightboxContent = (
     <div 
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/85 backdrop-blur-md select-none animate-in fade-in duration-200"
+      className="fixed inset-0 flex items-center justify-center bg-black/90 backdrop-blur-md select-none animate-in fade-in duration-200"
+      style={{ zIndex: 2147483640 }}
       onClick={closeLightbox}
     >
-      {/* Top action bar: Counter & Close button */}
+      {/* Top action bar: Counter & Close button (Strictly above any sticky header) */}
       <div 
-        className="absolute top-4 right-4 sm:top-6 sm:right-6 flex items-center gap-4 z-10"
+        className="absolute top-4 right-4 sm:top-6 sm:right-6 flex items-center gap-3.5"
+        style={{ zIndex: 2147483645 }}
         onClick={(e) => e.stopPropagation()}
       >
         {items.length > 1 && (
-          <div className="px-3 py-1 rounded-full bg-white/10 text-white font-mono text-xs backdrop-blur-sm border border-white/10">
+          <div className="px-3 py-1 rounded-full bg-white/10 text-white font-mono text-xs backdrop-blur-sm border border-white/10 select-none">
             {currentIndex + 1} / {items.length}
           </div>
         )}
         <button
           type="button"
           onClick={closeLightbox}
-          className="size-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer backdrop-blur-sm"
+          className="size-11 rounded-full bg-white/15 hover:bg-white/25 active:bg-white/35 text-white flex items-center justify-center transition-all cursor-pointer backdrop-blur-sm shadow-xl hover:scale-105 active:scale-95"
           aria-label="Закрыть"
+          title="Закрыть (Esc)"
         >
           <X className="size-5" />
         </button>
@@ -122,7 +131,7 @@ export default function MediaLightbox() {
             e.stopPropagation();
             handlePrev();
           }}
-          className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 size-12 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-all cursor-pointer z-10 backdrop-blur-sm"
+          className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 size-12 rounded-full bg-white/15 hover:bg-white/25 active:bg-white/35 text-white flex items-center justify-center transition-all cursor-pointer z-20 backdrop-blur-sm shadow-lg hover:scale-105 active:scale-95"
           aria-label="Предыдущее изображение"
         >
           <ChevronLeft className="size-6" />
@@ -131,7 +140,7 @@ export default function MediaLightbox() {
 
       {/* Main image container */}
       <div 
-        className="max-w-[92vw] max-h-[88vh] flex flex-col items-center justify-center p-2"
+        className="max-w-[92vw] max-h-[88vh] flex flex-col items-center justify-center p-2 z-10"
         onClick={(e) => e.stopPropagation()}
       >
         <img
@@ -154,7 +163,7 @@ export default function MediaLightbox() {
             e.stopPropagation();
             handleNext();
           }}
-          className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 size-12 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-all cursor-pointer z-10 backdrop-blur-sm"
+          className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 size-12 rounded-full bg-white/15 hover:bg-white/25 active:bg-white/35 text-white flex items-center justify-center transition-all cursor-pointer z-20 backdrop-blur-sm shadow-lg hover:scale-105 active:scale-95"
           aria-label="Следующее изображение"
         >
           <ChevronRight className="size-6" />
@@ -162,4 +171,6 @@ export default function MediaLightbox() {
       )}
     </div>
   );
+
+  return createPortal(lightboxContent, document.body);
 }

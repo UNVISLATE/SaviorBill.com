@@ -25,7 +25,7 @@ const t = useTranslations(lang);
       </h1>
 
       <!-- Short Subtitle (High contrast in both light & dark themes) -->
-      <p class="hero-subtitle max-w-2xl mx-auto text-xs sm:text-sm leading-relaxed">
+      <p class="hero-subtitle max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
         {lang === 'ru'
           ? 'Событийно-ориентированный биллинг для VPN, SaaS, хостинга и ключей с изолированной Lua-логикой и Server-Driven UI.'
           : 'Event-driven billing engine for VPN, SaaS, hosting, and digital keys powered by isolated Lua and Server-Driven UI.'}
@@ -65,10 +65,10 @@ const t = useTranslations(lang);
 
   <!-- Background Interactive Real Admin Mockup:
        1) Positioned strictly in background (z-0, absolute)
-       2) Anchored to left-[calc(50%+410px)] so it NEVER touches, squeezes or overlaps the centered hero content
+       2) Anchored to left-[calc(50%+490px)] so it NEVER touches, squeezes or overlaps the centered hero content
        3) Cropped cleanly by right screen edge and bottom hero border (overflow-hidden)
        4) Eliminates any empty dead gap below or harsh rectangular chops -->
-  <div class="hero-mockup-wrapper hidden min-[1400px]:block absolute left-[calc(50%+410px)] 2xl:left-[calc(50%+440px)] bottom-0 w-[940px] 2xl:w-[1020px] h-[660px] 2xl:h-[700px] z-0 pointer-events-auto opacity-85 hover:opacity-100 transition-opacity duration-300">
+  <div class="hero-mockup-wrapper hidden min-[1536px]:block absolute left-[calc(50%+490px)] 2xl:left-[calc(50%+520px)] bottom-0 w-[940px] 2xl:w-[1020px] h-[660px] 2xl:h-[700px] z-0 pointer-events-auto opacity-85 hover:opacity-100 transition-opacity duration-300">
     <RealAdminMockup client:load />
   </div>
 
