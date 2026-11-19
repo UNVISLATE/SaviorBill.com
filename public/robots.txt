@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Disallow: /raw/
+Disallow: /*/raw/
 Disallow: /pagefind/
 Disallow: /downloads/
 

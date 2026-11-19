@@ -50,6 +50,7 @@ export const GET: APIRoute = ({ params }) => {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
       'X-Content-Type-Options': 'nosniff',
+      'X-Robots-Tag': 'noindex, nofollow, noarchive',
       'Cache-Control': 'public, max-age=3600'
     }
   });
