@@ -56,7 +56,7 @@ const {
 
 const dateStr = typeof date === 'string' ? date : date.toISOString().split('T')[0];
 const postUrl = `https://saviorbill.com/${lang}/blog/${slug}`;
-const resolvedCover = cover || `/images/og/${lang}-${slug}.svg`;
+const resolvedCover = cover || `/images/og/${lang}-${slug}.png`;
 const absoluteCoverUrl = resolvedCover.startsWith('http') ? resolvedCover : `https://saviorbill.com${resolvedCover}`;
 
 const jsonLd: Array<Record<string, any>> = [

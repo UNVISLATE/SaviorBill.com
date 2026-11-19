@@ -4,6 +4,7 @@ import sharp from 'sharp';
 
 const blogDir = path.resolve('src/content/blog');
 const outDir = path.resolve('public/images/og');
+const publicDir = path.resolve('public');
 
 if (!fs.existsSync(outDir)) {
   fs.mkdirSync(outDir, { recursive: true });
@@ -38,7 +39,7 @@ function escapeXml(unsafe) {
   });
 }
 
-function generateSvg({ title, tag = 'Architecture', author = 'Andrey UNVI', avatarBase64 = null }) {
+function generateSvg({ title, tag = 'Architecture', author = 'Andrey UNVI', avatarBase64 = null, footerText = 'saviorbill.com' }) {
   const lines = wrapText(title, 26);
   const textElements = lines
     .map((line, idx) => `<tspan x="80" dy="${idx === 0 ? 0 : 58}">${escapeXml(line)}</tspan>`)
@@ -103,7 +104,7 @@ function generateSvg({ title, tag = 'Architecture', author = 'Andrey UNVI', avat
   <g transform="translate(80, 500)">
     ${avatarMarkup}
     <text x="80" y="38" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="600">${escapeXml(author)}</text>
-    <text x="1040" y="38" fill="rgba(255, 255, 255, 0.45)" font-family="monospace" font-size="18" text-anchor="end">saviorbill.com/blog</text>
+    <text x="1040" y="38" fill="rgba(255, 255, 255, 0.45)" font-family="monospace" font-size="18" text-anchor="end">${escapeXml(footerText)}</text>
   </g>
 </svg>`;
 }
@@ -127,6 +128,26 @@ async function getAvatarBase64(avatarRelPath) {
 }
 
 async function run() {
+  const defaultAvatar = await getAvatarBase64('/images/avatars/andrey-unvi.jpg');
+
+  // 1. Generate Site-wide Default OG Cover (PNG + SVG for maximum compatibility)
+  const defaultSiteSvg = generateSvg({
+    title: 'SaviorBill — Self-Hosted Billing Platform with Lua 5.4 & Server-Driven UI',
+    tag: 'OpenSource',
+    author: 'Andrey UNVI',
+    avatarBase64: defaultAvatar,
+    footerText: 'saviorbill.com'
+  });
+
+  const defaultSitePng = await sharp(Buffer.from(defaultSiteSvg))
+    .png({ quality: 90, compressionLevel: 8 })
+    .toBuffer();
+
+  fs.writeFileSync(path.join(publicDir, 'og-image.png'), defaultSitePng);
+  fs.writeFileSync(path.join(outDir, 'og-image.png'), defaultSitePng);
+  console.log('[AutoOG] Generated global site cover: public/og-image.png');
+
+  // 2. Generate Blog Post Covers in BOTH PNG (for Telegram/Twitter) and SVG
   const langs = ['ru', 'en'];
   for (const lang of langs) {
     const dir = path.join(blogDir, lang);
@@ -154,10 +175,20 @@ async function run() {
 
       const avatarBase64 = await getAvatarBase64(avatarPath);
 
-      const svg = generateSvg({ title, tag, author, avatarBase64 });
-      const outPath = path.join(outDir, `${lang}-${slug}.svg`);
-      fs.writeFileSync(outPath, svg, 'utf-8');
-      console.log(`[AutoOG] Generated: ${outPath} (with avatar: ${!!avatarBase64})`);
+      const svg = generateSvg({ title, tag, author, avatarBase64, footerText: 'saviorbill.com/blog' });
+      
+      // Save SVG
+      const svgPath = path.join(outDir, `${lang}-${slug}.svg`);
+      fs.writeFileSync(svgPath, svg, 'utf-8');
+
+      // Convert and save PNG (MANDATORY for Telegram, Twitter, Discord, WhatsApp)
+      const pngBuffer = await sharp(Buffer.from(svg))
+        .png({ quality: 90, compressionLevel: 8 })
+        .toBuffer();
+      const pngPath = path.join(outDir, `${lang}-${slug}.png`);
+      fs.writeFileSync(pngPath, pngBuffer);
+
+      console.log(`[AutoOG] Generated: ${pngPath} (PNG + SVG, with avatar: ${!!avatarBase64})`);
     }
   }
 }
