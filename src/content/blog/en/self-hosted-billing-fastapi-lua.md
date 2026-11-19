@@ -28,7 +28,7 @@ We decided to build a clean-slate modern stack: **Python 3.12, FastAPI, PostgreS
 
 - **Digital Licenses & Keys:** instantaneous delivery from concurrency-safe pools (`SKIP LOCKED`);
 - **VPS / VDS Hosting:** interactive resource calculator (vCPU, RAM, NVMe) with lifecycle automation;
-- **VPN & Networking:** WireGuard, VLESS, Outline with vector QR codes rendered via `sbuiSDK`;
+- **VPN & Proxies:** VLESS, Trojan, and digital keys with vector QR codes rendered via `sbuiSDK`;
 - **SaaS & AI APIs:** query credit packages and recurring memberships;
 - **Multi-Currency FX Engine:** live currency conversions across fiat and crypto.
 
@@ -41,21 +41,33 @@ Instead of installing heavy plugins directly into the server, all integrations e
 A service script simply implements deterministic action hooks:
 
 ```lua
--- scripts/services/vpn.lua
-function handle(ctx)
-  if ctx.action == "create" then
-    return {
-      public = {
-        subscription = "https://example.com/sub/token123"
-      },
-      private = {
-        username = ctx.user.login
-      },
-      state = "active",
-      expires_at = os.time() + 30 * 86400
-    }
-  end
+-- scripts/services/marzban-vless.lua
+local M = {}
+
+function M.create(ctx)
+  local s = (ctx.lua or {}).settings or {}
+  local resp = http({
+    url = "https://" .. s.panel_domain .. "/api/user",
+    method = "POST",
+    headers = { ["Content-Type"] = "application/json" },
+    body = json.encode({ username = "sb_" .. tostring(ctx.user.id) })
+  })
+  local u = json.decode(resp.body) or {}
+
+  return {
+    public = {
+      subscription_url = u.subscription_url,
+      node_type = "VLESS"
+    },
+    private = {
+      marzban_username = u.username
+    },
+    state = "active",
+    expires_at = os.time() + 30 * 86400
+  }
 end
+
+return M
 ```
 
 The `public` object is automatically parsed by `sbuiSDK` and shown to the customer, while `state` and `expires_at` manage billing cycles automatically.

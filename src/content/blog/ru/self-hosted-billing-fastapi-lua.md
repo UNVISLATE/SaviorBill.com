@@ -58,31 +58,45 @@ faq:
 ### Пример: Скрипт выдачи VPN-подписки
 
 ```lua
--- scripts/services/wireguard.lua
-function handle(ctx)
-  if ctx.action == "create" then
-    -- Генерация пира через внешнее API панели
-    local login = ctx.user.login
-    local peer_conf = api.wireguard:create_peer(login)
+-- scripts/services/marzban-vless.lua
+local M = {}
 
-    return {
-      public = {
-        config = peer_conf,
-        qr = peer_conf,
-        instructions = "Импортируйте конфиг в приложение WireGuard."
-      },
-      private = {
-        peer_id = login .. "_wg"
-      },
-      state = "active",
-      expires_at = os.time() + (30 * 86400)
-    }
-  elseif ctx.action == "freeze" then
-    -- Отключение пира при нехватке средств
-    api.wireguard:disable_peer(ctx.user.login)
-    return { state = "frozen" }
-  end
+function M.create(ctx)
+  local s = (ctx.lua or {}).settings or {}
+  -- Запрос к REST API панели через изолированный HTTP-клиент
+  local resp = http({
+    url = "https://" .. s.panel_domain .. "/api/user",
+    method = "POST",
+    headers = { 
+      ["Authorization"] = "Bearer " .. s.jwt_token,
+      ["Content-Type"] = "application/json" 
+    },
+    body = json.encode({ 
+      username = "sb_" .. tostring(ctx.user.id) .. "_" .. crypto.random_hex(4),
+      expire = os.time() + (tonumber(ctx.service.duration) or 2592000)
+    })
+  })
+  local u = json.decode(resp.body) or {}
+
+  return {
+    public = {
+      subscription_url = u.subscription_url,
+      node_type = "VLESS"
+    },
+    private = {
+      external_user_id = u.id
+    },
+    state = "active",
+    expires_at = os.time() + (30 * 86400)
+  }
 end
+
+function M.freeze(ctx)
+  -- Временная заморозка доступа при нехватке баланса
+  return { state = "frozen" }
+end
+
+return M
 ```
 
 Что здесь происходит:

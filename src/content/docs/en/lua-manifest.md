@@ -87,3 +87,9 @@ In addition to admin settings, manifests can define declarative layouts for cust
 
 - **`service_card`**: Card layout rendered in `SBPersonalAccountClient` with variable interpolation (`{{public.field}}`).
 - For component schemas and reactivity, see the [Server-Driven UI (sbuiSDK) Components](/en/docs/sbuisdk-components) documentation.
+
+---
+
+### Packaged Integration Example
+
+<div data-hub-card="marzban-vless" data-lang="en"></div>

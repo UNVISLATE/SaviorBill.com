@@ -30,8 +30,14 @@ Demand for self-hosted VPN solutions with modern high-performance tunneling and 
 ```
 
 1. Deploy your Marzban panel with VLESS inbounds enabled.
-2. Download `yookassa-payment.zip` and configure your `shop_id` and `secret_key`.
-3. Download `marzban-vless.zip` and set up panel domain and admin credentials.
+2. Download and configure the YooKassa payment gateway:
+
+<div data-hub-card="yookassa-payment" data-lang="en"></div>
+
+3. Download and import the Marzban delivery script:
+
+<div data-hub-card="marzban-vless" data-lang="en"></div>
+
 4. Add the product to your SaviorBill catalog.
 
 Customer payments trigger instant automated provisioning with zero manual intervention.

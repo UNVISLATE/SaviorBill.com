@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import TableOfContents from '../components/docs/TableOfContents.astro';
 import MediaLightbox from '../components/blog/MediaLightbox';
+import HubCardMount from '../components/hub/HubCardMount';
 
 interface Heading {
   depth: number;
@@ -270,6 +271,8 @@ if (faq && faq.length > 0) {
 
   <!-- Interactive Lightbox for Markdown Images & Galleries -->
   <MediaLightbox client:load />
+  <!-- Interactive Hub Card Hydrator -->
+  <HubCardMount client:load />
 
   <!-- Floating Quote Share Tooltip (Arayas Cheats style) -->
   <div
