@@ -845,17 +845,32 @@ mark.quote-highlight {
   animation: 300ms cubic-bezier(0.2, 1, 0.5, 1) both page-enter;
 }
 
-/* View Transitions Circle Ripple Animation (stealthsurf style) */
-html[data-curtain-active="true"]::view-transition-old(root),
-html[data-curtain-active="true"]::view-transition-new(root) {
+/* View Transitions Suppression during Curtain Transition */
+html[data-curtain-active="true"] * {
+  view-transition-name: none !important;
+}
+html[data-curtain-active="true"]::view-transition,
+html[data-curtain-active="true"]::view-transition-group(*),
+html[data-curtain-active="true"]::view-transition-image-pair(*),
+html[data-curtain-active="true"]::view-transition-old(*),
+html[data-curtain-active="true"]::view-transition-new(*) {
   display: none !important;
+  animation: none !important;
   opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
+#lunoweb-curve-wrapper:popover-open,
 #lunoweb-curve-wrapper,
 #lunoweb-curve-svg,
 #lunoweb-curve-route,
 #lunoweb-curtain {
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  inset: 0 !important;
   z-index: 2147483647 !important;
 }
 
