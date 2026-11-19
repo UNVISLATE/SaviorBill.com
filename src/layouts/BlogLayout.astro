@@ -26,6 +26,7 @@ interface Props {
   lang: 'ru' | 'en';
   date: string | Date;
   author?: string;
+  authorAvatar?: string;
   tags?: string[];
   slug: string;
   headings: Heading[];
@@ -40,7 +41,8 @@ const {
   description,
   lang,
   date,
-  author = 'UNVI',
+  author = 'Andrey UNVI',
+  authorAvatar = '/images/avatars/andrey-unvi.jpg',
   tags = [],
   slug,
   headings,
@@ -150,9 +152,17 @@ if (faq && faq.length > 0) {
         <!-- Meta Header -->
         <div class="flex flex-wrap items-center gap-4 text-xs font-mono pb-6 mb-6 border-b border-[oklch(1_0_0/6%)] article-meta-bar">
           <div class="flex items-center gap-2">
-            <span class="size-6 rounded-full bg-[#009080] text-white flex items-center justify-center font-bold text-[10px]">
-              {author[0]}
-            </span>
+            {authorAvatar ? (
+              <img 
+                src={authorAvatar} 
+                alt={author} 
+                class="size-6 rounded-full object-cover shrink-0 ring-1 ring-[#009080]/30 shadow-xs" 
+              />
+            ) : (
+              <span class="size-6 rounded-full bg-[#009080] text-white flex items-center justify-center font-bold text-[10px]">
+                {author[0]}
+              </span>
+            )}
             <span class="font-medium article-author-name">{author}</span>
           </div>
           <span>•</span>

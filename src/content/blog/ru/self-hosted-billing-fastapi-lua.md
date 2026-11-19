@@ -2,8 +2,8 @@
 title: 'Архитектура биллинга без монолитов: почему изоляция логики на Lua побеждает спагетти-плагины'
 description: 'Инженерный разбор платформы SaviorBill: как микро-контракты в LuaWorker и Server-Driven UI (sbuiSDK) избавляют от боли legacy-биллингов.'
 date: '2026-11-18'
-author: 'UNVI'
-cover: '/images/admin-dashboard.png'
+author: 'Andrey UNVI'
+authorAvatar: '/images/avatars/andrey-unvi.jpg'
 tags: ['FastAPI', 'Lua', 'Billing', 'Architecture', 'sbuiSDK']
 faq:
   - question: 'В чем ключевое отличие SaviorBill от классических биллингов (WHMCS, BILLmanager)?'

@@ -2,8 +2,31 @@
   "id": "yookassa-payment",
   "name": "ЮKassa Payment Gateway",
   "category": "Payments",
-  "author": "UNVI",
-  "version": "1.0.0",
-  "description": "Интеграция шлюза ЮKassa: генерация инвойсов, проверка статуса и безопасная обработка вебхуков.",
-  "actions": ["create", "callback", "check"]
+  "author": "Andrey UNVI",
+  "version": "1.2.0",
+  "description": "Официальная интеграция с API ЮKassa v3: генерация ссылок на оплату (карты, СБП, SberPay, ЮMoney), server-to-server верификация вебхуков и автоматический polling статуса.",
+  "actions": ["create", "callback", "check", "refund"],
+  "settings": {
+    "shop_id": {
+      "type": "string",
+      "label": "Идентификатор магазина (shopId)",
+      "placeholder": "123456",
+      "required": true,
+      "help": "shopId из личного кабинета ЮKassa"
+    },
+    "secret_key": {
+      "type": "password",
+      "label": "Секретный ключ (secret_key)",
+      "placeholder": "live_...",
+      "required": true,
+      "help": "Секретный ключ API из раздела Интеграция → Ключи API"
+    },
+    "return_url": {
+      "type": "string",
+      "label": "URL возврата по умолчанию",
+      "placeholder": "https://billing.example.com/payment/success",
+      "required": false,
+      "help": "Страница, на которую перенаправляется покупатель после успешной оплаты"
+    }
+  }
 }

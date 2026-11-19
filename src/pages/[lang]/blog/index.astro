@@ -72,7 +72,8 @@ const remainingPosts = langPosts.slice(1);
         const slug = parts.slice(1).join('/').replace(/\.(md|mdx)$/, '');
         const dateStr = typeof featuredPost.data.date === 'string' ? featuredPost.data.date : featuredPost.data.date.toISOString().split('T')[0];
         const coverImg = featuredPost.data.cover || `/images/og/${lang}-${slug}.svg`;
-        const author = featuredPost.data.author || 'UNVI';
+        const author = featuredPost.data.author || 'Andrey UNVI';
+        const authorAvatar = featuredPost.data.authorAvatar || '/images/avatars/andrey-unvi.jpg';
 
         return (
           <!-- Featured Wide Card (Arayas style data-variant="wide") -->
@@ -114,9 +115,13 @@ const remainingPosts = langPosts.slice(1);
 
                 <div class="pt-4 border-t border-[oklch(1_0_0/6%)] blog-card-footer flex items-center justify-between text-xs font-mono text-[oklch(0.6_0_0)]">
                   <div class="flex items-center gap-2">
-                    <span class="size-6 rounded-full bg-[#009080] text-white flex items-center justify-center font-bold text-[10px]">
-                      {author[0]}
-                    </span>
+                    {authorAvatar ? (
+                      <img src={authorAvatar} alt={author} class="size-6 rounded-full object-cover shrink-0 ring-1 ring-[#009080]/30 shadow-xs" />
+                    ) : (
+                      <span class="size-6 rounded-full bg-[#009080] text-white flex items-center justify-center font-bold text-[10px]">
+                        {author[0]}
+                      </span>
+                    )}
                     <span class="font-medium blog-card-author">{author}</span>
                     <span>•</span>
                     <time datetime={dateStr}>{dateStr}</time>
@@ -139,7 +144,8 @@ const remainingPosts = langPosts.slice(1);
             const slug = parts.slice(1).join('/').replace(/\.(md|mdx)$/, '');
             const dateStr = typeof post.data.date === 'string' ? post.data.date : post.data.date.toISOString().split('T')[0];
             const coverImg = post.data.cover || `/images/og/${lang}-${slug}.svg`;
-            const author = post.data.author || 'UNVI';
+            const author = post.data.author || 'Andrey UNVI';
+            const authorAvatar = post.data.authorAvatar || '/images/avatars/andrey-unvi.jpg';
 
             return (
               <a
@@ -162,6 +168,9 @@ const remainingPosts = langPosts.slice(1);
                   <!-- Meta bar -->
                   <div class="flex items-center justify-between text-xs font-mono text-[oklch(0.55_0_0)] mb-2.5">
                     <div class="flex items-center gap-2">
+                      {authorAvatar ? (
+                        <img src={authorAvatar} alt={author} class="size-4.5 rounded-full object-cover shrink-0 ring-1 ring-[#009080]/30 shadow-xs" />
+                      ) : null}
                       <span class="text-white dark:text-white light:text-slate-900 font-medium">{author}</span>
                       <span>•</span>
                       <time datetime={dateStr}>{dateStr}</time>

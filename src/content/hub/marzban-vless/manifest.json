@@ -1,0 +1,46 @@
+{
+  "id": "marzban-vless",
+  "name": "Marzban VLESS VPN Delivery",
+  "category": "VPN & Proxies",
+  "author": "Andrey UNVI",
+  "version": "0.9.8-beta",
+  "status": "not-stable",
+  "description": "Автоматическая выдача и продление VLESS-подписок через REST API панели Marzban. Создание пользователя, продление срока действия, заморозка и отзыв доступа.",
+  "actions": ["create", "renew", "stop", "delete", "freeze"],
+  "settings": {
+    "marzban_domain": {
+      "type": "string",
+      "label": "Домен панели Marzban",
+      "placeholder": "panel.example.com",
+      "required": true,
+      "help": "Домен панели без протокола https://"
+    },
+    "marzban_user": {
+      "type": "string",
+      "label": "Логин администратора",
+      "placeholder": "admin",
+      "required": true
+    },
+    "marzban_pass": {
+      "type": "password",
+      "label": "Пароль администратора",
+      "required": true
+    },
+    "data_limit_gb": {
+      "type": "number",
+      "label": "Лимит трафика (ГБ)",
+      "default": 0,
+      "help": "0 — безлимитный трафик"
+    },
+    "reset_strategy": {
+      "type": "select",
+      "label": "Стратегия сброса трафика",
+      "default": "no_reset",
+      "options": [
+        { "value": "no_reset", "label": "Без сброса" },
+        { "value": "month", "label": "Ежемесячно" },
+        { "value": "year", "label": "Ежегодно" }
+      ]
+    }
+  }
+}

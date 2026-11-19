@@ -17,7 +17,8 @@ const blog = defineCollection({
     title: z.string(),
     description: z.string(),
     date: z.string().or(z.date()),
-    author: z.string().default('UNVI'),
+    author: z.string().default('Andrey UNVI'),
+    authorAvatar: z.string().default('/images/avatars/andrey-unvi.jpg'),
     tags: z.array(z.string()).default([]),
     cover: z.string().optional(),
     faq: z.array(z.object({

@@ -28,19 +28,19 @@
       Savior<tspan fill="#009080">Bill</tspan>
     </text>
     <rect x="250" y="8" width="130" height="32" rx="16" fill="rgba(0, 144, 128, 0.15)" stroke="#009080" stroke-opacity="0.3" />
-    <text x="315" y="29" fill="#00e0cb" font-family="monospace" font-size="14" font-weight="700" text-anchor="middle">#Demo</text>
+    <text x="315" y="29" fill="#00e0cb" font-family="monospace" font-size="14" font-weight="700" text-anchor="middle">#VPN</text>
   </g>
 
   <!-- Title -->
   <text x="80" y="280" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="46" font-weight="800" letter-spacing="-1px">
-    <tspan x="80" dy="0">Тестовая страница Markdown</tspan><tspan x="80" dy="58">и компонентов</tspan>
+    <tspan x="80" dy="0">How to Launch a VPN</tspan><tspan x="80" dy="58">Service with YooKassa and</tspan><tspan x="80" dy="58">Marzban on SaviorBill:</tspan><tspan x="80" dy="58">Complete Guide</tspan>
   </text>
 
   <!-- Footer Info -->
   <g transform="translate(80, 520)">
     <circle cx="20" cy="20" r="20" fill="#009080" />
-    <text x="20" y="26" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" text-anchor="middle">U</text>
-    <text x="56" y="26" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="600">UNVI</text>
+    <text x="20" y="26" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" text-anchor="middle">A</text>
+    <text x="56" y="26" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="600">Andrey UNVI</text>
     <text x="1040" y="26" fill="rgba(255, 255, 255, 0.45)" font-family="monospace" font-size="18" text-anchor="end">saviorbill.com/blog</text>
   </g>
 </svg>

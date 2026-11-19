@@ -2,8 +2,8 @@
 title: 'Self-Hosted Billing on FastAPI and Lua: How SaviorBill is Built and Why We Abandoned Monolithic Plugins'
 description: 'Deep dive into SaviorBill architecture: isolating service delivery in LuaJIT, Server-Driven UI (sbuiSDK), and eliminating legacy spaghetti code.'
 date: '2026-11-18'
-author: 'UNVI'
-cover: '/images/admin-dashboard.png'
+author: 'Andrey UNVI'
+authorAvatar: '/images/avatars/andrey-unvi.jpg'
 tags: ['FastAPI', 'Lua', 'Billing', 'SelfHosted', 'Architecture']
 faq:
   - question: 'Why Lua instead of Python for integrations?'
