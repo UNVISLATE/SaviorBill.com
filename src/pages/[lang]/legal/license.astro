@@ -51,19 +51,19 @@ const description = lang === 'ru'
           </p>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             <div class="p-4 rounded-xl bg-[oklch(0.16_0_0)] space-y-1.5">
-              <div class="text-xs font-mono text-[#009080] font-semibold">✓ {lang === 'ru' ? 'Разрешено бесплатно' : 'Free to Use'}</div>
+              <div class="text-xs font-mono text-[#009080] font-semibold">✓ PolyForm Shield 1.0.0</div>
               <p class="text-xs text-[oklch(0.65_0_0)] leading-relaxed">
                 {lang === 'ru'
-                  ? 'Использование для личных проектов, стартапов и компаний на собственном сервере без комиссий с оборота.'
-                  : 'Self-hosting on your own infrastructure for personal or commercial projects without gross turnover fees.'}
+                  ? 'Ядро SaviorBill Core: бесплатно для самостоятельного использования, тестирования и бизнеса без конкуренции в виде SaaS-платформы биллинга.'
+                  : 'SaviorBill Core: free for self-hosting, internal operations, and business use without offering competing commercial billing SaaS.'}
               </p>
             </div>
             <div class="p-4 rounded-xl bg-[oklch(0.16_0_0)] space-y-1.5">
-              <div class="text-xs font-mono text-[#009080] font-semibold">✓ {lang === 'ru' ? 'Lua-скрипты и sbuiSDK' : 'Lua Scripts & sbuiSDK'}</div>
+              <div class="text-xs font-mono text-[#009080] font-semibold">✓ Apache License 2.0</div>
               <p class="text-xs text-[oklch(0.65_0_0)] leading-relaxed">
                 {lang === 'ru'
-                  ? 'Все скрипты интеграций и манифесты витрины распространяются под свободной лицензией MIT.'
-                  : 'Integration scripts, payment gateways, and client manifests are licensed under MIT.'}
+                  ? 'Клиентский кабинет (SBPersonalAccountClient) и SDK витрины (sbuiSDK) полностью открыты под свободной лицензией Apache 2.0.'
+                  : 'Client storefront and sbuiSDK are licensed under the permissive Apache License 2.0.'}
               </p>
             </div>
           </div>
@@ -80,37 +80,46 @@ const description = lang === 'ru'
               : 'Full license texts can be inspected directly in official GitHub repositories:'}
           </p>
           <ul class="space-y-3 pt-1 text-sm font-mono">
-            <li class="flex items-center justify-between p-3 rounded-xl bg-[oklch(0.16_0_0)]">
-              <span class="text-white font-semibold">SaviorBill Core (Backend & Admin)</span>
+            <li class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3.5 rounded-xl bg-[oklch(0.16_0_0)]">
+              <div>
+                <span class="text-white font-semibold block">SaviorBill Core (Backend & Admin)</span>
+                <span class="text-xs text-[oklch(0.6_0_0)]">PolyForm Shield License 1.0.0</span>
+              </div>
               <a 
-                href="https://github.com/UNVISLATE/SaviorBill/blob/master/LICENSE" 
+                href="https://github.com/UNVISLATE/SaviorBill/blob/master/LICENSE.txt" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                class="text-xs text-[#009080] hover:underline"
+                class="text-xs text-[#009080] hover:text-[#00e0cb] font-semibold"
               >
-                LICENSE →
+                PolyForm Shield License 1.0.0 →
               </a>
             </li>
-            <li class="flex items-center justify-between p-3 rounded-xl bg-[oklch(0.16_0_0)]">
-              <span class="text-white font-semibold">SBPersonalAccountClient (Storefront)</span>
+            <li class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3.5 rounded-xl bg-[oklch(0.16_0_0)]">
+              <div>
+                <span class="text-white font-semibold block">SBPersonalAccountClient (Storefront)</span>
+                <span class="text-xs text-[oklch(0.6_0_0)]">Apache License 2.0</span>
+              </div>
               <a 
-                href="https://github.com/UNVISLATE/SBPersonalAccountClient" 
+                href="https://github.com/UNVISLATE/SBPersonalAccountClient/blob/main/LICENSE" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                class="text-xs text-[#009080] hover:underline"
+                class="text-xs text-[#009080] hover:text-[#00e0cb] font-semibold"
               >
-                GitHub →
+                Apache License 2.0 →
               </a>
             </li>
-            <li class="flex items-center justify-between p-3 rounded-xl bg-[oklch(0.16_0_0)]">
-              <span class="text-white font-semibold">sbuiSDK (Server-Driven UI)</span>
+            <li class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3.5 rounded-xl bg-[oklch(0.16_0_0)]">
+              <div>
+                <span class="text-white font-semibold block">sbuiSDK (Server-Driven UI)</span>
+                <span class="text-xs text-[oklch(0.6_0_0)]">Apache License 2.0</span>
+              </div>
               <a 
-                href="https://github.com/UNVISLATE/sbuiSDK" 
+                href="https://github.com/UNVISLATE/sbuiSDK/blob/master/LICENSE" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                class="text-xs text-[#009080] hover:underline"
+                class="text-xs text-[#009080] hover:text-[#00e0cb] font-semibold"
               >
-                MIT License →
+                Apache License 2.0 →
               </a>
             </li>
           </ul>

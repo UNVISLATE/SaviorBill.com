@@ -68,6 +68,7 @@ const PERIOD_DATA: Record<string, PeriodData> = {
 
 export default function RealAdminMockup() {
   const [period, setPeriod] = useState<'7' | '30' | '90'>('30');
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
     users: true,
     catalog: true,
@@ -76,6 +77,9 @@ export default function RealAdminMockup() {
   });
 
   const toggleGroup = (key: string) => {
+    if (isCollapsed) {
+      setIsCollapsed(false);
+    }
     setOpenGroups(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
@@ -83,49 +87,58 @@ export default function RealAdminMockup() {
 
   return (
     /* Outer Window Container:
-       Fixed height to prevent ANY layout jumping when toggling sidebar groups.
-       Rounded top-left border, seamlessly integrates into the background. */
+       Fixed full height, rounded top-left border, integrates seamlessly into hero background. */
     <div className="sb-admin-mockup-root w-full h-full text-left select-none font-sans rounded-tl-2xl rounded-bl-none border-t border-l border-white/10 bg-[#0f0f11] shadow-2xl overflow-hidden flex antialiased">
       
       {/* ================= SIDEBAR (Outer Shell) ================= */}
-      <aside className="w-56 shrink-0 bg-[#0f0f11] flex flex-col justify-between pt-3 pb-2 pl-2 pr-1 h-full">
+      <aside 
+        className={`${
+          isCollapsed ? 'w-14 items-center' : 'w-56'
+        } shrink-0 bg-[#0f0f11] flex flex-col justify-between pt-3 pb-2.5 px-2 h-full transition-[width] duration-200 border-r border-white/[0.06]`}
+      >
         
         {/* Top section: Brand + Nav Menu */}
-        <div className="flex flex-col min-h-0 flex-1">
+        <div className="flex flex-col min-h-0 flex-1 w-full">
           {/* Sidebar Branding Header */}
-          <div className="flex items-center gap-2.5 px-2.5 py-1.5 shrink-0">
-            <img src="/logo.svg" alt="SaviorBill Logo" className="size-6 object-contain" />
-            <span className="text-sm font-semibold tracking-tight text-white">
-              SaviorBill Admin
-            </span>
+          <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-2.5 px-2.5'} py-1.5 shrink-0`}>
+            <img src="/logo.svg" alt="SaviorBill Logo" className="size-6 object-contain shrink-0" />
+            {!isCollapsed && (
+              <span className="text-sm font-semibold tracking-tight text-white truncate">
+                SaviorBill Admin
+              </span>
+            )}
           </div>
 
-          {/* Navigation Menu (Scrollable if needed, never alters window dimensions) */}
-          <nav className="mt-3 space-y-1 text-xs overflow-y-auto pr-1 flex-1">
+          {/* Navigation Menu */}
+          <nav className="mt-3 space-y-1 text-xs overflow-y-auto pr-0.5 flex-1 scrollbar-none w-full">
             
             {/* Active: Дашборд */}
             <button 
               type="button" 
-              className="w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg bg-[#0c5e53] text-white font-medium shadow-xs"
+              title="Дашборд"
+              className={`w-full flex items-center ${isCollapsed ? 'justify-center px-1' : 'gap-2.5 px-2.5'} py-1.5 rounded-lg bg-[#0c5e53] text-white font-medium shadow-xs`}
             >
               <Gauge className="size-4 shrink-0 text-white" />
-              <span>Дашборд</span>
+              {!isCollapsed && <span>Дашборд</span>}
             </button>
 
             {/* Group: Пользователи */}
             <div>
               <button 
                 type="button" 
+                title="Пользователи"
                 onClick={() => toggleGroup('users')} 
-                className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-md text-[#a1a1aa] hover:text-white hover:bg-white/[0.04] transition-colors"
+                className={`w-full flex items-center ${isCollapsed ? 'justify-center px-1' : 'justify-between px-2.5'} py-1.5 rounded-md text-[#a1a1aa] hover:text-white hover:bg-white/[0.04] transition-colors`}
               >
                 <div className="flex items-center gap-2.5">
                   <Users className="size-4 shrink-0" />
-                  <span>Пользователи</span>
+                  {!isCollapsed && <span>Пользователи</span>}
                 </div>
-                <ChevronDown className={`size-3 text-[#71717a] transition-transform duration-200 ${openGroups.users ? '' : '-rotate-90'}`} />
+                {!isCollapsed && (
+                  <ChevronDown className={`size-3 text-[#71717a] transition-transform duration-200 ${openGroups.users ? '' : '-rotate-90'}`} />
+                )}
               </button>
-              {openGroups.users && (
+              {!isCollapsed && openGroups.users && (
                 <div className="pl-6 pr-1 py-0.5 space-y-0.5 border-l border-white/[0.08] ml-4 mt-0.5">
                   <div className="flex items-center gap-2 px-2 py-1 rounded text-[#a1a1aa] hover:text-white hover:bg-white/[0.04] cursor-pointer">
                     <Users className="size-3.5 shrink-0" />
@@ -151,16 +164,19 @@ export default function RealAdminMockup() {
             <div>
               <button 
                 type="button" 
+                title="Каталог"
                 onClick={() => toggleGroup('catalog')} 
-                className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-md text-[#a1a1aa] hover:text-white hover:bg-white/[0.04] transition-colors"
+                className={`w-full flex items-center ${isCollapsed ? 'justify-center px-1' : 'justify-between px-2.5'} py-1.5 rounded-md text-[#a1a1aa] hover:text-white hover:bg-white/[0.04] transition-colors`}
               >
                 <div className="flex items-center gap-2.5">
                   <FolderTree className="size-4 shrink-0" />
-                  <span>Каталог</span>
+                  {!isCollapsed && <span>Каталог</span>}
                 </div>
-                <ChevronDown className={`size-3 text-[#71717a] transition-transform duration-200 ${openGroups.catalog ? '' : '-rotate-90'}`} />
+                {!isCollapsed && (
+                  <ChevronDown className={`size-3 text-[#71717a] transition-transform duration-200 ${openGroups.catalog ? '' : '-rotate-90'}`} />
+                )}
               </button>
-              {openGroups.catalog && (
+              {!isCollapsed && openGroups.catalog && (
                 <div className="pl-6 pr-1 py-0.5 space-y-0.5 border-l border-white/[0.08] ml-4 mt-0.5">
                   <div className="flex items-center gap-2 px-2 py-1 rounded text-[#a1a1aa] hover:text-white hover:bg-white/[0.04] cursor-pointer">
                     <FolderTree className="size-3.5 shrink-0" />
@@ -186,16 +202,19 @@ export default function RealAdminMockup() {
             <div>
               <button 
                 type="button" 
+                title="Автоматизация"
                 onClick={() => toggleGroup('auto')} 
-                className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-md text-[#a1a1aa] hover:text-white hover:bg-white/[0.04] transition-colors"
+                className={`w-full flex items-center ${isCollapsed ? 'justify-center px-1' : 'justify-between px-2.5'} py-1.5 rounded-md text-[#a1a1aa] hover:text-white hover:bg-white/[0.04] transition-colors`}
               >
                 <div className="flex items-center gap-2.5">
                   <Zap className="size-4 shrink-0" />
-                  <span>Автоматизация</span>
+                  {!isCollapsed && <span>Автоматизация</span>}
                 </div>
-                <ChevronDown className={`size-3 text-[#71717a] transition-transform duration-200 ${openGroups.auto ? '' : '-rotate-90'}`} />
+                {!isCollapsed && (
+                  <ChevronDown className={`size-3 text-[#71717a] transition-transform duration-200 ${openGroups.auto ? '' : '-rotate-90'}`} />
+                )}
               </button>
-              {openGroups.auto && (
+              {!isCollapsed && openGroups.auto && (
                 <div className="pl-6 pr-1 py-0.5 space-y-0.5 border-l border-white/[0.08] ml-4 mt-0.5">
                   <div className="flex items-center gap-2 px-2 py-1 rounded text-[#a1a1aa] hover:text-white hover:bg-white/[0.04] cursor-pointer">
                     <ScrollText className="size-3.5 shrink-0" />
@@ -217,16 +236,19 @@ export default function RealAdminMockup() {
             <div>
               <button 
                 type="button" 
+                title="Провайдеры"
                 onClick={() => toggleGroup('providers')} 
-                className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-md text-[#a1a1aa] hover:text-white hover:bg-white/[0.04] transition-colors"
+                className={`w-full flex items-center ${isCollapsed ? 'justify-center px-1' : 'justify-between px-2.5'} py-1.5 rounded-md text-[#a1a1aa] hover:text-white hover:bg-white/[0.04] transition-colors`}
               >
                 <div className="flex items-center gap-2.5">
                   <CreditCard className="size-4 shrink-0" />
-                  <span>Провайдеры</span>
+                  {!isCollapsed && <span>Провайдеры</span>}
                 </div>
-                <ChevronDown className={`size-3 text-[#71717a] transition-transform duration-200 ${openGroups.providers ? '' : '-rotate-90'}`} />
+                {!isCollapsed && (
+                  <ChevronDown className={`size-3 text-[#71717a] transition-transform duration-200 ${openGroups.providers ? '' : '-rotate-90'}`} />
+                )}
               </button>
-              {openGroups.providers && (
+              {!isCollapsed && openGroups.providers && (
                 <div className="pl-6 pr-1 py-0.5 space-y-0.5 border-l border-white/[0.08] ml-4 mt-0.5">
                   <div className="flex items-center gap-2 px-2 py-1 rounded text-[#a1a1aa] hover:text-white hover:bg-white/[0.04] cursor-pointer">
                     <CreditCard className="size-3.5 shrink-0" />
@@ -241,43 +263,57 @@ export default function RealAdminMockup() {
             </div>
 
             {/* Standalone plugin item */}
-            <div className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[#a1a1aa] hover:text-white hover:bg-white/[0.04] cursor-pointer">
+            <div 
+              title="Тест-плагин"
+              className={`flex items-center ${isCollapsed ? 'justify-center px-1' : 'gap-2.5 px-2.5'} py-1.5 rounded-md text-[#a1a1aa] hover:text-white hover:bg-white/[0.04] cursor-pointer`}
+            >
               <Plug className="size-4 shrink-0" />
-              <span>Тест-плагин</span>
+              {!isCollapsed && <span>Тест-плагин</span>}
             </div>
 
           </nav>
         </div>
 
-        {/* Sidebar Footer (Pinned at bottom) */}
-        <div className="px-1 pt-2 border-t border-white/[0.08] space-y-2 shrink-0">
+        {/* Sidebar Footer (Pinned at bottom, zero dead void) */}
+        <div className="pt-2 border-t border-white/[0.08] space-y-2 shrink-0 w-full mt-auto">
           <div className="space-y-0.5 text-xs text-[#a1a1aa]">
-            <div className="flex items-center gap-2 px-2.5 py-1 rounded hover:text-white hover:bg-white/[0.04] cursor-pointer">
+            <div 
+              title="Аудит"
+              className={`flex items-center ${isCollapsed ? 'justify-center px-1' : 'gap-2 px-2.5'} py-1 rounded hover:text-white hover:bg-white/[0.04] cursor-pointer`}
+            >
               <FileClock className="size-3.5 shrink-0" />
-              <span>Аудит</span>
+              {!isCollapsed && <span>Аудит</span>}
             </div>
-            <div className="flex items-center gap-2 px-2.5 py-1 rounded hover:text-white hover:bg-white/[0.04] cursor-pointer">
+            <div 
+              title="Система"
+              className={`flex items-center ${isCollapsed ? 'justify-center px-1' : 'gap-2 px-2.5'} py-1 rounded hover:text-white hover:bg-white/[0.04] cursor-pointer`}
+            >
               <MonitorCog className="size-3.5 shrink-0" />
-              <span>Система</span>
+              {!isCollapsed && <span>Система</span>}
             </div>
-            <div className="flex items-center gap-2 px-2.5 py-1 rounded hover:text-white hover:bg-white/[0.04] cursor-pointer">
+            <div 
+              title="Настройки"
+              className={`flex items-center ${isCollapsed ? 'justify-center px-1' : 'gap-2 px-2.5'} py-1 rounded hover:text-white hover:bg-white/[0.04] cursor-pointer`}
+            >
               <Settings className="size-3.5 shrink-0" />
-              <span>Настройки</span>
+              {!isCollapsed && <span>Настройки</span>}
             </div>
           </div>
 
           {/* NavUser Component (owner) */}
-          <div className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06]">
+          <div className={`flex items-center ${isCollapsed ? 'justify-center p-1' : 'justify-between px-2.5 py-1.5'} rounded-lg bg-white/[0.03] border border-white/[0.06]`}>
             <div className="flex items-center gap-2 min-w-0">
               <div className="size-7 rounded-full bg-neutral-800 text-neutral-200 text-[11px] font-semibold flex items-center justify-center shrink-0">
                 OW
               </div>
-              <div className="min-w-0 truncate">
-                <div className="text-xs font-semibold text-white leading-tight truncate">owner</div>
-                <div className="text-[10px] text-[#71717a] leading-tight truncate">owner</div>
-              </div>
+              {!isCollapsed && (
+                <div className="min-w-0 truncate">
+                  <div className="text-xs font-semibold text-white leading-tight truncate">owner</div>
+                  <div className="text-[10px] text-[#71717a] leading-tight truncate">owner</div>
+                </div>
+              )}
             </div>
-            <ChevronsUpDown className="size-3.5 text-[#71717a] shrink-0" />
+            {!isCollapsed && <ChevronsUpDown className="size-3.5 text-[#71717a] shrink-0" />}
           </div>
         </div>
 
@@ -289,7 +325,13 @@ export default function RealAdminMockup() {
         {/* Main Top Header Bar (Inside inset panel) */}
         <header className="h-11 px-4 border-b border-white/[0.06] flex items-center justify-between shrink-0 bg-[#141416]">
           <div className="flex items-center gap-2.5">
-            <button type="button" className="p-1 rounded text-[#a1a1aa] hover:text-white hover:bg-white/[0.06] transition-colors">
+            <button 
+              type="button" 
+              onClick={() => setIsCollapsed(prev => !prev)}
+              title={isCollapsed ? "Развернуть меню" : "Свернуть меню"}
+              aria-label="Переключить боковое меню"
+              className="p-1.5 rounded-md text-[#a1a1aa] hover:text-white hover:bg-white/[0.08] active:bg-white/[0.12] transition-colors cursor-pointer"
+            >
               <PanelLeft className="size-4" />
             </button>
             <span className="h-3.5 w-px bg-white/10" />

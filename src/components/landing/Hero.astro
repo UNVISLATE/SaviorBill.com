@@ -11,28 +11,28 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<section class="relative min-h-[calc(100vh-5rem)] flex items-center justify-center overflow-hidden py-12 px-4">
+<section class="relative min-h-[calc(100vh-5rem)] flex items-center justify-center overflow-hidden py-10 px-4">
   
   <!-- Central Hero Content: 100% Centered as originally requested, ZERO layout displacement, ZERO squeezing -->
-  <div class="relative z-10 max-w-4xl mx-auto text-center space-y-6">
-    <div class="space-y-4">
+  <div class="relative z-10 max-w-3xl mx-auto text-center space-y-5">
+    <div class="space-y-3.5">
       
-      <!-- Slogan (Centered, clean) -->
-      <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+      <!-- Slogan (Centered, tight leading, compact typography) -->
+      <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] font-extrabold tracking-tight leading-[1.15]">
         <span class="inline sm:block hero-title-1">{t('hero.title.1')} </span>
         <span class="inline sm:block hero-title-2">{t('hero.title.2')} </span>
         <span class="inline sm:block hero-title-3">{t('hero.title.3')}</span>
       </h1>
 
       <!-- Short Subtitle (High contrast in both light & dark themes) -->
-      <p class="hero-subtitle max-w-2xl mx-auto text-xs sm:text-sm leading-relaxed">
+      <p class="hero-subtitle max-w-xl mx-auto text-xs sm:text-sm leading-relaxed">
         {lang === 'ru'
           ? 'Событийно-ориентированный биллинг для VPN, SaaS, хостинга и ключей с изолированной Lua-логикой и Server-Driven UI.'
           : 'Event-driven billing engine for VPN, SaaS, hosting, and digital keys powered by isolated Lua and Server-Driven UI.'}
       </p>
 
-      <!-- Terminal & Action Buttons (Centered) -->
-      <div class="max-w-xl mx-auto pt-2">
+      <!-- Terminal & Action Buttons (Centered, compact) -->
+      <div class="max-w-lg mx-auto pt-1">
         <TerminalBlock 
           client:load 
           command="curl -fsSL https://get.saviorbill.com | bash" 
@@ -65,10 +65,10 @@ const t = useTranslations(lang);
 
   <!-- Background Interactive Real Admin Mockup:
        1) Positioned strictly in background (z-0, absolute)
-       2) Anchored to left-[calc(50%+410px)] so it NEVER touches or shifts the centered hero text
-       3) Anchored flush to bottom (bottom-0) with soft feathering on bottom & right edges (calc(100% - 60px))
-       4) Eliminates any empty dead gap below or harsh rectangular chops -->
-  <div class="hero-mockup-wrapper hidden min-[1380px]:block absolute left-[calc(50%+410px)] 2xl:left-[calc(50%+440px)] bottom-0 w-[940px] 2xl:w-[1020px] h-[660px] 2xl:h-[700px] z-0 pointer-events-auto opacity-85 hover:opacity-100 transition-opacity duration-300">
+       2) Anchored to left-[calc(50%+240px)] so it NEVER touches or shifts the centered hero text
+       3) Anchored top-12 bottom-0 flush with the bottom edge of hero section, bleeding off right and bottom edges
+       4) Eliminates any empty dead gap below or harsh chops, fully interactive and collapsible -->
+  <div class="hero-mockup-wrapper hidden xl:block absolute left-[calc(50%+240px)] 2xl:left-[calc(50%+280px)] top-12 bottom-0 w-[960px] 2xl:w-[1080px] z-0 pointer-events-auto opacity-90 hover:opacity-100 transition-opacity duration-300">
     <RealAdminMockup client:load />
   </div>
 

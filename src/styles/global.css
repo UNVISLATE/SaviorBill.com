@@ -846,6 +846,16 @@ mark.quote-highlight {
 }
 
 /* View Transitions Circle Ripple Animation (stealthsurf style) */
+html[data-curtain-active="true"]::view-transition-old(root),
+html[data-curtain-active="true"]::view-transition-new(root) {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+#lunoweb-curtain {
+  z-index: 2147483647 !important;
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;

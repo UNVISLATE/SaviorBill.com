@@ -1,26 +1,41 @@
 ---
 ---
 
-<!-- Lunoweb-style Fullscreen Curtain Transition (Only triggers between Root Sections: Home <-> Blog <-> Docs <-> Hub) -->
+<!-- Lunoweb-style Fullscreen Curtain Transition (transition:persist ensures the element is never discarded during Astro page swap) -->
 <div 
   id="lunoweb-curtain" 
-  class="fixed inset-0 z-[99999] pointer-events-none flex flex-col items-center justify-center bg-[#0a0f18] text-white shadow-2xl transition-transform duration-350 ease-[cubic-bezier(0.76,0,0.24,1)] translate-y-full"
+  transition:persist="lunoweb-curtain"
+  class="fixed inset-0 pointer-events-none flex flex-col items-center justify-center bg-[#070b12] text-white select-none translate-y-full"
+  style="z-index: 2147483647; will-change: transform;"
   aria-hidden="true"
 >
-  <div class="flex items-center gap-3 scale-95 opacity-90 transition-opacity">
-    <img src="/logo.svg" alt="SaviorBill" class="size-10 object-contain animate-pulse" />
-    <span class="text-xl font-bold tracking-tight font-sans text-white">
-      Savior<span class="text-[#009080]">Bill</span>
+  <div class="flex flex-col items-center gap-5">
+    <img src="/logo.svg" alt="SaviorBill" class="size-14 sm:size-16 object-contain" />
+    <span 
+      id="lunoweb-curtain-title" 
+      class="text-2xl sm:text-4xl font-extrabold tracking-widest uppercase font-sans text-white"
+    >
+      БЛОГ
     </span>
   </div>
 </div>
 
 <script is:inline>
   (function() {
-    const curtain = document.getElementById('lunoweb-curtain');
-    if (!curtain) return;
-
-    let curtainActive = false;
+    const SECTION_NAMES = {
+      ru: {
+        home: 'ГЛАВНАЯ',
+        blog: 'БЛОГ',
+        docs: 'ДОКУМЕНТАЦИЯ',
+        hub: 'LUA ХАБ'
+      },
+      en: {
+        home: 'HOME',
+        blog: 'BLOG',
+        docs: 'DOCS',
+        hub: 'LUA HUB'
+      }
+    };
 
     function getRootSection(pathname) {
       if (!pathname) return 'home';
@@ -35,8 +50,14 @@
       return 'other';
     }
 
-    // Intercept navigation before preparation
+    let isCurtainActive = false;
+
+    // 1. Before preparation: slide curtain in from bottom to cover screen
     document.addEventListener('astro:before-preparation', (event) => {
+      const curtain = document.getElementById('lunoweb-curtain');
+      const titleEl = document.getElementById('lunoweb-curtain-title');
+      if (!curtain || !titleEl) return;
+
       const fromPath = window.location.pathname;
       const toPath = event.to.pathname;
 
@@ -47,37 +68,49 @@
 
       // Only trigger curtain when changing ROOT section
       if (fromSec !== toSec && validRoots.includes(fromSec) && validRoots.includes(toSec)) {
-        curtainActive = true;
+        isCurtainActive = true;
+        document.documentElement.setAttribute('data-curtain-active', 'true');
+
+        // Set destination title
+        const lang = toPath.startsWith('/en') ? 'en' : 'ru';
+        const sectionTitle = SECTION_NAMES[lang]?.[toSec] || toSec.toUpperCase();
+        titleEl.textContent = sectionTitle;
+
+        // Slide in from bottom
+        curtain.style.pointerEvents = 'auto';
+        curtain.style.transition = 'transform 360ms cubic-bezier(0.77, 0, 0.175, 1)';
+        curtain.style.transform = 'translateY(0%)';
+
         const originalLoader = event.loader;
-
         event.loader = async () => {
-          // Slide in from bottom to cover screen
-          curtain.style.transition = 'transform 340ms cubic-bezier(0.76, 0, 0.24, 1)';
-          curtain.style.transform = 'translateY(0%)';
-          curtain.style.pointerEvents = 'auto';
-
-          // Wait for curtain to cover viewport
-          await new Promise((r) => setTimeout(r, 340));
+          // Wait for curtain to fully cover viewport
+          await new Promise((r) => setTimeout(r, 370));
           await originalLoader();
         };
       }
     });
 
-    // After new page DOM is swapped, slide curtain out toward top
+    // 2. After swap: new DOM is painted behind curtain; slide curtain out to top
     document.addEventListener('astro:after-swap', () => {
-      if (curtainActive) {
-        // Slide out to top
-        curtain.style.transition = 'transform 360ms cubic-bezier(0.76, 0, 0.24, 1)';
+      if (!isCurtainActive) return;
+
+      const curtain = document.getElementById('lunoweb-curtain');
+      if (!curtain) return;
+
+      setTimeout(() => {
+        // Slide out toward top
+        curtain.style.transition = 'transform 380ms cubic-bezier(0.77, 0, 0.175, 1)';
         curtain.style.transform = 'translateY(-100%)';
 
         setTimeout(() => {
-          // Reset curtain back below viewport without transition
+          // Silently reset curtain back below viewport
           curtain.style.transition = 'none';
           curtain.style.transform = 'translateY(100%)';
           curtain.style.pointerEvents = 'none';
-          curtainActive = false;
-        }, 380);
-      }
+          document.documentElement.removeAttribute('data-curtain-active');
+          isCurtainActive = false;
+        }, 390);
+      }, 50);
     });
   })();
 </script>
