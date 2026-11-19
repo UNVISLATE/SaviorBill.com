@@ -11,3 +11,10 @@ Thumbs.db
 
 # Generated hub download zips (generated at build time)
 public/downloads/hub/*.zip
+
+# IDE
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
+.vscode/
