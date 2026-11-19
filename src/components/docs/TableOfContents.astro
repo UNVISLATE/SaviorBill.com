@@ -106,6 +106,29 @@ const filteredHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     }
   }
 
+  // Smooth scroll handler for TOC links
+  function bindTOCLinks() {
+    const links = document.querySelectorAll('.toc-link');
+    links.forEach((link) => {
+      if (link.dataset.tocBound) return;
+      link.dataset.tocBound = 'true';
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const slug = link.getAttribute('data-slug');
+        if (!slug) return;
+        const target = document.getElementById(slug);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          history.pushState(null, '', `#${slug}`);
+        }
+      });
+    });
+  }
+
+  bindTOCLinks();
+  document.addEventListener('astro:page-load', bindTOCLinks);
+  document.addEventListener('astro:after-swap', bindTOCLinks);
+
   window.addEventListener('scroll', () => {
     updateProgress();
     highlightTOC();

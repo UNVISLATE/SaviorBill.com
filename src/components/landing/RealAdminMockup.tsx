@@ -85,7 +85,7 @@ export default function RealAdminMockup() {
     /* Outer Window Container:
        Fixed height to prevent ANY layout jumping when toggling sidebar groups.
        Rounded top-left border, seamlessly integrates into the background. */
-    <div className="w-full h-full text-left select-none font-sans rounded-tl-2xl border-t border-l border-white/10 bg-[#0f0f11] shadow-2xl overflow-hidden flex antialiased">
+    <div className="sb-admin-mockup-root w-full h-full text-left select-none font-sans rounded-tl-2xl border-t border-l border-white/10 bg-[#0f0f11] shadow-2xl overflow-hidden flex antialiased">
       
       {/* ================= SIDEBAR (Outer Shell) ================= */}
       <aside className="w-56 shrink-0 bg-[#0f0f11] flex flex-col justify-between py-3 pl-2 pr-1 h-full">
@@ -310,8 +310,8 @@ export default function RealAdminMockup() {
           {/* Welcome row & Period Switcher */}
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-base font-bold text-white tracking-tight">Добро пожаловать, owner</h2>
-              <p className="text-xs text-[#a1a1aa]">Сводка за выбранный период.</p>
+              <h2 className="text-base font-bold !text-white tracking-tight" style={{ color: '#ffffff' }}>Добро пожаловать, owner</h2>
+              <p className="text-xs !text-[#a1a1aa]" style={{ color: '#a1a1aa' }}>Сводка за выбранный период.</p>
             </div>
 
             {/* Period Button Group */}

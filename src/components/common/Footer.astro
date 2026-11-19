@@ -12,26 +12,26 @@ const year = new Date().getFullYear();
 
 <footer class="mt-20 px-3 pb-8 sm:px-4 relative overflow-visible">
   <!-- Floating Island container without borders (border-none) -->
-  <div class="relative overflow-hidden mx-auto max-w-6xl rounded-2xl bg-[oklch(0.18_0_0/80%)] px-6 py-10 shadow-xl shadow-black/25 backdrop-blur-md">
+  <div class="footer-island relative overflow-hidden mx-auto max-w-6xl rounded-2xl px-6 py-10 shadow-xl backdrop-blur-md">
     
-    <!-- Giant outline logo background -->
+    <!-- Giant outline logo background (animated stroke visible in both dark & light modes) -->
     <img
       src="/OutlineLoader.svg"
       alt=""
-      class="absolute -bottom-24 -left-12 -rotate-8 w-96 h-96 opacity-10 pointer-events-none select-none -z-10"
+      class="footer-outline-loader absolute -bottom-24 -left-12 -rotate-8 w-96 h-96 pointer-events-none select-none -z-10"
       aria-hidden="true"
     />
 
     <div class="relative z-10 grid gap-8 sm:grid-cols-2 md:grid-cols-3">
       <!-- Col 1: Brand -->
       <div class="space-y-3">
-        <a href={`/${lang}`} class="inline-flex items-center gap-2.5 font-bold tracking-tight text-white dark:text-white light:text-slate-900">
+        <a href={`/${lang}`} class="inline-flex items-center gap-2.5 font-bold tracking-tight text-white">
           <img src="/logo.svg" alt="SaviorBill" class="size-7 object-contain" />
-          <span class="text-base font-bold tracking-tight text-white dark:text-white light:text-slate-900">
+          <span class="text-base font-bold tracking-tight footer-brand-text">
             Savior<span class="text-[#009080]">Bill</span>
           </span>
         </a>
-        <p class="text-xs text-[oklch(0.65_0_0)] leading-relaxed max-w-sm">
+        <p class="text-xs text-[oklch(0.65_0_0)] leading-relaxed max-w-sm footer-desc">
           {lang === 'ru' 
             ? 'Событийно-ориентированная self-hosted платформа биллинга и витрина цифровых услуг с изолированной Lua-логикой.'
             : 'Event-driven self-hosted billing engine & digital storefront powered by isolated Lua runtime.'}
@@ -40,35 +40,35 @@ const year = new Date().getFullYear();
 
       <!-- Col 2: Docs -->
       <div class="space-y-2 text-xs">
-        <p class="font-semibold text-white uppercase tracking-wider font-mono mb-3">
+        <p class="font-semibold text-white uppercase tracking-wider font-mono mb-3 footer-col-title">
           {t('nav.docs')}
         </p>
-        <ul class="space-y-2 text-[oklch(0.7_0_0)]">
-          <li><a href={`/${lang}/docs/quickstart`} class="hover:text-white transition-colors">{lang === 'ru' ? 'Быстрый старт' : 'Quickstart'}</a></li>
-          <li><a href={`/${lang}/docs/lua-contracts`} class="hover:text-white transition-colors">{lang === 'ru' ? 'Контракты Lua-скриптов' : 'Lua Contracts'}</a></li>
-          <li><a href={`/${lang}/hub`} class="hover:text-white transition-colors">{t('nav.hub')}</a></li>
-          <li><a href={`/${lang}/blog`} class="hover:text-white transition-colors">{t('nav.blog')}</a></li>
+        <ul class="space-y-2 text-[oklch(0.7_0_0)] footer-links">
+          <li><a href={`/${lang}/docs/quickstart`} class="hover:text-[#009080] transition-colors">{lang === 'ru' ? 'Быстрый старт' : 'Quickstart'}</a></li>
+          <li><a href={`/${lang}/docs/lua-contracts`} class="hover:text-[#009080] transition-colors">{lang === 'ru' ? 'Контракты Lua-скриптов' : 'Lua Contracts'}</a></li>
+          <li><a href={`/${lang}/hub`} class="hover:text-[#009080] transition-colors">{t('nav.hub')}</a></li>
+          <li><a href={`/${lang}/blog`} class="hover:text-[#009080] transition-colors">{t('nav.blog')}</a></li>
         </ul>
       </div>
 
       <!-- Col 3: Repositories -->
       <div class="space-y-2 text-xs">
-        <p class="font-semibold text-white uppercase tracking-wider font-mono mb-3">
+        <p class="font-semibold text-white uppercase tracking-wider font-mono mb-3 footer-col-title">
           {lang === 'ru' ? 'Репозитории и код' : 'Ecosystem'}
         </p>
-        <ul class="space-y-2 text-[oklch(0.7_0_0)]">
-          <li><a href="https://github.com/UNVISLATE/SaviorBill" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">SaviorBill Core (Backend & Admin)</a></li>
-          <li><a href="https://github.com/UNVISLATE/SBPersonalAccountClient" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">SBPersonalAccountClient (Storefront)</a></li>
-          <li><a href="https://github.com/UNVISLATE/sbuiSDK" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">sbuiSDK (Server-Driven UI)</a></li>
+        <ul class="space-y-2 text-[oklch(0.7_0_0)] footer-links">
+          <li><a href="https://github.com/UNVISLATE/SaviorBill" target="_blank" rel="noopener noreferrer" class="hover:text-[#009080] transition-colors">SaviorBill Core (Backend & Admin)</a></li>
+          <li><a href="https://github.com/UNVISLATE/SBPersonalAccountClient" target="_blank" rel="noopener noreferrer" class="hover:text-[#009080] transition-colors">SBPersonalAccountClient (Storefront)</a></li>
+          <li><a href="https://github.com/UNVISLATE/sbuiSDK" target="_blank" rel="noopener noreferrer" class="hover:text-[#009080] transition-colors">sbuiSDK (Server-Driven UI)</a></li>
         </ul>
       </div>
     </div>
 
     <!-- Soft Divider -->
-    <div class="my-6 border-t border-[oklch(1_0_0/6%)]"></div>
+    <div class="my-6 border-t border-[oklch(1_0_0/6%)] footer-divider"></div>
 
     <!-- Bottom Bar: © 2026 saviorbill.com + Powered by UNVI.XYZ + Borderless Buttons -->
-    <div class="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between text-xs text-[oklch(0.6_0_0)]">
+    <div class="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between text-xs text-[oklch(0.6_0_0)] footer-bottom-bar">
       <div class="flex flex-wrap items-center gap-2 sm:gap-3">
         <span>© {year} saviorbill.com</span>
         <span class="opacity-40">•</span>
@@ -76,7 +76,7 @@ const year = new Date().getFullYear();
           href="https://unvi.xyz/"
           target="_blank"
           rel="noopener noreferrer"
-          class="group inline-flex items-baseline gap-1 text-[oklch(0.6_0_0)] transition-transform duration-300 hover:text-white"
+          class="group inline-flex items-baseline gap-1 transition-transform duration-300 hover:text-white"
         >
           <span>Powered by</span>
           <span class="inline-block bg-[linear-gradient(100deg,#009080_0%,#009080_35%,#fff_50%,#0C5E53_65%,#0C5E53_100%)] bg-[length:250%_100%] bg-[position:100%_0] bg-clip-text text-transparent transition-[background-position] duration-700 ease-out group-hover:bg-[position:0_0] font-semibold">
@@ -94,7 +94,7 @@ const year = new Date().getFullYear();
           rel="noopener noreferrer"
           aria-label="GitHub"
           title="GitHub"
-          class="footer-social-btn size-9 rounded-xl bg-[oklch(0.24_0_0)] hover:bg-[oklch(0.28_0_0)] hover:text-white text-[oklch(0.8_0_0)] flex items-center justify-center transition-all"
+          class="footer-social-btn size-9 rounded-xl bg-[oklch(0.24_0_0)] hover:bg-[oklch(0.28_0_0)] hover:text-white text-[oklch(0.8_0_0)] flex items-center justify-center transition-all shrink-0"
         >
           <svg class="size-4" fill="currentColor" viewBox="0 0 24 24">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
@@ -108,7 +108,7 @@ const year = new Date().getFullYear();
           rel="noopener noreferrer"
           aria-label="Telegram"
           title="Telegram"
-          class="footer-social-btn size-9 rounded-xl bg-[oklch(0.24_0_0)] hover:bg-[#009080] hover:text-white text-[oklch(0.8_0_0)] flex items-center justify-center transition-all"
+          class="footer-social-btn size-9 rounded-xl bg-[oklch(0.24_0_0)] hover:bg-[#009080] hover:text-white text-[oklch(0.8_0_0)] flex items-center justify-center transition-all shrink-0"
         >
           <svg class="size-4" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
@@ -122,7 +122,7 @@ const year = new Date().getFullYear();
           rel="noopener noreferrer"
           aria-label="Habr"
           title="Habr Article"
-          class="footer-social-btn size-9 rounded-xl bg-[oklch(0.24_0_0)] hover:bg-[#009080] hover:text-white text-[oklch(0.8_0_0)] flex items-center justify-center transition-all font-mono font-black text-sm"
+          class="footer-social-btn size-9 rounded-xl bg-[oklch(0.24_0_0)] hover:bg-[#009080] hover:text-white text-[oklch(0.8_0_0)] flex items-center justify-center transition-all font-mono font-black text-sm shrink-0"
         >
           H
         </a>

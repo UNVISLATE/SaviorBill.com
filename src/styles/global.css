@@ -19,7 +19,7 @@
   --color-foreground: oklch(0.985 0 0);
   --color-muted: oklch(0.708 0 0);
   --color-muted-dark: oklch(0.5 0 0);
-  --color-border: oklch(1 0 0 / 8%);
+  --color-border: transparent;
 
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -28,9 +28,10 @@
 
 :root {
   color-scheme: dark;
+  scroll-behavior: smooth;
 }
 
-/* Light Theme Variables (Calm muted slate background with crisp white cards) */
+/* Light Theme Variables (Calm muted slate background with crisp white borderless cards) */
 html.light {
   color-scheme: light;
   --color-background: #d8e2eb;
@@ -42,7 +43,7 @@ html.light {
   --color-foreground: #0f172a;
   --color-muted: #475569;
   --color-muted-dark: #64748b;
-  --color-border: rgba(148, 163, 184, 0.35);
+  --color-border: transparent;
 }
 
 html.light body {
@@ -50,112 +51,200 @@ html.light body {
   color: #0f172a;
 }
 
-/* Header & Footer Island Floating Panels */
-html.light .header-island,
-html.light header > div > div,
-html.light footer > div {
-  background-color: rgba(255, 255, 255, 0.94) !important;
-  border: 1px solid rgba(148, 163, 184, 0.4) !important;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08) !important;
+/* ============================================================
+   ZERO BORDERS & FLOATING ISLAND PANELS (Header & Footer)
+   ============================================================ */
+
+/* Header Floating Island: Frosted glass, borderless */
+.header-island {
+  background-color: rgba(26, 26, 26, 0.82) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.35) !important;
+}
+
+html.light .header-island {
+  background-color: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04) !important;
+}
+
+/* Header Brand Text */
+.header-brand-text {
+  color: #ffffff;
+}
+html.light .header-brand-text {
+  color: #0f172a !important;
+}
+
+/* Header Nav Links */
+.header-nav-links a {
+  color: oklch(0.708 0 0);
+}
+html.light .header-nav-links a {
+  color: #475569 !important;
+}
+html.light .header-nav-links a:hover {
+  color: #009080 !important;
+}
+
+/* Header & Footer Buttons: Strictly borderless, uniform dimensions */
+.header-btn,
+.footer-social-btn {
+  border: none !important;
+  outline: none !important;
 }
 
 html.light .header-btn,
 html.light .footer-social-btn {
-  background-color: #f1f5f9 !important;
-  color: #334155 !important;
-  border: 1px solid rgba(148, 163, 184, 0.35) !important;
+  background-color: #e2e8f0 !important;
+  color: #1e293b !important;
+  border: none !important;
+  outline: none !important;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
 }
 
 html.light .header-btn:hover,
 html.light .footer-social-btn:hover {
-  background-color: #ffffff !important;
+  background-color: #cbd5e1 !important;
   color: #0f172a !important;
-  border-color: #009080 !important;
+}
+
+/* Hero Secondary Button */
+.hero-secondary-btn {
+  border: none !important;
 }
 
 html.light .hero-secondary-btn {
   background-color: #ffffff !important;
   color: #0f172a !important;
-  border: 1px solid rgba(148, 163, 184, 0.45) !important;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06) !important;
 }
 
 html.light .hero-secondary-btn:hover {
-  background-color: #f8fafc !important;
-  border-color: #009080 !important;
+  background-color: #f1f5f9 !important;
 }
 
-html.light header a,
-html.light header span,
-html.light footer a,
-html.light footer span {
+/* Footer Floating Island: Borderless */
+.footer-island {
+  background-color: rgba(26, 26, 26, 0.82) !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.35) !important;
+}
+
+html.light .footer-island {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Footer elements in light mode */
+.footer-brand-text {
+  color: #ffffff;
+}
+html.light .footer-brand-text {
   color: #0f172a !important;
 }
 
-html.light footer ul a {
+.footer-desc {
+  color: oklch(0.65 0 0);
+}
+html.light .footer-desc {
   color: #475569 !important;
 }
 
-html.light footer ul a:hover {
-  color: #009080 !important;
+.footer-col-title {
+  color: #ffffff;
 }
-
-html.light header .text-\[\#009080\],
-html.light footer .text-\[\#009080\] {
-  color: #009080 !important;
-}
-
-html.light h1,
-html.light h2,
-html.light h3,
-html.light h4 {
+html.light .footer-col-title {
   color: #0f172a !important;
 }
 
-html.light p {
-  color: #475569;
+.footer-links a {
+  color: oklch(0.7 0 0);
+}
+html.light .footer-links a {
+  color: #475569 !important;
+}
+html.light .footer-links a:hover {
+  color: #009080 !important;
 }
 
-html.light .text-\[oklch\(0\.7_0_0\)\],
-html.light .text-\[oklch\(0\.65_0_0\)\],
-html.light .text-\[oklch\(0\.708_0_0\)\],
-html.light .text-\[oklch\(0\.6_0_0\)\],
-html.light .text-\[oklch\(0\.55_0_0\)\] {
+.footer-divider {
+  border-top-color: oklch(1 0 0 / 6%);
+}
+html.light .footer-divider {
+  border-top-color: rgba(148, 163, 184, 0.25) !important;
+}
+
+.footer-bottom-bar {
+  color: oklch(0.6 0 0);
+}
+html.light .footer-bottom-bar {
   color: #64748b !important;
 }
 
-/* Crisp White Cards with Clear Borders in Light Mode (No more text floating in thin air) */
+/* Footer Animated Outline Loader Logo */
+.footer-outline-loader {
+  opacity: 0.12;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+html.light .footer-outline-loader {
+  opacity: 0.24 !important;
+  filter: invert(1) hue-rotate(180deg) !important;
+}
+
+/* ============================================================
+   ZERO BORDERS ON CARDS (Surface & Interactive)
+   ============================================================ */
 .card-surface {
   background-color: var(--color-surface);
   border-radius: 1rem;
-  border: 1px solid var(--color-border);
+  border: none !important;
+  outline: none !important;
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.3);
 }
 
 .card-interactive {
   background-color: var(--color-surface);
   border-radius: 1rem;
-  border: 1px solid var(--color-border);
+  border: none !important;
+  outline: none !important;
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.3);
   transition: all 0.2s cubic-bezier(0.2, 1, 0.5, 1);
+}
+
+.card-interactive:hover {
+  background-color: var(--color-surface-hover);
 }
 
 html.light .card-surface,
 html.light .card-interactive {
   background-color: #ffffff !important;
-  border: 1px solid rgba(148, 163, 184, 0.4) !important;
-  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03) !important;
 }
 
 html.light .card-interactive:hover {
   background-color: #ffffff !important;
-  border-color: #009080 !important;
-  box-shadow: 0 10px 25px -4px rgba(0, 144, 128, 0.15), 0 4px 10px rgba(15, 23, 42, 0.05) !important;
+  box-shadow: 0 10px 25px -4px rgba(0, 144, 128, 0.12), 0 4px 10px rgba(15, 23, 42, 0.04) !important;
 }
 
-/* Badge Pills - Soft Teal with Mint Tint in Light Mode (replaces pitch black pills) */
+/* Badge Pills - Soft Teal with Mint Tint, borderless */
 .badge-pill {
   background-color: oklch(0.24 0 0);
   color: #009080;
+  border: none !important;
 }
 
 html.light .badge-pill,
@@ -164,19 +253,159 @@ html.light span[class*="bg-[oklch(0.205_0_0)]"],
 html.light span[class*="bg-[oklch(0.26_0_0)]"] {
   background-color: rgba(0, 144, 128, 0.12) !important;
   color: #007a6d !important;
-  border: 1px solid rgba(0, 144, 128, 0.25) !important;
+  border: none !important;
 }
 
 html.light .action-badge {
   background-color: #f1f5f9 !important;
   color: #334155 !important;
-  border: 1px solid rgba(148, 163, 184, 0.35) !important;
+  border: none !important;
+}
+
+/* ============================================================
+   HERO HEADLINE & SUBTITLE THEME ADAPTATION
+   ============================================================ */
+.hero-title-1 {
+  color: #ffffff;
+}
+.hero-title-2 {
+  color: oklch(0.75 0 0);
+}
+.hero-title-3 {
+  color: #009080;
+}
+.hero-subtitle {
+  color: oklch(0.65 0 0);
+}
+
+html.light .hero-title-1 {
+  color: #0f172a !important;
+}
+html.light .hero-title-2 {
+  color: #334155 !important;
+}
+html.light .hero-title-3 {
+  color: #009080 !important;
+}
+html.light .hero-subtitle {
+  color: #475569 !important;
+}
+
+/* ============================================================
+   STRICT ISOLATION FOR REAL ADMIN MOCKUP
+   (Never let light theme styles affect the dark mockup)
+   ============================================================ */
+.sb-admin-mockup-root,
+.sb-admin-mockup-root * {
+  color-scheme: dark !important;
+}
+
+html.light .sb-admin-mockup-root h1,
+html.light .sb-admin-mockup-root h2,
+html.light .sb-admin-mockup-root h3,
+html.light .sb-admin-mockup-root h4 {
+  color: #ffffff !important;
+}
+
+html.light .sb-admin-mockup-root .text-white {
+  color: #ffffff !important;
+}
+
+html.light .sb-admin-mockup-root .text-\[\#a1a1aa\] {
+  color: #a1a1aa !important;
+}
+
+html.light .sb-admin-mockup-root .text-\[\#71717a\] {
+  color: #71717a !important;
+}
+
+/* ============================================================
+   LIGHT THEME HEADINGS & PARAGRAPHS (Excluding Admin Mockup)
+   ============================================================ */
+html.light :not(.sb-admin-mockup-root *) > h1,
+html.light :not(.sb-admin-mockup-root *) > h2,
+html.light :not(.sb-admin-mockup-root *) > h3,
+html.light :not(.sb-admin-mockup-root *) > h4 {
+  color: #0f172a;
+}
+
+html.light .article-main-title,
+html.light .faq-section-title {
+  color: #0f172a !important;
+}
+
+/* Blog Index & Card typography */
+.blog-index-title {
+  color: #ffffff;
+}
+html.light .blog-index-title {
+  color: #0f172a !important;
+}
+
+.blog-index-desc {
+  color: oklch(0.65 0 0);
+}
+html.light .blog-index-desc {
+  color: #475569 !important;
+}
+
+.blog-card-title {
+  color: #ffffff;
+}
+html.light .blog-card-title {
+  color: #0f172a !important;
+}
+
+.blog-card-desc {
+  color: oklch(0.65 0 0);
+}
+html.light .blog-card-desc {
+  color: #475569 !important;
+}
+
+.blog-card-author {
+  color: #ffffff;
+}
+html.light .blog-card-author {
+  color: #0f172a !important;
+}
+
+.blog-card-footer {
+  border-top-color: oklch(1 0 0 / 6%);
+}
+html.light .blog-card-footer {
+  border-top-color: rgba(148, 163, 184, 0.2) !important;
+}
+
+html.light .faq-question {
+  color: #0f172a !important;
+}
+
+html.light .faq-answer {
+  color: #475569 !important;
+}
+
+html.light .related-posts-header {
+  color: #64748b !important;
+}
+
+html.light .related-post-title {
+  color: #0f172a !important;
+}
+
+html.light .article-author-name {
+  color: #0f172a !important;
+}
+
+html.light .article-date,
+html.light .article-breadcrumbs {
+  color: #64748b !important;
 }
 
 /* Comparison Table in Light Mode */
 html.light .comparison-table th {
   color: #64748b !important;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.35) !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25) !important;
 }
 
 html.light .comparison-table th:nth-child(2) {
@@ -185,7 +414,7 @@ html.light .comparison-table th:nth-child(2) {
 
 html.light .comparison-table td {
   color: #475569 !important;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.2) !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15) !important;
 }
 
 html.light .comparison-table td:first-child {
@@ -206,8 +435,8 @@ html.light .comparison-table tr:hover {
 html.light #docs-quick-search {
   background-color: #ffffff !important;
   color: #0f172a !important;
-  border: 1px solid rgba(148, 163, 184, 0.45) !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+  border: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
 }
 
 html.light #docs-quick-search::placeholder {
@@ -229,7 +458,6 @@ html.light #docs-sidebar-categories a {
 html.light #docs-sidebar-categories a:hover {
   color: #0f172a !important;
   background-color: rgba(255, 255, 255, 0.85) !important;
-  border: 1px solid rgba(148, 163, 184, 0.25) !important;
 }
 
 html.light #docs-sidebar-categories a.active,
@@ -237,17 +465,17 @@ html.light #docs-sidebar-categories a[class*="active"] {
   background-color: rgba(0, 144, 128, 0.12) !important;
   color: #007a6d !important;
   font-weight: 600 !important;
-  border: 1px solid rgba(0, 144, 128, 0.25) !important;
 }
 
 /* Table of Contents in Light Mode */
 html.light #article-toc-nav .card-surface {
   background-color: #ffffff !important;
-  border: 1px solid rgba(148, 163, 184, 0.35) !important;
+  border: none !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05) !important;
 }
 
 html.light #article-toc-nav .border-b {
-  border-color: rgba(148, 163, 184, 0.25) !important;
+  border-color: rgba(148, 163, 184, 0.2) !important;
   color: #475569 !important;
 }
 
@@ -272,7 +500,7 @@ html.light #article-toc-nav .bg-\[oklch\(0\.12_0_0\)\] {
 html.light .feature-code-box {
   background-color: #0f172a !important;
   color: #f1f5f9 !important;
-  border: 1px solid rgba(15, 23, 42, 0.2) !important;
+  border: none !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
 }
 
@@ -293,49 +521,18 @@ html.light .feature-code-box .text-white {
 }
 
 /* Floating Quote Tooltip */
-html.light #selection-quote-tooltip {
+html.light #selection-quote-tooltip,
+html.light #quote-share-tooltip {
   background-color: #0f172a !important;
   color: #ffffff !important;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3) !important;
-}
-
-/* Subtle, neat text backdrop for maximum readability without altering layout */
-.hero-text-backdrop {
-  background: transparent;
-}
-
-html.light .hero-text-backdrop {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  border-radius: 1.25rem;
-  padding: 1.5rem 1.75rem;
-  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
-}
-
-/* Isolated 1v1 SaviorBill Admin Panel Theme (completely independent from landing styles) */
-.sb-admin-theme {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --primary: #009080;
-  --secondary: oklch(0.269 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-accent: #0c5e53;
-  --sidebar-border: oklch(1 0 0 / 10%);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color-scheme: dark !important;
 }
 
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans);
-  overflow-x: hidden;
+  overflow-x: clip; /* Fix for position: sticky */
   -webkit-font-smoothing: antialiased;
 }
 
@@ -343,21 +540,9 @@ body {
   font-family: 'Onder', sans-serif;
 }
 
-/* Static card surface */
-.card-surface {
-  background-color: var(--color-surface);
-  border-radius: 1rem;
-}
-
-/* Interactive card */
-.card-interactive {
-  background-color: var(--color-surface);
-  border-radius: 1rem;
-  transition: background-color 0.2s cubic-bezier(0.2, 1, 0.5, 1);
-}
-
-.card-interactive:hover {
-  background-color: var(--color-surface-hover);
+/* Scroll margin offset for sticky header */
+h1, h2, h3, h4, [id] {
+  scroll-margin-top: 5.5rem;
 }
 
 /* Custom minimal scrollbar */
@@ -558,12 +743,10 @@ html.light .article-content :not(pre) > code {
   border-radius: 0.75rem;
   overflow: hidden;
   background-color: oklch(0.17 0 0);
-  border: 1px solid oklch(1 0 0 / 8%);
 }
 
 html.light .article-content table {
   background-color: #ffffff;
-  border-color: rgba(0, 0, 0, 0.08);
 }
 
 .article-content th {

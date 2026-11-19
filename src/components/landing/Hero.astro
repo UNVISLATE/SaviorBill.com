@@ -18,14 +18,14 @@ const t = useTranslations(lang);
     <div class="space-y-4">
       
       <!-- Slogan (Centered, clean) -->
-      <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white dark:text-white light:text-slate-900 leading-tight">
-        <span class="inline sm:block">{t('hero.title.1')} </span>
-        <span class="inline sm:block text-[oklch(0.75_0_0)] dark:text-[oklch(0.75_0_0)] light:text-slate-600">{t('hero.title.2')} </span>
-        <span class="inline sm:block text-[#009080]">{t('hero.title.3')}</span>
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+        <span class="inline sm:block hero-title-1">{t('hero.title.1')} </span>
+        <span class="inline sm:block hero-title-2">{t('hero.title.2')} </span>
+        <span class="inline sm:block hero-title-3">{t('hero.title.3')}</span>
       </h1>
 
-      <!-- Short Subtitle -->
-      <p class="max-w-2xl mx-auto text-xs sm:text-sm text-[oklch(0.65_0_0)] dark:text-[oklch(0.65_0_0)] light:text-slate-600 leading-relaxed">
+      <!-- Short Subtitle (High contrast in both light & dark themes) -->
+      <p class="hero-subtitle max-w-2xl mx-auto text-xs sm:text-sm leading-relaxed">
         {lang === 'ru'
           ? 'Событийно-ориентированный биллинг для VPN, SaaS, хостинга и ключей с изолированной Lua-логикой и Server-Driven UI.'
           : 'Event-driven billing engine for VPN, SaaS, hosting, and digital keys powered by isolated Lua and Server-Driven UI.'}

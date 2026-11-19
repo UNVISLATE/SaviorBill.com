@@ -32,10 +32,10 @@ const remainingPosts = langPosts.slice(1);
       
       <!-- Top Title Group -->
       <div class="text-center max-w-2xl mx-auto">
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white dark:text-white light:text-slate-900 tracking-tight mb-3">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-3 blog-index-title">
           {title}
         </h1>
-        <p class="text-[oklch(0.65_0_0)] dark:text-[oklch(0.65_0_0)] light:text-slate-600 text-sm sm:text-base">
+        <p class="text-sm sm:text-base blog-index-desc">
           {description}
         </p>
       </div>
@@ -74,21 +74,21 @@ const remainingPosts = langPosts.slice(1);
                     <span class="text-xs text-[oklch(0.55_0_0)] font-mono">• Главный материал</span>
                   </div>
 
-                  <h2 class="text-xl sm:text-2xl font-bold text-white dark:text-white light:text-slate-900 group-hover:text-[#009080] transition-colors leading-snug mb-3">
+                  <h2 class="text-xl sm:text-2xl font-bold blog-card-title group-hover:text-[#009080] transition-colors leading-snug mb-3">
                     {featuredPost.data.title}
                   </h2>
 
-                  <p class="text-xs sm:text-sm text-[oklch(0.65_0_0)] dark:text-[oklch(0.65_0_0)] light:text-slate-600 leading-relaxed line-clamp-3">
+                  <p class="text-xs sm:text-sm blog-card-desc leading-relaxed line-clamp-3">
                     {featuredPost.data.description}
                   </p>
                 </div>
 
-                <div class="pt-4 border-t border-[oklch(1_0_0/6%)] flex items-center justify-between text-xs font-mono text-[oklch(0.6_0_0)]">
+                <div class="pt-4 border-t border-[oklch(1_0_0/6%)] blog-card-footer flex items-center justify-between text-xs font-mono text-[oklch(0.6_0_0)]">
                   <div class="flex items-center gap-2">
                     <span class="size-6 rounded-full bg-[#009080] text-white flex items-center justify-center font-bold text-[10px]">
                       {author[0]}
                     </span>
-                    <span class="text-white dark:text-white light:text-slate-900 font-medium">{author}</span>
+                    <span class="font-medium blog-card-author">{author}</span>
                     <span>•</span>
                     <time datetime={dateStr}>{dateStr}</time>
                   </div>
@@ -143,12 +143,12 @@ const remainingPosts = langPosts.slice(1);
                   </div>
 
                   <!-- Title -->
-                  <h3 class="text-base sm:text-lg font-bold text-white dark:text-white light:text-slate-900 group-hover:text-[#009080] transition-colors mb-2 line-clamp-2 leading-snug">
+                  <h3 class="text-base sm:text-lg font-bold blog-card-title group-hover:text-[#009080] transition-colors mb-2 line-clamp-2 leading-snug">
                     {post.data.title}
                   </h3>
 
                   <!-- Description -->
-                  <p class="text-xs sm:text-sm text-[oklch(0.65_0_0)] dark:text-[oklch(0.65_0_0)] light:text-slate-600 leading-relaxed line-clamp-3 mb-4">
+                  <p class="text-xs sm:text-sm blog-card-desc leading-relaxed line-clamp-3 mb-4">
                     {post.data.description}
                   </p>
                 </div>
