@@ -66,10 +66,9 @@ const t = useTranslations(lang);
   <!-- Background Interactive Real Admin Mockup:
        1) Positioned strictly in background (z-0, absolute)
        2) Anchored to left-[calc(50%+410px)] so it NEVER touches or shifts the centered hero text
-       3) Anchored to bottom edge with fixed height to eliminate ANY bottom empty gap and prevent accordion jumping
-       4) Cropped by right screen edge and bottom hero border (overflow-hidden)
-       5) Pointer-events active for interactive testing -->
-  <div class="hidden min-[1380px]:block absolute left-[calc(50%+410px)] 2xl:left-[calc(50%+440px)] bottom-[-30px] 2xl:bottom-[-20px] w-[940px] 2xl:w-[1020px] h-[720px] 2xl:h-[760px] z-0 pointer-events-auto opacity-80 hover:opacity-100 transition-opacity duration-300">
+       3) Anchored flush to bottom (bottom-0) with soft feathering on bottom & right edges (calc(100% - 60px))
+       4) Eliminates any empty dead gap below or harsh rectangular chops -->
+  <div class="hero-mockup-wrapper hidden min-[1380px]:block absolute left-[calc(50%+410px)] 2xl:left-[calc(50%+440px)] bottom-0 w-[940px] 2xl:w-[1020px] h-[660px] 2xl:h-[700px] z-0 pointer-events-auto opacity-85 hover:opacity-100 transition-opacity duration-300">
     <RealAdminMockup client:load />
   </div>
 

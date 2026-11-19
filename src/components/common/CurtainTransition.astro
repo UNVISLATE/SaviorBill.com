@@ -1,0 +1,83 @@
+---
+---
+
+<!-- Lunoweb-style Fullscreen Curtain Transition (Only triggers between Root Sections: Home <-> Blog <-> Docs <-> Hub) -->
+<div 
+  id="lunoweb-curtain" 
+  class="fixed inset-0 z-[99999] pointer-events-none flex flex-col items-center justify-center bg-[#0a0f18] text-white shadow-2xl transition-transform duration-350 ease-[cubic-bezier(0.76,0,0.24,1)] translate-y-full"
+  aria-hidden="true"
+>
+  <div class="flex items-center gap-3 scale-95 opacity-90 transition-opacity">
+    <img src="/logo.svg" alt="SaviorBill" class="size-10 object-contain animate-pulse" />
+    <span class="text-xl font-bold tracking-tight font-sans text-white">
+      Savior<span class="text-[#009080]">Bill</span>
+    </span>
+  </div>
+</div>
+
+<script is:inline>
+  (function() {
+    const curtain = document.getElementById('lunoweb-curtain');
+    if (!curtain) return;
+
+    let curtainActive = false;
+
+    function getRootSection(pathname) {
+      if (!pathname) return 'home';
+      // Strip language prefix /ru or /en
+      const clean = pathname.replace(/^\/(ru|en)(\/|$)/, '') || '';
+      const firstSegment = clean.split('/')[0].trim();
+
+      if (!firstSegment || firstSegment === '') return 'home';
+      if (firstSegment === 'blog') return 'blog';
+      if (firstSegment === 'docs') return 'docs';
+      if (firstSegment === 'hub') return 'hub';
+      return 'other';
+    }
+
+    // Intercept navigation before preparation
+    document.addEventListener('astro:before-preparation', (event) => {
+      const fromPath = window.location.pathname;
+      const toPath = event.to.pathname;
+
+      const fromSec = getRootSection(fromPath);
+      const toSec = getRootSection(toPath);
+
+      const validRoots = ['home', 'blog', 'docs', 'hub'];
+
+      // Only trigger curtain when changing ROOT section
+      if (fromSec !== toSec && validRoots.includes(fromSec) && validRoots.includes(toSec)) {
+        curtainActive = true;
+        const originalLoader = event.loader;
+
+        event.loader = async () => {
+          // Slide in from bottom to cover screen
+          curtain.style.transition = 'transform 340ms cubic-bezier(0.76, 0, 0.24, 1)';
+          curtain.style.transform = 'translateY(0%)';
+          curtain.style.pointerEvents = 'auto';
+
+          // Wait for curtain to cover viewport
+          await new Promise((r) => setTimeout(r, 340));
+          await originalLoader();
+        };
+      }
+    });
+
+    // After new page DOM is swapped, slide curtain out toward top
+    document.addEventListener('astro:after-swap', () => {
+      if (curtainActive) {
+        // Slide out to top
+        curtain.style.transition = 'transform 360ms cubic-bezier(0.76, 0, 0.24, 1)';
+        curtain.style.transform = 'translateY(-100%)';
+
+        setTimeout(() => {
+          // Reset curtain back below viewport without transition
+          curtain.style.transition = 'none';
+          curtain.style.transform = 'translateY(100%)';
+          curtain.style.pointerEvents = 'none';
+          curtainActive = false;
+        }, 380);
+      }
+    });
+  })();
+</script>

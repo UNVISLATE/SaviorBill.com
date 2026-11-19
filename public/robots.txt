@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /raw/
+Disallow: /pagefind/
+Disallow: /downloads/
 
 Sitemap: https://saviorbill.com/sitemap-index.xml

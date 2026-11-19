@@ -40,6 +40,33 @@ const remainingPosts = langPosts.slice(1);
         </p>
       </div>
 
+      <!-- Instant Blog Search Bar -->
+      <div class="max-w-md mx-auto relative">
+        <input
+          type="text"
+          id="blog-search-input"
+          placeholder={lang === 'ru' ? 'Поиск по статьям и тегам...' : 'Search articles and tags...'}
+          autocomplete="off"
+          class="w-full h-11 pl-10 pr-4 rounded-xl bg-[oklch(0.20_0_0)] text-sm text-white placeholder-[oklch(0.55_0_0)] focus:outline-none focus:ring-1 focus:ring-[#009080] transition-all shadow-sm"
+        />
+        <svg class="size-4 text-[oklch(0.55_0_0)] absolute left-3.5 top-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+
+      <!-- Empty Results Notification -->
+      <div id="blog-no-results" class="hidden text-center py-16 space-y-2">
+        <p class="text-base font-semibold text-white">
+          {lang === 'ru' ? 'Ничего не найдено' : 'No articles found'}
+        </p>
+        <p class="text-xs text-[oklch(0.6_0_0)]">
+          {lang === 'ru' ? 'Попробуйте изменить запрос или поискать по другим ключевым словам.' : 'Try adjusting your search terms.'}
+        </p>
+      </div>
+
+      <!-- Blog Posts Container -->
+      <div id="blog-posts-list" class="space-y-10">
+
       {featuredPost && (() => {
         const parts = featuredPost.id.split('/');
         const slug = parts.slice(1).join('/').replace(/\.(md|mdx)$/, '');
@@ -51,6 +78,8 @@ const remainingPosts = langPosts.slice(1);
           <!-- Featured Wide Card (Arayas style data-variant="wide") -->
           <a
             href={`/${lang}/blog/${slug}`}
+            data-search-card
+            data-search-text={`${featuredPost.data.title} ${featuredPost.data.description} ${(featuredPost.data.tags || []).join(' ')}`.toLowerCase()}
             class="group card-interactive p-5 sm:p-7 block rounded-2xl transition-all duration-300"
           >
             <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
@@ -115,6 +144,8 @@ const remainingPosts = langPosts.slice(1);
             return (
               <a
                 href={`/${lang}/blog/${slug}`}
+                data-search-card
+                data-search-text={`${post.data.title} ${post.data.description} ${(post.data.tags || []).join(' ')}`.toLowerCase()}
                 class="group card-interactive p-5 flex flex-col justify-between rounded-xl"
               >
                 <div>
@@ -162,7 +193,48 @@ const remainingPosts = langPosts.slice(1);
           })}
         </div>
       )}
+      </div>
 
     </div>
   </div>
 </BaseLayout>
+
+<script is:inline>
+  (function() {
+    function initBlogSearch() {
+      const input = document.getElementById('blog-search-input');
+      const noResults = document.getElementById('blog-no-results');
+      const cards = document.querySelectorAll('[data-search-card]');
+
+      if (!input || input.dataset.bound) return;
+      input.dataset.bound = 'true';
+
+      input.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+          const text = (card.getAttribute('data-search-text') || '').toLowerCase();
+          if (!query || text.includes(query)) {
+            card.style.display = '';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        if (noResults) {
+          if (visibleCount === 0 && query) {
+            noResults.classList.remove('hidden');
+          } else {
+            noResults.classList.add('hidden');
+          }
+        }
+      });
+    }
+
+    initBlogSearch();
+    document.addEventListener('astro:page-load', initBlogSearch);
+    document.addEventListener('astro:after-swap', initBlogSearch);
+  })();
+</script>

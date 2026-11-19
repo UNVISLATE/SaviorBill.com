@@ -1,0 +1,123 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ru' } },
+    { params: { lang: 'en' } }
+  ];
+}
+
+const { lang } = Astro.params as { lang: 'ru' | 'en' };
+
+const title = lang === 'ru' ? 'Правовая информация и лицензия' : 'Legal & License';
+const description = lang === 'ru'
+  ? 'Условия использования исходного кода, лицензия SaviorBill Source-Available и коммерческие условия.'
+  : 'Terms of use, SaviorBill Source-Available licensing, and commercial usage guidelines.';
+---
+
+<BaseLayout title={title} description={description} lang={lang}>
+  <div class="px-3 sm:px-4 py-16">
+    <div class="max-w-4xl mx-auto space-y-10">
+      
+      <!-- Header -->
+      <div class="space-y-3">
+        <div class="flex items-center gap-2 text-xs font-mono text-[oklch(0.55_0_0)] mb-2">
+          <a href={`/${lang}`} class="hover:text-[#009080] transition-colors">SaviorBill</a>
+          <span>/</span>
+          <span class="text-[#009080]">{title}</span>
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          {title}
+        </h1>
+        <p class="text-sm sm:text-base text-[oklch(0.65_0_0)]">
+          {description}
+        </p>
+      </div>
+
+      <!-- Content Cards -->
+      <div class="space-y-6">
+        
+        <!-- Summary Card -->
+        <div class="card-surface p-6 sm:p-8 space-y-4">
+          <h2 class="text-xl font-bold text-white flex items-center gap-2.5">
+            <span class="size-2 rounded-full bg-[#009080]"></span>
+            <span>{lang === 'ru' ? 'Модель лицензирования SaviorBill' : 'SaviorBill Licensing Model'}</span>
+          </h2>
+          <p class="text-sm text-[oklch(0.7_0_0)] leading-relaxed">
+            {lang === 'ru'
+              ? 'SaviorBill распространяется по лицензии Source-Available. Это означает, что исходный код ядра и компонентов открыт для изучения, аудита безопасности, локальной модификации и самостоятельного хостинга (Self-Hosted).'
+              : 'SaviorBill is distributed under a Source-Available license model. The source code is openly available for audit, local modification, and self-hosted deployments.'}
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            <div class="p-4 rounded-xl bg-[oklch(0.16_0_0)] space-y-1.5">
+              <div class="text-xs font-mono text-[#009080] font-semibold">✓ {lang === 'ru' ? 'Разрешено бесплатно' : 'Free to Use'}</div>
+              <p class="text-xs text-[oklch(0.65_0_0)] leading-relaxed">
+                {lang === 'ru'
+                  ? 'Использование для личных проектов, стартапов и компаний на собственном сервере без комиссий с оборота.'
+                  : 'Self-hosting on your own infrastructure for personal or commercial projects without gross turnover fees.'}
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-[oklch(0.16_0_0)] space-y-1.5">
+              <div class="text-xs font-mono text-[#009080] font-semibold">✓ {lang === 'ru' ? 'Lua-скрипты и sbuiSDK' : 'Lua Scripts & sbuiSDK'}</div>
+              <p class="text-xs text-[oklch(0.65_0_0)] leading-relaxed">
+                {lang === 'ru'
+                  ? 'Все скрипты интеграций и манифесты витрины распространяются под свободной лицензией MIT.'
+                  : 'Integration scripts, payment gateways, and client manifests are licensed under MIT.'}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Official Repositories Card -->
+        <div class="card-surface p-6 sm:p-8 space-y-4">
+          <h2 class="text-xl font-bold text-white">
+            {lang === 'ru' ? 'Официальные репозитории и исходный код' : 'Official Repositories'}
+          </h2>
+          <p class="text-sm text-[oklch(0.7_0_0)] leading-relaxed">
+            {lang === 'ru'
+              ? 'Полный текст лицензионных соглашений доступен в соответствующих репозиториях GitHub организации UNVISLATE:'
+              : 'Full license texts can be inspected directly in official GitHub repositories:'}
+          </p>
+          <ul class="space-y-3 pt-1 text-sm font-mono">
+            <li class="flex items-center justify-between p-3 rounded-xl bg-[oklch(0.16_0_0)]">
+              <span class="text-white font-semibold">SaviorBill Core (Backend & Admin)</span>
+              <a 
+                href="https://github.com/UNVISLATE/SaviorBill/blob/master/LICENSE" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="text-xs text-[#009080] hover:underline"
+              >
+                LICENSE →
+              </a>
+            </li>
+            <li class="flex items-center justify-between p-3 rounded-xl bg-[oklch(0.16_0_0)]">
+              <span class="text-white font-semibold">SBPersonalAccountClient (Storefront)</span>
+              <a 
+                href="https://github.com/UNVISLATE/SBPersonalAccountClient" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="text-xs text-[#009080] hover:underline"
+              >
+                GitHub →
+              </a>
+            </li>
+            <li class="flex items-center justify-between p-3 rounded-xl bg-[oklch(0.16_0_0)]">
+              <span class="text-white font-semibold">sbuiSDK (Server-Driven UI)</span>
+              <a 
+                href="https://github.com/UNVISLATE/sbuiSDK" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="text-xs text-[#009080] hover:underline"
+              >
+                MIT License →
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>

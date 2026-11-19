@@ -22,17 +22,26 @@ const categories = Array.from(new Set(docs.map((d) => d.category)));
 <aside class="w-64 shrink-0 py-8 pr-6 select-none">
   <div class="sticky top-20 space-y-6">
     
-    <!-- Quick Search Input -->
-    <div class="relative">
+    <!-- Quick Search Input + Instant Results Dropdown -->
+    <div class="relative" id="docs-search-wrapper">
       <input
         type="text"
         id="docs-quick-search"
         placeholder={lang === 'ru' ? 'Поиск по доке...' : 'Search docs...'}
+        autocomplete="off"
         class="w-full h-9 pl-9 pr-3 rounded-xl bg-[oklch(0.20_0_0)] text-xs text-white placeholder-[oklch(0.55_0_0)] focus:outline-none focus:ring-1 focus:ring-[#009080] transition-all"
       />
       <svg class="size-4 text-[oklch(0.5_0_0)] absolute left-3 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
       </svg>
+
+      <!-- Instant Dropdown Results -->
+      <div 
+        id="docs-search-dropdown" 
+        class="absolute left-0 right-0 top-11 z-50 hidden rounded-xl bg-[oklch(0.18_0_0)] shadow-2xl p-2 space-y-1 max-h-60 overflow-y-auto"
+      >
+        <div id="docs-search-results-list" class="space-y-1 text-xs"></div>
+      </div>
     </div>
 
     <!-- Collapsible Categories -->
@@ -45,7 +54,7 @@ const categories = Array.from(new Set(docs.map((d) => d.category)));
         const hasActiveDoc = catDocs.some((d) => d.slug === currentSlug);
 
         return (
-          <details class="group" open={hasActiveDoc || true}>
+          <details class="group category-details" open={hasActiveDoc || true}>
             <summary class="flex items-center justify-between cursor-pointer list-none py-1.5 text-xs font-mono font-semibold uppercase tracking-wider text-[oklch(0.6_0_0)] hover:text-white transition-colors">
               <span>{cat}</span>
               <svg class="size-3.5 transition-transform duration-200 group-open:rotate-180 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,7 +67,7 @@ const categories = Array.from(new Set(docs.map((d) => d.category)));
                 const href = `/${lang}/docs/${doc.slug}`;
                 const isActive = doc.slug === currentSlug;
                 return (
-                  <li>
+                  <li data-title={doc.title.toLowerCase()} data-slug={doc.slug}>
                     <a
                       href={href}
                       class={`block px-3 py-1.5 rounded-lg text-xs transition-colors ${
@@ -80,22 +89,95 @@ const categories = Array.from(new Set(docs.map((d) => d.category)));
   </div>
 </aside>
 
-<script is:inline>
-  // Simple quick filter for sidebar
-  const searchInput = document.getElementById('docs-quick-search');
-  if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      const q = e.target.value.toLowerCase().trim();
-      const links = document.querySelectorAll('#docs-sidebar-categories a');
-      links.forEach((a) => {
-        const text = a.textContent.toLowerCase();
-        const li = a.parentElement;
-        if (!q || text.includes(q)) {
-          li.style.display = '';
-        } else {
-          li.style.display = 'none';
+<script is:inline define:vars={{ docsData: docs, currentLang: lang }}>
+  (function() {
+    function initDocsSearch() {
+      const input = document.getElementById('docs-quick-search');
+      const dropdown = document.getElementById('docs-search-dropdown');
+      const resultsList = document.getElementById('docs-search-results-list');
+      const detailsList = document.querySelectorAll('#docs-sidebar-categories .category-details');
+
+      if (!input || input.dataset.searchBound) return;
+      input.dataset.searchBound = 'true';
+
+      input.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+
+        if (!query) {
+          if (dropdown) dropdown.classList.add('hidden');
+          // Reset all sidebar links & details
+          detailsList.forEach((det) => {
+            det.style.display = '';
+            const lis = det.querySelectorAll('li');
+            lis.forEach((li) => (li.style.display = ''));
+          });
+          return;
+        }
+
+        // 1. Filter sidebar in-place & auto-open matching categories
+        detailsList.forEach((det) => {
+          const lis = det.querySelectorAll('li');
+          let hasMatch = false;
+
+          lis.forEach((li) => {
+            const title = (li.dataset.title || li.textContent || '').toLowerCase();
+            if (title.includes(query)) {
+              li.style.display = '';
+              hasMatch = true;
+            } else {
+              li.style.display = 'none';
+            }
+          });
+
+          if (hasMatch) {
+            det.style.display = '';
+            det.open = true;
+          } else {
+            det.style.display = 'none';
+          }
+        });
+
+        // 2. Render instant dropdown list
+        const matches = (docsData || []).filter((d) => 
+          d.title.toLowerCase().includes(query) ||
+          d.category.toLowerCase().includes(query) ||
+          d.slug.toLowerCase().includes(query)
+        );
+
+        if (dropdown && resultsList) {
+          if (matches.length > 0) {
+            resultsList.innerHTML = matches.map((m) => `
+              <a 
+                href="/${currentLang}/docs/${m.slug}" 
+                class="block px-3 py-2 rounded-lg hover:bg-[oklch(0.24_0_0)] transition-colors group"
+              >
+                <div class="text-[10px] font-mono text-[#009080]">${m.category}</div>
+                <div class="font-medium text-white group-hover:text-[#00e0cb]">${m.title}</div>
+              </a>
+            `).join('');
+            dropdown.classList.remove('hidden');
+          } else {
+            resultsList.innerHTML = `
+              <div class="px-3 py-3 text-center text-xs text-[oklch(0.6_0_0)]">
+                ${currentLang === 'ru' ? 'Ничего не найдено' : 'No documents found'}
+              </div>
+            `;
+            dropdown.classList.remove('hidden');
+          }
         }
       });
-    });
-  }
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        const wrapper = document.getElementById('docs-search-wrapper');
+        if (wrapper && !wrapper.contains(e.target) && dropdown) {
+          dropdown.classList.add('hidden');
+        }
+      });
+    }
+
+    initDocsSearch();
+    document.addEventListener('astro:page-load', initDocsSearch);
+    document.addEventListener('astro:after-swap', initDocsSearch);
+  })();
 </script>

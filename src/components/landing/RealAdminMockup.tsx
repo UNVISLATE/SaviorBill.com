@@ -85,10 +85,10 @@ export default function RealAdminMockup() {
     /* Outer Window Container:
        Fixed height to prevent ANY layout jumping when toggling sidebar groups.
        Rounded top-left border, seamlessly integrates into the background. */
-    <div className="sb-admin-mockup-root w-full h-full text-left select-none font-sans rounded-tl-2xl border-t border-l border-white/10 bg-[#0f0f11] shadow-2xl overflow-hidden flex antialiased">
+    <div className="sb-admin-mockup-root w-full h-full text-left select-none font-sans rounded-tl-2xl rounded-bl-none border-t border-l border-white/10 bg-[#0f0f11] shadow-2xl overflow-hidden flex antialiased">
       
       {/* ================= SIDEBAR (Outer Shell) ================= */}
-      <aside className="w-56 shrink-0 bg-[#0f0f11] flex flex-col justify-between py-3 pl-2 pr-1 h-full">
+      <aside className="w-56 shrink-0 bg-[#0f0f11] flex flex-col justify-between pt-3 pb-2 pl-2 pr-1 h-full">
         
         {/* Top section: Brand + Nav Menu */}
         <div className="flex flex-col min-h-0 flex-1">
@@ -284,9 +284,7 @@ export default function RealAdminMockup() {
       </aside>
 
       {/* ================= MAIN CONTENT INSET CARD (Image 3 layout) ================= */}
-      {/* Notice: m-2 mr-2 rounded-xl border border-white/[0.08] bg-[#141416] - 
-          The content area is nested INSIDE the page as a floating card with all 4 rounded corners! */}
-      <main className="flex-1 flex flex-col min-w-0 m-2.5 ml-0 rounded-xl border border-white/[0.08] bg-[#141416] shadow-lg overflow-hidden h-[calc(100%-1.25rem)]">
+      <main className="flex-1 flex flex-col min-w-0 mt-2.5 mr-2.5 ml-0 mb-0 rounded-t-xl rounded-b-none border-t border-l border-r border-white/[0.08] bg-[#141416] shadow-lg overflow-hidden h-[calc(100%-0.625rem)]">
         
         {/* Main Top Header Bar (Inside inset panel) */}
         <header className="h-11 px-4 border-b border-white/[0.06] flex items-center justify-between shrink-0 bg-[#141416]">

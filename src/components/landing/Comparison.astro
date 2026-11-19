@@ -14,8 +14,8 @@ const { lang } = Astro.props;
       </h2>
       <p class="max-w-xl mx-auto text-[oklch(0.65_0_0)] text-xs sm:text-sm">
         {lang === 'ru'
-          ? 'Чем современный self-hosted подход SaviorBill отличается от устаревших монолитов и закрытых платформ.'
-          : 'How SaviorBill’s modern self-hosted architecture compares to legacy billing monoliths and closed platforms.'}
+          ? 'Чем SaviorBill отличается от других аналогичных систем и платформ.'
+          : 'How SaviorBill compares to other billing systems and platforms.'}
       </p>
     </div>
 
@@ -34,7 +34,7 @@ const { lang } = Astro.props;
           <tbody class="divide-y divide-[oklch(1_0_0/4%)] font-normal text-[oklch(0.85_0_0)]">
             <tr>
               <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Комиссия с оборота' : 'Platform Fee / Cut'}</td>
-              <td class="py-4 font-bold text-[#009080]">0% (Self-Hosted)</td>
+              <td class="py-4 font-bold text-[#009080]">0% (Source Available)</td>
               <td class="py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Дорогая лицензия' : 'Monthly License Fee'}</td>
               <td class="py-4 text-red-400">5% – 10% + fee</td>
             </tr>
@@ -46,7 +46,7 @@ const { lang } = Astro.props;
             </tr>
             <tr>
               <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Интерфейс покупателя' : 'Customer Storefront'}</td>
-              <td class="py-4 font-medium text-[#009080]">Server-Driven UI (sbuiSDK)</td>
+              <td class="py-4 font-medium text-[#009080]">{lang === 'ru' ? 'Полностью кастомизируемые формы (sbuiSDK)' : 'Fully customizable forms (sbuiSDK)'}</td>
               <td class="py-4 text-[oklch(0.65_0_0)]">Legacy Bootstrap 3/Smarty</td>
               <td class="py-4 text-[oklch(0.65_0_0)]">Hosted Checkout</td>
             </tr>
@@ -58,9 +58,14 @@ const { lang } = Astro.props;
             </tr>
             <tr>
               <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Развертывание' : 'Deployment & Stack'}</td>
-              <td class="py-4 font-medium text-[#009080]">Docker Compose в 1 команду</td>
+              <td class="py-4 font-medium text-[#009080]">{lang === 'ru' ? '1 команда' : '1 command'}</td>
               <td class="py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Сложная системная настройка' : 'Complex VM configuration'}</td>
-              <td class="py-4 text-[oklch(0.65_0_0)]">Cloud only</td>
+              <td class="py-4 text-[#00e0cb]">
+                <span class="inline-flex items-center gap-1.5 font-medium">
+                  <span class="text-xs">✓</span>
+                  <span>{lang === 'ru' ? 'Cloud only (Регистрация за 5 минут)' : 'Cloud only (5-min signup)'}</span>
+                </span>
+              </td>
             </tr>
           </tbody>
         </table>
