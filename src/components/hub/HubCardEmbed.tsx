@@ -73,7 +73,7 @@ export default function HubCardEmbed({ scriptId, lang = 'ru' }: HubCardEmbedProp
           </span>
           <span className="text-xs font-mono text-[oklch(0.55_0_0)]">v{data.version}</span>
         </div>
-        <span className="text-[11px] font-mono text-[oklch(0.45_0_0)]">LuaJIT</span>
+        <span className="text-[11px] font-mono text-[oklch(0.45_0_0)]">Lua 5.4</span>
       </div>
 
       {/* Title & Description (Compact, no empty gap) */}
