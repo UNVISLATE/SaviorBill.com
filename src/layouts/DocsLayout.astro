@@ -31,6 +31,21 @@ interface Props {
 
 const { title, description = '', lang, currentSlug, docs, headings } = Astro.props;
 
+// Sort all docs by category & order for prev/next navigation
+const sortedDocs = [...docs].sort((a, b) => {
+  if (a.category !== b.category) {
+    return a.category.localeCompare(b.category);
+  }
+  return a.order - b.order;
+});
+
+const currentIndex = sortedDocs.findIndex((d) => d.slug === currentSlug);
+const prevDoc = currentIndex > 0 ? sortedDocs[currentIndex - 1] : null;
+const nextDoc = currentIndex < sortedDocs.length - 1 ? sortedDocs[currentIndex + 1] : null;
+
+// Unique categories
+const categories = Array.from(new Set(docs.map((d) => d.category)));
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'TechArticle',
@@ -45,38 +60,136 @@ const jsonLd = {
   <div class="px-3 sm:px-4">
     <div class="max-w-6xl mx-auto flex gap-8 justify-between">
       
-      <!-- Left: Navigation Sidebar (w-64) -->
+      <!-- Left: Navigation Sidebar (w-64, Desktop) -->
       <div class="hidden lg:block shrink-0">
         <DocsSidebar lang={lang} currentSlug={currentSlug} docs={docs} />
       </div>
 
       <!-- Center: Main Content (flex-1) -->
-      <article class="flex-1 py-8 min-w-0">
+      <article class="flex-1 py-6 sm:py-8 min-w-0 max-w-full">
         <!-- Breadcrumbs -->
-        <div class="flex items-center gap-2 text-xs font-mono text-[oklch(0.55_0_0)] dark:text-[oklch(0.55_0_0)] light:text-slate-500 mb-4">
+        <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs font-mono text-[oklch(0.55_0_0)] dark:text-[oklch(0.55_0_0)] light:text-slate-500 mb-4">
           <a href={`/${lang}`} class="hover:text-white dark:hover:text-white light:hover:text-slate-900 transition-colors">SaviorBill</a>
           <span>/</span>
           <a href={`/${lang}/docs/quickstart`} class="hover:text-white dark:hover:text-white light:hover:text-slate-900 transition-colors">Docs</a>
           <span>/</span>
-          <span class="text-[#009080]">{title}</span>
+          <span class="text-[#009080] truncate max-w-[160px] sm:max-w-none">{title}</span>
         </div>
 
-        <h1 class="text-2xl sm:text-4xl font-extrabold text-white dark:text-white light:text-slate-900 tracking-tight mb-3">
+        <!-- Mobile Docs Navigation Bar (Visible only on < lg) -->
+        <div class="lg:hidden mb-6">
+          <button 
+            id="mobile-docs-toggle-btn"
+            type="button"
+            class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[oklch(0.20_0_0)] hover:bg-[oklch(0.24_0_0)] text-white text-xs font-semibold shadow-md transition-all cursor-pointer"
+            aria-expanded="false"
+          >
+            <div class="flex items-center gap-2">
+              <svg class="size-4 text-[#009080] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+              <span>{lang === 'ru' ? 'Меню документации' : 'Docs Navigation'}</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-[oklch(0.6_0_0)]">
+              <span class="text-[11px] font-mono text-[#009080] truncate max-w-[120px]">{title}</span>
+              <svg id="mobile-docs-chevron" class="size-3.5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </button>
+
+          <!-- Mobile Docs Drawer / Dropdown -->
+          <div 
+            id="mobile-docs-drawer" 
+            class="hidden mt-2 p-3 sm:p-4 rounded-2xl bg-[oklch(0.18_0_0)] border border-[oklch(1_0_0/6%)] shadow-2xl space-y-4 transition-all"
+          >
+            <!-- Categories & Docs List -->
+            <div class="space-y-4">
+              {categories.map((cat) => {
+                const catDocs = docs
+                  .filter((d) => d.category === cat)
+                  .sort((a, b) => a.order - b.order);
+
+                return (
+                  <div>
+                    <div class="text-[11px] font-mono font-semibold uppercase tracking-wider text-[oklch(0.6_0_0)] mb-1 px-1">
+                      {cat}
+                    </div>
+                    <ul class="space-y-1">
+                      {catDocs.map((doc) => {
+                        const href = `/${lang}/docs/${doc.slug}`;
+                        const isActive = doc.slug === currentSlug;
+                        return (
+                          <li>
+                            <a
+                              href={href}
+                              class={`flex items-center justify-between px-3 py-2 rounded-lg text-xs transition-colors ${
+                                isActive
+                                  ? 'bg-[oklch(0.24_0_0)] text-[#009080] font-semibold'
+                                  : 'text-[oklch(0.8_0_0)] hover:text-white hover:bg-[oklch(0.22_0_0)]'
+                              }`}
+                            >
+                              <span>{doc.title}</span>
+                              {isActive && <span class="text-[#009080] text-xs">●</span>}
+                            </a>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-white dark:text-white light:text-slate-900 tracking-tight mb-3 break-words">
           {title}
         </h1>
 
         {description && (
-          <p class="text-sm sm:text-base text-[oklch(0.65_0_0)] dark:text-[oklch(0.65_0_0)] light:text-slate-600 mb-8 leading-relaxed">
+          <p class="text-xs sm:text-base text-[oklch(0.65_0_0)] dark:text-[oklch(0.65_0_0)] light:text-slate-600 mb-6 sm:mb-8 leading-relaxed">
             {description}
           </p>
         )}
 
-        <div class="article-content">
+        <div class="article-content max-w-full overflow-hidden">
           <slot />
+        </div>
+
+        <!-- Prev / Next Doc Navigation at the bottom -->
+        <div class="mt-12 pt-6 border-t border-[oklch(1_0_0/6%)] grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {prevDoc ? (
+            <a 
+              href={`/${lang}/docs/${prevDoc.slug}`}
+              class="flex flex-col p-4 rounded-xl bg-[oklch(0.18_0_0)] hover:bg-[oklch(0.22_0_0)] border border-[oklch(1_0_0/4%)] transition-all group"
+            >
+              <span class="text-[11px] font-mono text-[oklch(0.55_0_0)] mb-1 flex items-center gap-1 group-hover:text-[#009080]">
+                ← {lang === 'ru' ? 'Предыдущая' : 'Previous'}
+              </span>
+              <span class="text-xs sm:text-sm font-semibold text-white group-hover:text-[#009080] transition-colors truncate">
+                {prevDoc.title}
+              </span>
+            </a>
+          ) : <div class="hidden sm:block"></div>}
+
+          {nextDoc ? (
+            <a 
+              href={`/${lang}/docs/${nextDoc.slug}`}
+              class="flex flex-col p-4 rounded-xl bg-[oklch(0.18_0_0)] hover:bg-[oklch(0.22_0_0)] border border-[oklch(1_0_0/4%)] transition-all group text-right sm:text-right"
+            >
+              <span class="text-[11px] font-mono text-[oklch(0.55_0_0)] mb-1 flex items-center justify-end gap-1 group-hover:text-[#009080]">
+                {lang === 'ru' ? 'Следующая' : 'Next'} →
+              </span>
+              <span class="text-xs sm:text-sm font-semibold text-white group-hover:text-[#009080] transition-colors truncate">
+                {nextDoc.title}
+              </span>
+            </a>
+          ) : <div></div>}
         </div>
       </article>
 
-      <!-- Right: Table of Contents (w-60) -->
+      <!-- Right: Table of Contents (w-60, XL screens) -->
       <div class="hidden xl:block w-60 shrink-0 py-8">
         <TableOfContents headings={headings} />
       </div>
@@ -88,3 +201,33 @@ const jsonLd = {
   <HubCardMount client:load />
   <ArticleQuoteAndAnchors lang={lang} />
 </BaseLayout>
+
+<script is:inline>
+  (function() {
+    function setupMobileDocsMenu() {
+      const btn = document.getElementById('mobile-docs-toggle-btn');
+      const drawer = document.getElementById('mobile-docs-drawer');
+      const chevron = document.getElementById('mobile-docs-chevron');
+
+      if (!btn || !drawer || btn.dataset.bound) return;
+      btn.dataset.bound = 'true';
+
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const isOpen = !drawer.classList.contains('hidden');
+        if (isOpen) {
+          drawer.classList.add('hidden');
+          btn.setAttribute('aria-expanded', 'false');
+          if (chevron) chevron.style.transform = 'rotate(0deg)';
+        } else {
+          drawer.classList.remove('hidden');
+          btn.setAttribute('aria-expanded', 'true');
+          if (chevron) chevron.style.transform = 'rotate(180deg)';
+        }
+      });
+    }
+
+    setupMobileDocsMenu();
+    document.addEventListener('astro:after-swap', setupMobileDocsMenu);
+  })();
+</script>

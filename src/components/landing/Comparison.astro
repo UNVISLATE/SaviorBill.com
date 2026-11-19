@@ -6,9 +6,9 @@ interface Props {
 const { lang } = Astro.props;
 ---
 
-<section class="py-14 relative px-3 sm:px-4">
+<section class="py-10 sm:py-14 relative px-3 sm:px-4">
   <div class="max-w-6xl mx-auto">
-    <div class="mb-10 text-center">
+    <div class="mb-8 sm:mb-10 text-center">
       <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">
         {lang === 'ru' ? 'Архитектурные отличия' : 'Architectural Differences'}
       </h2>
@@ -19,54 +19,59 @@ const { lang } = Astro.props;
       </p>
     </div>
 
+    <!-- Mobile Scroll Hint -->
+    <div class="sm:hidden text-[11px] font-mono text-[oklch(0.55_0_0)] text-center mb-3 flex items-center justify-center gap-1.5">
+      <span>← {lang === 'ru' ? 'Свайпайте таблицу для сравнения' : 'Swipe table to compare'} →</span>
+    </div>
+
     <!-- Comparison Table (Borderless Surface, matches max-w-6xl) -->
-    <div class="card-surface overflow-hidden p-6 sm:p-8">
-      <div class="overflow-x-auto">
-        <table class="comparison-table w-full text-left text-sm">
+    <div class="card-surface overflow-hidden p-4 sm:p-8 max-w-full">
+      <div class="overflow-x-auto scrollbar-thin">
+        <table class="comparison-table w-full text-left text-xs sm:text-sm min-w-[540px]">
           <thead>
-            <tr class="border-b border-[oklch(1_0_0/6%)] text-xs uppercase font-mono tracking-wider text-[oklch(0.55_0_0)]">
-              <th class="pb-4 font-semibold">{lang === 'ru' ? 'Критерий' : 'Feature'}</th>
-              <th class="pb-4 font-bold text-[#009080]">SaviorBill</th>
-              <th class="pb-4 font-semibold text-[oklch(0.75_0_0)]">{lang === 'ru' ? 'Традиционные биллинги' : 'Traditional Monoliths'}</th>
-              <th class="pb-4 font-semibold text-[oklch(0.75_0_0)]">Stripe / Paddle</th>
+            <tr class="border-b border-[oklch(1_0_0/6%)] text-[11px] sm:text-xs uppercase font-mono tracking-wider text-[oklch(0.55_0_0)]">
+              <th class="pb-3 sm:pb-4 font-semibold">{lang === 'ru' ? 'Критерий' : 'Feature'}</th>
+              <th class="pb-3 sm:pb-4 font-bold text-[#009080]">SaviorBill</th>
+              <th class="pb-3 sm:pb-4 font-semibold text-[oklch(0.75_0_0)]">{lang === 'ru' ? 'Традиционные биллинги' : 'Traditional Monoliths'}</th>
+              <th class="pb-3 sm:pb-4 font-semibold text-[oklch(0.75_0_0)]">Stripe / Paddle</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-[oklch(1_0_0/4%)] font-normal text-[oklch(0.85_0_0)]">
             <tr>
-              <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Комиссия с оборота' : 'Platform Fee / Cut'}</td>
-              <td class="py-4 font-bold text-[#009080]">0% (Source Available)</td>
-              <td class="py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Дорогая лицензия' : 'Monthly License Fee'}</td>
-              <td class="py-4 text-red-400">5% – 10% + fee</td>
+              <td class="py-3 sm:py-4 font-medium text-white">{lang === 'ru' ? 'Комиссия с оборота' : 'Platform Fee / Cut'}</td>
+              <td class="py-3 sm:py-4 font-bold text-[#009080]">0% (Source Available)</td>
+              <td class="py-3 sm:py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Дорогая лицензия' : 'Monthly License Fee'}</td>
+              <td class="py-3 sm:py-4 text-red-400">5% – 10% + fee</td>
             </tr>
             <tr>
-              <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Исполнение бизнес-логики' : 'Custom Logic Runtime'}</td>
-              <td class="py-4 font-medium text-[#009080]">Изолированный LuaJIT Sandbox</td>
-              <td class="py-4 text-[oklch(0.65_0_0)]">PHP / Perl в ядре сервера</td>
-              <td class="py-4 text-[oklch(0.65_0_0)]">Webhooks only</td>
+              <td class="py-3 sm:py-4 font-medium text-white">{lang === 'ru' ? 'Исполнение бизнес-логики' : 'Custom Logic Runtime'}</td>
+              <td class="py-3 sm:py-4 font-medium text-[#009080]">Изолированный LuaJIT Sandbox</td>
+              <td class="py-3 sm:py-4 text-[oklch(0.65_0_0)]">PHP / Perl в ядре сервера</td>
+              <td class="py-3 sm:py-4 text-[oklch(0.65_0_0)]">Webhooks only</td>
             </tr>
             <tr>
-              <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Интерфейс покупателя' : 'Customer Storefront'}</td>
-              <td class="py-4 font-medium text-[#009080]">{lang === 'ru' ? 'Полностью кастомизируемые формы (sbuiSDK)' : 'Fully customizable forms (sbuiSDK)'}</td>
-              <td class="py-4 text-[oklch(0.65_0_0)]">Legacy Bootstrap 3/Smarty</td>
-              <td class="py-4 text-[oklch(0.65_0_0)]">Hosted Checkout</td>
+              <td class="py-3 sm:py-4 font-medium text-white">{lang === 'ru' ? 'Интерфейс покупателя' : 'Customer Storefront'}</td>
+              <td class="py-3 sm:py-4 font-medium text-[#009080]">{lang === 'ru' ? 'Полностью кастомизируемые формы (sbuiSDK)' : 'Fully customizable forms (sbuiSDK)'}</td>
+              <td class="py-3 sm:py-4 text-[oklch(0.65_0_0)]">Legacy Bootstrap 3/Smarty</td>
+              <td class="py-3 sm:py-4 text-[oklch(0.65_0_0)]">Hosted Checkout</td>
             </tr>
             <tr>
-              <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Платежные шлюзы' : 'Payment Gateways'}</td>
-              <td class="py-4 font-medium text-[#009080]">{lang === 'ru' ? 'Любые (Lua-скрипт за 10 мин)' : 'Any via custom Lua'}</td>
-              <td class="py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Сложные PHP-модули' : 'Complex PHP modules'}</td>
-              <td class="py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Только их шлюз' : 'Locked-in to provider'}</td>
+              <td class="py-3 sm:py-4 font-medium text-white">{lang === 'ru' ? 'Платежные шлюзы' : 'Payment Gateways'}</td>
+              <td class="py-3 sm:py-4 font-medium text-[#009080]">{lang === 'ru' ? 'Любые (Lua-скрипт за 10 мин)' : 'Any via custom Lua'}</td>
+              <td class="py-3 sm:py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Сложные PHP-модули' : 'Complex PHP modules'}</td>
+              <td class="py-3 sm:py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Только их шлюз' : 'Locked-in to provider'}</td>
             </tr>
             <tr>
-              <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Развертывание' : 'Deployment & Stack'}</td>
-              <td class="py-4 font-medium text-[#009080]">{lang === 'ru' ? '1 команда' : '1 command'}</td>
-              <td class="py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Сложная системная настройка' : 'Complex VM configuration'}</td>
-              <td class="py-4 font-medium text-[#009080]">{lang === 'ru' ? 'Cloud only (Регистрация за 5 минут)' : 'Cloud only (5-min signup)'}</td>
+              <td class="py-3 sm:py-4 font-medium text-white">{lang === 'ru' ? 'Развертывание' : 'Deployment & Stack'}</td>
+              <td class="py-3 sm:py-4 font-medium text-[#009080]">{lang === 'ru' ? '1 команда' : '1 command'}</td>
+              <td class="py-3 sm:py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Сложная системная настройка' : 'Complex VM configuration'}</td>
+              <td class="py-3 sm:py-4 font-medium text-[#009080]">{lang === 'ru' ? 'Cloud only (Регистрация за 5 минут)' : 'Cloud only (5-min signup)'}</td>
             </tr>
             <tr>
-              <td class="py-4 font-medium text-white">{lang === 'ru' ? 'Зрелость и история' : 'Maturity & History'}</td>
-              <td class="py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Молодой проект (активная разработка)' : 'Young project (active development)'}</td>
-              <td class="py-4 font-medium text-[#009080]">{lang === 'ru' ? '15+ лет на рынке' : '15+ years on market'}</td>
-              <td class="py-4 font-medium text-[#009080]">{lang === 'ru' ? '14+ лет, развитая экосистема' : '14+ years, massive ecosystem'}</td>
+              <td class="py-3 sm:py-4 font-medium text-white">{lang === 'ru' ? 'Зрелость и история' : 'Maturity & History'}</td>
+              <td class="py-3 sm:py-4 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Молодой проект (активная разработка)' : 'Young project (active development)'}</td>
+              <td class="py-3 sm:py-4 font-medium text-[#009080]">{lang === 'ru' ? '15+ лет на рынке' : '15+ years on market'}</td>
+              <td class="py-3 sm:py-4 font-medium text-[#009080]">{lang === 'ru' ? '14+ лет, развитая экосистема' : '14+ years, massive ecosystem'}</td>
             </tr>
           </tbody>
         </table>

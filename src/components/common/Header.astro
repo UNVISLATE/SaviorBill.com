@@ -18,21 +18,21 @@ const switchLangUrl = `/${targetLang}${cleanPath === '/' ? '' : cleanPath}`;
 <header class="sticky top-3 z-50 px-3 sm:px-4">
   <div class="relative mx-auto max-w-6xl">
     <!-- Floating Island (Clean, perfectly balanced, borderless in both dark and light modes) -->
-    <div class="header-island flex items-center justify-between gap-4 rounded-2xl px-4 py-2 sm:px-6 shadow-xl backdrop-blur-md transition-colors">
+    <div class="header-island flex items-center justify-between gap-2 sm:gap-4 rounded-2xl px-3 sm:px-6 py-2 shadow-xl backdrop-blur-md transition-colors">
       
       <!-- Brand Logo -->
-      <a href={`/${lang}`} class="inline-flex items-center gap-2.5 font-bold tracking-tight text-white hover:opacity-90 transition-opacity">
+      <a href={`/${lang}`} class="inline-flex items-center gap-2 sm:gap-2.5 font-bold tracking-tight text-white hover:opacity-90 transition-opacity shrink-0">
         <img 
           src="/logo.svg" 
           alt="SaviorBill" 
-          class="size-8 object-contain"
+          class="size-7 sm:size-8 object-contain"
         />
-        <span class="text-base sm:text-lg font-bold tracking-tight header-brand-text">
+        <span class="text-sm sm:text-lg font-bold tracking-tight header-brand-text">
           Savior<span class="text-[#009080]">Bill</span>
         </span>
       </a>
 
-      <!-- Center Navigation -->
+      <!-- Center Navigation (Desktop) -->
       <nav class="hidden md:flex items-center gap-8 text-sm font-medium header-nav-links">
         <a href={`/${lang}/docs/quickstart`} class="hover:text-[#009080] transition-colors py-1">
           {t('nav.docs')}
@@ -45,18 +45,18 @@ const switchLangUrl = `/${targetLang}${cleanPath === '/' ? '' : cleanPath}`;
         </a>
       </nav>
 
-      <!-- Right Actions: Uniform height h-9, matching theme styles -->
-      <div class="flex items-center gap-2">
+      <!-- Right Actions -->
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
         <!-- Theme Toggle Button -->
         <ThemeToggle />
 
-        <!-- GitHub Button -->
+        <!-- GitHub Button (Desktop & Tablets) -->
         <a 
           href="https://github.com/UNVISLATE/SaviorBill" 
           target="_blank" 
           rel="noopener noreferrer" 
           title="GitHub Repository"
-          class="header-btn size-9 rounded-xl bg-[oklch(0.24_0_0)] hover:bg-[oklch(0.28_0_0)] hover:text-white text-[oklch(0.8_0_0)] flex items-center justify-center transition-all shrink-0"
+          class="header-btn size-9 rounded-xl bg-[oklch(0.24_0_0)] hover:bg-[oklch(0.28_0_0)] hover:text-white text-[oklch(0.8_0_0)] hidden sm:flex items-center justify-center transition-all shrink-0"
         >
           <svg class="size-4" fill="currentColor" viewBox="0 0 24 24">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
@@ -66,20 +66,144 @@ const switchLangUrl = `/${targetLang}${cleanPath === '/' ? '' : cleanPath}`;
         <!-- Language Switcher -->
         <a 
           href={switchLangUrl} 
-          class="header-btn h-9 px-3 rounded-xl bg-[oklch(0.24_0_0)] hover:bg-[oklch(0.28_0_0)] text-white text-xs font-mono font-semibold flex items-center justify-center transition-all shrink-0"
+          class="header-btn h-9 px-2.5 sm:px-3 rounded-xl bg-[oklch(0.24_0_0)] hover:bg-[oklch(0.28_0_0)] text-white text-xs font-mono font-semibold flex items-center justify-center transition-all shrink-0"
           title="Switch language"
         >
           {targetLang.toUpperCase()}
         </a>
 
-        <!-- Quickstart Button -->
+        <!-- Quickstart Button (Desktop & Tablets) -->
         <a 
           href={`/${lang}/docs/quickstart`} 
-          class="h-9 px-4 rounded-xl bg-[#009080] hover:bg-[#0c5e53] text-white text-xs font-semibold flex items-center justify-center transition-colors shadow-sm shrink-0"
+          class="h-9 px-3.5 sm:px-4 rounded-xl bg-[#009080] hover:bg-[#0c5e53] text-white text-xs font-semibold hidden sm:flex items-center justify-center transition-colors shadow-sm shrink-0"
         >
           {lang === 'ru' ? 'Быстрый старт' : 'Quickstart'}
+        </a>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button
+          id="mobile-nav-toggle"
+          type="button"
+          aria-label="Toggle navigation menu"
+          aria-expanded="false"
+          class="header-btn size-9 rounded-xl bg-[oklch(0.24_0_0)] hover:bg-[oklch(0.28_0_0)] text-white md:hidden flex items-center justify-center transition-all shrink-0 cursor-pointer"
+        >
+          <svg id="mobile-nav-icon-open" class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg id="mobile-nav-icon-close" class="size-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Dropdown Menu -->
+    <div 
+      id="mobile-nav-panel" 
+      class="hidden md:hidden mt-2 p-4 rounded-2xl bg-[oklch(0.18_0_0)]/95 backdrop-blur-xl border border-[oklch(1_0_0/8%)] shadow-2xl transition-all space-y-3"
+    >
+      <nav class="flex flex-col space-y-1 text-sm font-medium">
+        <a 
+          href={`/${lang}/docs/quickstart`} 
+          class="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-[oklch(0.24_0_0)] text-white hover:text-[#009080] transition-colors"
+        >
+          <span class="flex items-center gap-2.5">
+            <svg class="size-4 text-[#009080]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            {t('nav.docs')}
+          </span>
+          <span class="text-xs font-mono text-[oklch(0.55_0_0)]">→</span>
+        </a>
+        <a 
+          href={`/${lang}/blog`} 
+          class="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-[oklch(0.24_0_0)] text-white hover:text-[#009080] transition-colors"
+        >
+          <span class="flex items-center gap-2.5">
+            <svg class="size-4 text-[#009080]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+            </svg>
+            {t('nav.blog')}
+          </span>
+          <span class="text-xs font-mono text-[oklch(0.55_0_0)]">→</span>
+        </a>
+        <a 
+          href={`/${lang}/hub`} 
+          class="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-[oklch(0.24_0_0)] text-white hover:text-[#009080] transition-colors"
+        >
+          <span class="flex items-center gap-2.5">
+            <svg class="size-4 text-[#009080]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+            </svg>
+            {t('nav.hub')}
+          </span>
+          <span class="text-xs font-mono text-[oklch(0.55_0_0)]">→</span>
+        </a>
+      </nav>
+
+      <div class="pt-2 border-t border-[oklch(1_0_0/6%)] flex flex-col gap-2">
+        <a 
+          href={`/${lang}/docs/quickstart`} 
+          class="w-full h-10 px-4 rounded-xl bg-[#009080] hover:bg-[#0c5e53] text-white text-xs font-semibold flex items-center justify-center transition-colors shadow-sm"
+        >
+          {lang === 'ru' ? 'Быстрый старт' : 'Quickstart'}
+        </a>
+        <a 
+          href="https://github.com/UNVISLATE/SaviorBill" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="w-full h-9 px-4 rounded-xl bg-[oklch(0.24_0_0)] hover:bg-[oklch(0.28_0_0)] text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all"
+        >
+          <svg class="size-4" fill="currentColor" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+          </svg>
+          <span>GitHub Repository</span>
         </a>
       </div>
     </div>
   </div>
 </header>
+
+<script is:inline>
+  (function() {
+    function setupMobileNav() {
+      const btn = document.getElementById('mobile-nav-toggle');
+      const panel = document.getElementById('mobile-nav-panel');
+      const iconOpen = document.getElementById('mobile-nav-icon-open');
+      const iconClose = document.getElementById('mobile-nav-icon-close');
+
+      if (!btn || !panel || btn.dataset.bound) return;
+      btn.dataset.bound = 'true';
+
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const isOpen = !panel.classList.contains('hidden');
+        if (isOpen) {
+          panel.classList.add('hidden');
+          btn.setAttribute('aria-expanded', 'false');
+          if (iconOpen) iconOpen.classList.remove('hidden');
+          if (iconClose) iconClose.classList.add('hidden');
+        } else {
+          panel.classList.remove('hidden');
+          btn.setAttribute('aria-expanded', 'true');
+          if (iconOpen) iconOpen.classList.add('hidden');
+          if (iconClose) iconClose.classList.remove('hidden');
+        }
+      });
+
+      // Close when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!panel.classList.contains('hidden') && !panel.contains(e.target) && !btn.contains(e.target)) {
+          panel.classList.add('hidden');
+          btn.setAttribute('aria-expanded', 'false');
+          if (iconOpen) iconOpen.classList.remove('hidden');
+          if (iconClose) iconClose.classList.add('hidden');
+        }
+      });
+    }
+
+    setupMobileNav();
+    document.addEventListener('astro:after-swap', setupMobileNav);
+  })();
+</script>
