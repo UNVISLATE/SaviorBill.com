@@ -1,0 +1,28 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "SaviorBill",
+    "documentationUrl": "https://saviorbill.com/ru/docs/quickstart/"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:saviorbill.com:docs:quickstart",
+      "displayName": "SaviorBill Quickstart & Installation",
+      "type": "text/markdown",
+      "url": "https://saviorbill.com/llms.txt",
+      "description": "Self-hosted billing platform with Lua extensions, Docker deployment, and payment gateway integrations.",
+      "representativeQueries": [
+        "how to install saviorbill",
+        "saviorbill billing lua extensions",
+        "self-hosted vpn shop billing setup"
+      ]
+    },
+    {
+      "identifier": "urn:air:saviorbill.com:hub:extensions",
+      "displayName": "SaviorBill Hub Extensions Catalog",
+      "type": "application/json",
+      "url": "https://saviorbill.com/ru/hub/",
+      "description": "Official and community Lua payment and service extensions for SaviorBill."
+    }
+  ]
+}

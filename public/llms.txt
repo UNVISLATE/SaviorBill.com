@@ -1,0 +1,18 @@
+# SaviorBill
+
+> Self-hosted billing platform with Lua extensions, modern Admin UI, and automated client onboarding.
+
+## Overview
+SaviorBill is an open-source, self-hosted billing system for digital services, subscriptions, and VPN shops. It features Docker Compose deployment, Lua 5.4 plugins for payment gateways and service provisioners, and a reactive personal account client.
+
+## Documentation
+- Quickstart & Installation: https://saviorbill.com/ru/docs/quickstart/
+- Lua API Reference: https://saviorbill.com/ru/docs/lua-api/
+- Manifest Schema: https://saviorbill.com/ru/docs/lua-manifest/
+- Extensions Hub: https://saviorbill.com/ru/hub/
+
+## One-line Installer
+Run on a clean Ubuntu or Debian server:
+```bash
+curl -fsSL https://get.saviorbill.com | bash
+```
