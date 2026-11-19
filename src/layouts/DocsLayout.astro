@@ -4,6 +4,7 @@ import DocsSidebar from '../components/docs/DocsSidebar.astro';
 import TableOfContents from '../components/docs/TableOfContents.astro';
 import MediaLightbox from '../components/blog/MediaLightbox';
 import HubCardMount from '../components/hub/HubCardMount';
+import ArticleQuoteAndAnchors from '../components/common/ArticleQuoteAndAnchors.astro';
 
 interface Heading {
   depth: number;
@@ -85,4 +86,5 @@ const jsonLd = {
 
   <MediaLightbox client:load />
   <HubCardMount client:load />
+  <ArticleQuoteAndAnchors lang={lang} />
 </BaseLayout>

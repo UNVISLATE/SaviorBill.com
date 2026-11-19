@@ -15,7 +15,7 @@ const filteredHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
 {filteredHeadings.length > 0 && (
-  <nav class="sticky top-20 space-y-4 text-xs select-none" id="article-toc-nav">
+  <nav class="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto pr-1 space-y-4 text-xs select-none sidebar-scroll" id="article-toc-nav">
     <!-- Reading Progress Bar (arayas-cheats style) -->
     <div class="card-surface p-3.5 space-y-2">
       <div class="flex items-center justify-between text-xs font-mono text-[oklch(0.6_0_0)]">
@@ -27,8 +27,8 @@ const filteredHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
       </div>
     </div>
 
-    <!-- Table of Contents Links -->
-    <div class="card-surface p-4">
+    <!-- Table of Contents Links (Scrollable if many headings) -->
+    <div class="card-surface p-4 max-h-[calc(100vh-14rem)] overflow-y-auto sidebar-scroll">
       <div class="font-mono text-xs font-semibold uppercase tracking-wider text-[oklch(0.6_0_0)] mb-3 pb-2 border-b border-[oklch(1_0_0/6%)]">
         {title}
       </div>
