@@ -179,6 +179,72 @@ end
 
 ---
 
+## Описание интерфейса в sbui (`sbuiSDK`)
+
+Помимо параметров админки, манифест может содержать декларативное описание интерфейса для личного кабинета покупателя (`SBPersonalAccountClient`). Для этого используется корневой блок **`sbui`**:
+
+```json
+{
+  "id": "marzban-vless",
+  "name": "Marzban VLESS VPN Delivery",
+  "...": "...",
+  "sbui": {
+    "version": "1.0",
+    "title": "VLESS Subscription Card",
+    "service_card": {
+      "type": "card",
+      "variant": "elevated",
+      "header": "Подключение VLESS (Xray / Reality)",
+      "children": [
+        {
+          "type": "row",
+          "gap": 16,
+          "align": "center",
+          "children": [
+            {
+              "type": "qr",
+              "value": "{{public.subscription_url}}",
+              "size": 130,
+              "qrStyle": "liquid",
+              "logo": "UNVIDark"
+            },
+            {
+              "type": "column",
+              "gap": 8,
+              "children": [
+                { "type": "text", "variant": "caption", "bold": true, "content": "Ключ подключения:" },
+                {
+                  "type": "input",
+                  "name": "sub_url",
+                  "defaultValue": "{{public.subscription_url}}",
+                  "readOnly": true
+                },
+                {
+                  "type": "button",
+                  "label": "Скопировать ключ",
+                  "variant": "primary",
+                  "action": "copy"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+### Ключевые параметры секции `sbui`:
+- **`version`** (`"1.0"`): версия протокола схемы разметки;
+- **`service_card`**: готовая карточка услуги, которая отображается в личном кабинете покупателя после активации. В значениях полей поддерживается автоматическая подстановка переменных из возвращенной скриптом таблицы `public` через синтаксис `{{public.field_name}}` (например, `{{public.subscription_url}}`);
+- **`order_form`** (опционально): кастомная форма выбора параметров на этапе оформления заказа в витрине.
+
+> [!NOTE]
+> Полный перечень всех 17 компонентов интерфейса, свойства векторного QR-кода, DatePicker, модальных окон и правила реактивных условий (`depends_on`) подробно описаны в руководстве [Компоненты Server-Driven UI (sbuiSDK)](/ru/docs/sbuisdk-components).
+
+---
+
 ## Правила упаковки интеграции
 
 Для публикации интеграции в каталоге или загрузки архивом в админ-панель SaviorBill файлы упаковываются в `.zip` архив со следующей структурой:

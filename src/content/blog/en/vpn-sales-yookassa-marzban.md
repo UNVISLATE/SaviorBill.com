@@ -12,7 +12,7 @@ faq:
     answer: 'Instantly upon payment webhook confirmation, the Lua script calls Marzban API, registers the subscriber, and returns the subscription URL and liquid QR code to the customer dashboard via Server-Driven UI.'
 ---
 
-Demand for self-hosted VPN solutions with modern censorship-resistant protocols (VLESS, Reality, Trojan) is skyrocketing. In this tutorial, we will set up a fully automated VPN storefront on **SaviorBill** using pre-built Hub integrations:
+Demand for self-hosted VPN solutions with modern high-performance tunneling and encryption protocols (VLESS, Reality, Trojan) is growing rapidly. In this tutorial, we will set up a fully automated VPN storefront on **SaviorBill** using pre-built Hub integrations:
 - [YooKassa Payment Gateway](/en/hub/yookassa-payment) for bank cards and instant payments;
 - [Marzban VLESS Delivery](/en/hub/marzban-vless) service module;
 - [Server-Driven UI (sbuiSDK)](/en/docs/sbuisdk-components) for native in-app QR code rendering.

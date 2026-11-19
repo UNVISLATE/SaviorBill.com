@@ -42,5 +42,59 @@
         { "value": "year", "label": "Ежегодно" }
       ]
     }
+  },
+  "sbui": {
+    "version": "1.0",
+    "title": "VLESS Subscription Card",
+    "service_card": {
+      "type": "card",
+      "variant": "elevated",
+      "header": "Подключение VLESS (Xray / Reality)",
+      "children": [
+        {
+          "type": "row",
+          "justify": "between",
+          "align": "center",
+          "children": [
+            { "type": "text", "variant": "caption", "color": "#a1a1aa", "content": "VLESS • Reality • TCP Vision" },
+            { "type": "badge", "variant": "success", "content": "Активен" }
+          ]
+        },
+        {
+          "type": "row",
+          "gap": 16,
+          "align": "center",
+          "children": [
+            {
+              "type": "qr",
+              "value": "{{public.subscription_url}}",
+              "size": 130,
+              "plateRadius": 18,
+              "qrStyle": "liquid",
+              "logo": "UNVIDark"
+            },
+            {
+              "type": "column",
+              "gap": 8,
+              "children": [
+                { "type": "text", "variant": "caption", "bold": true, "content": "Ссылка на подписку:" },
+                {
+                  "type": "input",
+                  "name": "sub_url",
+                  "defaultValue": "{{public.subscription_url}}",
+                  "readOnly": true
+                },
+                {
+                  "type": "button",
+                  "label": "Скопировать ссылку",
+                  "variant": "primary",
+                  "action": "copy"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   }
 }

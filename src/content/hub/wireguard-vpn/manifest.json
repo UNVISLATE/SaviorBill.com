@@ -1,9 +1,0 @@
-{
-  "id": "wireguard-vpn",
-  "name": "WireGuard VPN Provider",
-  "category": "VPN & Networks",
-  "author": "UNVI",
-  "version": "1.0.0",
-  "description": "Автоматическое создание пиров WireGuard, выдача .conf файлов и рендер векторных QR-кодов через sbuiSDK.",
-  "actions": ["create", "renew", "freeze", "delete"]
-}

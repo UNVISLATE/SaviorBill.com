@@ -225,19 +225,35 @@ if (faq && faq.length > 0) {
             {lang === 'ru' ? 'Другие статьи в блоге' : 'More from the blog'}
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {slug === 'self-hosted-billing-fastapi-lua' ? (
+              <a
+                href={`/${lang}/blog/vpn-sales-yookassa-marzban`}
+                class="card-interactive p-4 flex flex-col justify-between"
+              >
+                <span class="text-xs text-[#009080] font-mono mb-1">{lang === 'ru' ? 'Следующая статья →' : 'Next article →'}</span>
+                <span class="text-sm font-semibold leading-snug related-post-title">
+                  {lang === 'ru' ? 'Как запустить продажи VPN через ЮKassa и Marzban' : 'How to Launch a VPN Service with YooKassa and Marzban'}
+                </span>
+              </a>
+            ) : (
+              <a
+                href={`/${lang}/blog/self-hosted-billing-fastapi-lua`}
+                class="card-interactive p-4 flex flex-col justify-between"
+              >
+                <span class="text-xs text-[#009080] font-mono mb-1">{lang === 'ru' ? '← Архитектура биллинга' : '← Billing Architecture'}</span>
+                <span class="text-sm font-semibold leading-snug related-post-title">
+                  {lang === 'ru' ? 'Изоляция логики на Lua и Server-Driven UI' : 'Isolating Logic in Lua and Server-Driven UI'}
+                </span>
+              </a>
+            )}
             <a
-              href={`/${lang}/blog/self-hosted-billing-fastapi-lua`}
+              href={`/${lang}/docs/quickstart`}
               class="card-interactive p-4 flex flex-col justify-between"
             >
-              <span class="text-xs text-[#009080] font-mono mb-1">← Архитектура биллинга</span>
-              <span class="text-sm font-semibold leading-snug related-post-title">Изоляция логики на Lua и Server-Driven UI</span>
-            </a>
-            <a
-              href={`/${lang}/blog/kitchen-sink`}
-              class="card-interactive p-4 flex flex-col justify-between"
-            >
-              <span class="text-xs text-[#009080] font-mono mb-1">Демо стенд →</span>
-              <span class="text-sm font-semibold leading-snug related-post-title">Тестовая страница Markdown и компонентов</span>
+              <span class="text-xs text-[#009080] font-mono mb-1">{lang === 'ru' ? 'Документация →' : 'Documentation →'}</span>
+              <span class="text-sm font-semibold leading-snug related-post-title">
+                {lang === 'ru' ? 'Быстрый старт и развертывание SaviorBill' : 'Quickstart and Deploying SaviorBill'}
+              </span>
             </a>
           </div>
         </div>

@@ -55,25 +55,15 @@ const description = lang === 'ru'
         </p>
       </div>
 
-      <!-- Controls Row: Tabs & Search Filter -->
+      <!-- Controls Row: Count Badge & Search Filter -->
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
         
-        <!-- Tabs: Official (default) vs Community -->
-        <div class="inline-flex rounded-xl bg-[oklch(0.18_0_0)] p-1 card-surface select-none self-start sm:self-auto">
-          <button
-            type="button"
-            id="tab-btn-official"
-            class="hub-tab-btn active px-4 py-2 rounded-lg text-xs font-semibold font-mono transition-colors bg-[#009080] text-white shadow-xs cursor-pointer"
-          >
-            {lang === 'ru' ? 'Официальные модули' : 'Official Scripts'} ({officialScripts.length})
-          </button>
-          <button
-            type="button"
-            id="tab-btn-community"
-            class="hub-tab-btn px-4 py-2 rounded-lg text-xs font-semibold font-mono transition-colors text-[oklch(0.7_0_0)] hover:text-white cursor-pointer"
-          >
-            {lang === 'ru' ? 'Сторонние и сообщество' : 'Community Scripts'} ({communityScripts.length})
-          </button>
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[oklch(0.18_0_0)] card-surface select-none self-start sm:self-auto text-xs font-mono">
+          <span class="size-2 rounded-full bg-[#009080]"></span>
+          <span class="font-semibold text-white">
+            {lang === 'ru' ? 'Официальные модули' : 'Official Modules'}
+          </span>
+          <span class="text-[oklch(0.6_0_0)]">({officialScripts.length})</span>
         </div>
 
         <!-- Search Bar -->
@@ -92,7 +82,7 @@ const description = lang === 'ru'
 
       </div>
 
-      <!-- Section: Official Scripts (Visible by default) -->
+      <!-- Section: Official Scripts -->
       <div id="hub-list-official" class="hub-list grid grid-cols-1 md:grid-cols-2 gap-5">
         {officialScripts.map((s) => (
           <a
@@ -156,70 +146,6 @@ const description = lang === 'ru'
                 </svg>
                 <span>.zip</span>
               </button>
-            </div>
-          </a>
-        ))}
-      </div>
-
-      <!-- Section: Community Scripts (Toggled via Tab 2) -->
-      <div id="hub-list-community" class="hub-list hidden grid-cols-1 md:grid-cols-2 gap-5">
-        {communityScripts.map((s) => (
-          <a
-            href={`/${lang}/hub/${s.id}`}
-            data-hub-card
-            data-search-text={`${s.name} ${s.description} ${s.category} ${(s.actions || []).join(' ')} ${s.author}`.toLowerCase()}
-            class="group card-interactive p-5 flex flex-col justify-between rounded-xl relative overflow-hidden transition-all duration-200"
-          >
-            <div class="space-y-3">
-              <div class="flex items-center justify-between gap-2 text-xs font-mono">
-                <div class="flex items-center gap-2">
-                  <span class="badge-pill px-2.5 py-0.5 rounded text-[11px] font-semibold">
-                    {s.category}
-                  </span>
-                  <span class="text-[oklch(0.55_0_0)]">v{s.version}</span>
-                </div>
-                <span class="text-[11px] text-[oklch(0.6_0_0)] font-mono">
-                  by @{s.author}
-                </span>
-              </div>
-
-              <h3 class="text-base font-bold text-white group-hover:text-[#009080] transition-colors leading-snug">
-                {s.name}
-              </h3>
-
-              <p class="text-xs text-[oklch(0.65_0_0)] leading-relaxed line-clamp-2">
-                {s.description}
-              </p>
-
-              {s.actions && s.actions.length > 0 && (
-                <div class="flex flex-wrap items-center gap-1.5 pt-1">
-                  {s.actions.map((act: string) => (
-                    <span class="px-2 py-0.5 rounded bg-[oklch(0.16_0_0)] text-[oklch(0.85_0_0)] font-mono text-[10px]">
-                      {act}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div class="pt-4 mt-4 border-t border-[oklch(1_0_0/5%)] flex items-center justify-between">
-              <span class="text-xs text-[#009080] font-medium group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-                <span>{lang === 'ru' ? 'Подробнее' : 'Details'}</span>
-                <span>→</span>
-              </span>
-
-              {s.downloadUrl && (
-                <button
-                  type="button"
-                  data-download-url={s.downloadUrl}
-                  class="hub-direct-download-btn px-3 py-1.5 rounded-lg bg-[oklch(0.24_0_0)] hover:bg-[#009080] text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-colors shadow-xs"
-                >
-                  <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                  </svg>
-                  <span>.zip</span>
-                </button>
-              )}
             </div>
           </a>
         ))}

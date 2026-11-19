@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import sharp from 'sharp';
 
 const blogDir = path.resolve('src/content/blog');
 const outDir = path.resolve('public/images/og');
@@ -37,11 +38,28 @@ function escapeXml(unsafe) {
   });
 }
 
-function generateSvg({ title, tag = 'Architecture', author = 'UNVI' }) {
+function generateSvg({ title, tag = 'Architecture', author = 'Andrey UNVI', avatarBase64 = null }) {
   const lines = wrapText(title, 26);
   const textElements = lines
     .map((line, idx) => `<tspan x="80" dy="${idx === 0 ? 0 : 58}">${escapeXml(line)}</tspan>`)
     .join('');
+
+  let avatarMarkup = `
+    <circle cx="30" cy="30" r="30" fill="#009080" />
+    <text x="30" y="38" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="700" text-anchor="middle">${escapeXml(author[0] || 'U')}</text>
+  `;
+
+  if (avatarBase64) {
+    avatarMarkup = `
+    <defs>
+      <clipPath id="avatarClip">
+        <circle cx="30" cy="30" r="30" />
+      </clipPath>
+    </defs>
+    <circle cx="30" cy="30" r="32" fill="#009080" />
+    <image href="data:image/jpeg;base64,${avatarBase64}" x="0" y="0" width="60" height="60" clip-path="url(#avatarClip)" />
+    `;
+  }
 
   return `<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -82,41 +100,66 @@ function generateSvg({ title, tag = 'Architecture', author = 'UNVI' }) {
   </text>
 
   <!-- Footer Info -->
-  <g transform="translate(80, 520)">
-    <circle cx="20" cy="20" r="20" fill="#009080" />
-    <text x="20" y="26" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" text-anchor="middle">${escapeXml(author[0])}</text>
-    <text x="56" y="26" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="600">${escapeXml(author)}</text>
-    <text x="1040" y="26" fill="rgba(255, 255, 255, 0.45)" font-family="monospace" font-size="18" text-anchor="end">saviorbill.com/blog</text>
+  <g transform="translate(80, 500)">
+    ${avatarMarkup}
+    <text x="80" y="38" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="600">${escapeXml(author)}</text>
+    <text x="1040" y="38" fill="rgba(255, 255, 255, 0.45)" font-family="monospace" font-size="18" text-anchor="end">saviorbill.com/blog</text>
   </g>
 </svg>`;
 }
 
-const langs = ['ru', 'en'];
-for (const lang of langs) {
-  const dir = path.join(blogDir, lang);
-  if (!fs.existsSync(dir)) continue;
+async function getAvatarBase64(avatarRelPath) {
+  if (!avatarRelPath) return null;
+  const cleanPath = avatarRelPath.startsWith('/') ? avatarRelPath.slice(1) : avatarRelPath;
+  const fullPath = path.resolve('public', cleanPath);
+  if (!fs.existsSync(fullPath)) return null;
 
-  const files = fs.readdirSync(dir).filter(f => f.endsWith('.md') || f.endsWith('.mdx'));
-  for (const file of files) {
-    const content = fs.readFileSync(path.join(dir, file), 'utf-8');
-    const slug = file.replace(/\.(md|mdx)$/, '');
-
-    // Parse simple frontmatter
-    const titleMatch = content.match(/title:\s*['"]?([^'"\n]+)['"]?/);
-    const tagMatch = content.match(/tags:\s*\[([^\]]+)\]/);
-    const authorMatch = content.match(/author:\s*['"]?([^'"\n]+)['"]?/);
-
-    const title = titleMatch ? titleMatch[1] : slug;
-    let tag = 'Engineering';
-    if (tagMatch) {
-      const firstTag = tagMatch[1].split(',')[0].replace(/['"\s]/g, '');
-      if (firstTag) tag = firstTag;
-    }
-    const author = authorMatch ? authorMatch[1] : 'UNVI';
-
-    const svg = generateSvg({ title, tag, author });
-    const outPath = path.join(outDir, `${lang}-${slug}.svg`);
-    fs.writeFileSync(outPath, svg, 'utf-8');
-    console.log(`[AutoOG] Generated: ${outPath}`);
+  try {
+    const resizedBuffer = await sharp(fullPath)
+      .resize(120, 120, { fit: 'cover' })
+      .jpeg({ quality: 85 })
+      .toBuffer();
+    return resizedBuffer.toString('base64');
+  } catch (err) {
+    console.error(`Failed to process avatar: ${fullPath}`, err);
+    return null;
   }
 }
+
+async function run() {
+  const langs = ['ru', 'en'];
+  for (const lang of langs) {
+    const dir = path.join(blogDir, lang);
+    if (!fs.existsSync(dir)) continue;
+
+    const files = fs.readdirSync(dir).filter(f => f.endsWith('.md') || f.endsWith('.mdx'));
+    for (const file of files) {
+      const content = fs.readFileSync(path.join(dir, file), 'utf-8');
+      const slug = file.replace(/\.(md|mdx)$/, '');
+
+      // Parse simple frontmatter
+      const titleMatch = content.match(/title:\s*['"]?([^'"\n]+)['"]?/);
+      const tagMatch = content.match(/tags:\s*\[([^\]]+)\]/);
+      const authorMatch = content.match(/author:\s*['"]?([^'"\n]+)['"]?/);
+      const avatarMatch = content.match(/authorAvatar:\s*['"]?([^'"\n]+)['"]?/);
+
+      const title = titleMatch ? titleMatch[1] : slug;
+      let tag = 'Engineering';
+      if (tagMatch) {
+        const firstTag = tagMatch[1].split(',')[0].replace(/['"\s]/g, '');
+        if (firstTag) tag = firstTag;
+      }
+      const author = authorMatch ? authorMatch[1] : 'Andrey UNVI';
+      const avatarPath = avatarMatch ? avatarMatch[1] : '/images/avatars/andrey-unvi.jpg';
+
+      const avatarBase64 = await getAvatarBase64(avatarPath);
+
+      const svg = generateSvg({ title, tag, author, avatarBase64 });
+      const outPath = path.join(outDir, `${lang}-${slug}.svg`);
+      fs.writeFileSync(outPath, svg, 'utf-8');
+      console.log(`[AutoOG] Generated: ${outPath} (with avatar: ${!!avatarBase64})`);
+    }
+  }
+}
+
+run();

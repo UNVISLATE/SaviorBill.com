@@ -57,3 +57,33 @@ It serves three core purposes:
 - **`number`**: Integer or floating-point input.
 - **`select`**: Dropdown with options array `[ { "value": "val", "label": "Label" } ]`.
 - **`toggle`**: Boolean switch (`true` / `false`).
+
+---
+
+## Server-Driven UI Configuration (`sbui`)
+
+In addition to admin settings, manifests can define declarative layouts for customer dashboards via the **`sbui`** block:
+
+```json
+{
+  "sbui": {
+    "version": "1.0",
+    "service_card": {
+      "type": "card",
+      "variant": "elevated",
+      "header": "VLESS Subscription Access",
+      "children": [
+        {
+          "type": "qr",
+          "value": "{{public.subscription_url}}",
+          "size": 130,
+          "qrStyle": "liquid"
+        }
+      ]
+    }
+  }
+}
+```
+
+- **`service_card`**: Card layout rendered in `SBPersonalAccountClient` with variable interpolation (`{{public.field}}`).
+- For component schemas and reactivity, see the [Server-Driven UI (sbuiSDK) Components](/en/docs/sbuisdk-components) documentation.

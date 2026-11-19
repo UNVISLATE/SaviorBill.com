@@ -18,7 +18,7 @@ Hello everyone! In this post, I want to talk about my project **SaviorBill** —
 
 ## Why We Built SaviorBill
 
-When looking to sell digital goods and memberships, many developers face an unpleasant choice: either run 15-year-old PHP/Perl monoliths (like WHMCS or legacy billing panels) that are prone to vulnerabilities and hard to customize, or pay 5–10% revenue fees to closed US-centric SaaS platforms.
+When looking to sell digital goods and memberships, many developers face an unpleasant choice: either run legacy monolithic billing panels that are hard to customize and prone to architecture debt, or pay 5–10% revenue fees to closed US-centric SaaS platforms.
 
 We decided to build a clean-slate modern stack: **Python 3.12, FastAPI, PostgreSQL, Valkey**, and crucially — an **isolated Lua sandbox**.
 
