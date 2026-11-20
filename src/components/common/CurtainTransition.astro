@@ -56,14 +56,25 @@
       }
     };
 
-    function getRootSection(pathname) {
-      if (!pathname) return 'home';
-      const clean = pathname.replace(/^\/(ru|en)(\/|$)/, '') || '';
-      const firstSegment = clean.split('/')[0].trim();
-      if (!firstSegment || firstSegment === '') return 'home';
-      if (firstSegment === 'blog') return 'blog';
-      if (firstSegment === 'docs') return 'docs';
-      if (firstSegment === 'hub') return 'hub';
+    function getRootSection(input) {
+      if (!input) return 'home';
+      let pathname = '';
+      if (typeof input === 'string') {
+        pathname = input.startsWith('http') ? new URL(input).pathname : input.split('?')[0].split('#')[0];
+      } else if (input && typeof input.pathname === 'string') {
+        pathname = input.pathname;
+      }
+      
+      const segments = pathname.replace(/^\/+/, '').replace(/\/+$/, '').split('/').filter(Boolean);
+      if (segments.length > 0 && (segments[0] === 'en' || segments[0] === 'ru')) {
+        segments.shift();
+      }
+
+      if (segments.length === 0) return 'home';
+      const first = segments[0].toLowerCase();
+      if (first === 'blog') return 'blog';
+      if (first === 'docs') return 'docs';
+      if (first === 'hub') return 'hub';
       return 'other';
     }
 
