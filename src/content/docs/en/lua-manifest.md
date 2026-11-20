@@ -1,25 +1,28 @@
 ---
 title: 'manifest.json Specification for Lua Integrations'
-description: 'How to write a manifest.json file for SaviorBill Lua scripts: metadata, auto-generated admin forms, and packaging.'
+description: 'Canonical manifest specification for SaviorBill Lua scripts: metadata, settings_form admin schemas, client_order_form checkout inputs, Server-Driven UI (view_layout), and packaging rules.'
 category: 'Integrations & Lua'
 order: 10
 ---
 
 ## What is manifest.json?
 
-Every Lua script in SaviorBill (service delivery module, payment gateway, OAuth provider, or trigger action) is packaged with a `manifest.json` file.
+Every Lua script in SaviorBill (service delivery module, payment gateway, OAuth provider, or background trigger) is packaged with a declarative `manifest.json` file.
 
-It serves three core purposes:
-1. **Core Registration:** registers the unique slug (`id`), display name, category, author, and supported lifecycle actions (`actions`).
-2. **Auto-Generated Admin UI:** describes the configuration schema (`settings`). SaviorBill automatically renders input forms in the admin panel without frontend code.
-3. **Versioning:** tracks module version (`version`), stability status (`status`), and changelogs.
+The manifest serves several key purposes:
+1. **Core Registration:** defines the unique identifier (`slug` / `id`), display name, category, author, and supported lifecycle events (`actions`).
+2. **Auto-Generated Admin UI (`settings_form`):** a strictly ordered array of configuration fields. SaviorBill automatically generates interactive admin settings forms (text, passwords, toggles, sliders, selects) with validation without requiring custom frontend code.
+3. **Client Checkout Forms (`client_order_form`):** fields filled out by customers during order placement in the storefront. The billing core validates these inputs and passes them to Lua in `ctx.order.form`.
+4. **Server-Driven UI (`view_layout` and `layout`):** declarative layouts for delivered services (vector Liquid QR codes, copy buttons, status badges) rendered directly in the customer portal (`SBPersonalAccountClient`).
+5. **Versioning & Media:** tracks module version (`version`), stability status (`status`), and declarative background media downloads (`media_download`).
 
 ---
 
-## Minimal Example
+## Canonical Manifest Example
 
 ```json
 {
+  "slug": "marzban-vless",
   "id": "marzban-vless",
   "name": "Marzban VLESS VPN Delivery",
   "category": "VPN & Proxies",
@@ -27,66 +30,178 @@ It serves three core purposes:
   "version": "1.0.0",
   "status": "stable",
   "description": "Automated VLESS subscription provisioning via Marzban REST API.",
-  "actions": ["create", "renew", "stop", "delete", "freeze"],
-  "settings": {
-    "marzban_domain": {
-      "type": "string",
+  "actions": [
+    "create",
+    "renew",
+    "stop",
+    "delete",
+    "freeze"
+  ],
+  "settings_form": [
+    {
+      "id": "marzban_domain",
+      "type": "text",
       "label": "Marzban Panel Domain",
       "placeholder": "panel.example.com",
-      "required": true
+      "required": true,
+      "description": "Panel hostname without https://"
     },
-    "marzban_user": {
-      "type": "string",
+    {
+      "id": "marzban_user",
+      "type": "text",
       "label": "Admin Username",
+      "placeholder": "admin",
       "required": true
     },
-    "marzban_pass": {
+    {
+      "id": "marzban_pass",
       "type": "password",
       "label": "Admin Password",
       "required": true
+    },
+    {
+      "id": "data_limit_gb",
+      "type": "number",
+      "label": "Traffic Limit (GB)",
+      "default": 0,
+      "description": "0 = unlimited traffic"
+    },
+    {
+      "id": "reset_strategy",
+      "type": "select",
+      "label": "Traffic Reset Interval",
+      "default": "no_reset",
+      "options": [
+        { "value": "no_reset", "label": "No reset" },
+        { "value": "month", "label": "Monthly" },
+        { "value": "year", "label": "Annually" }
+      ]
     }
+  ],
+  "view_trigger_label": "Setup Guide & QR",
+  "view_layout": {
+    "type": "card",
+    "variant": "elevated",
+    "content": "VLESS Subscription Connection",
+    "children": [
+      {
+        "type": "row",
+        "align": "center",
+        "children": [
+          { "type": "text", "variant": "caption", "content": "VLESS • Reality • TCP Vision" },
+          { "type": "badge", "variant": "success", "content": "Active" }
+        ]
+      },
+      {
+        "type": "row",
+        "gap": 16,
+        "align": "center",
+        "children": [
+          {
+            "type": "qr",
+            "props": {
+              "value": "{{public.subscription_url}}",
+              "size": 130,
+              "plateRadius": 18,
+              "qrStyle": "liquid",
+              "logo": "UNVIDark"
+            }
+          },
+          {
+            "type": "column",
+            "gap": 8,
+            "children": [
+              { "type": "text", "variant": "caption", "content": "Subscription URL:" },
+              {
+                "type": "copy_field",
+                "props": {
+                  "value": "{{public.subscription_url}}",
+                  "label": "Copy Link"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 }
 ```
 
 ---
 
-## Supported Field Types in `settings`
-- **`string`**: Single-line text input.
-- **`password`**: Obfuscated and encrypted credential field.
-- **`number`**: Integer or floating-point input.
-- **`select`**: Dropdown with options array `[ { "value": "val", "label": "Label" } ]`.
-- **`toggle`**: Boolean switch (`true` / `false`).
+## Root Manifest Fields
+
+| Field | Type | Required | Description |
+| :--- | :--- | :---: | :--- |
+| `slug` | `string` | **Yes** | Unique identifier (`^[a-z0-9_-]+$`). E.g. `marzban-vless`, `cryptobot-payment`. |
+| `id` | `string` | No | Compatibility alias (recommended to set identical to `slug`). |
+| `name` | `string` | **Yes** | Human-readable title of the module (up to 128 characters). |
+| `category` | `string` | **Yes** | Integration category: `VPN & Proxies`, `Payments`, `Hosting & Cloud`, etc. |
+| `author` | `string` | No | Author or studio name. |
+| `version` | `string` | **Yes** | SemVer or manifest version (e.g. `"1.0.0"`). |
+| `status` | `string` | No | Stability indicator: `stable` or `not-stable`. |
+| `description` | `string` | No | Summary of protocols and capabilities. |
+| `actions` | `array<string>` | **Yes** | Supported lifecycle actions (e.g. `["create", "renew", "stop", "delete"]`). |
+| `settings_form` | `array<FieldDefinition>` | No | Ordered list of configuration inputs for the Admin UI. |
+| `client_order_form` | `array<FieldDefinition>` | No | Ordered list of customer input fields at checkout. |
+| `layout` | `SchemaNode` | No | Server-Driven UI layout for custom storefront order flows. |
+| `view_layout` | `SchemaNode` | No | Server-Driven UI node rendered in the customer portal modal. |
+| `view_trigger_label` | `string` | No | Text label for the service modal trigger button (e.g. `"Setup Guide & QR"`). |
+| `hide_key` | `boolean` | No | When `true`, hides the default raw key display box in customer portal. |
+| `media_download` | `array<MediaDownloadItem>` | No | Background safe downloads fetched via mediaworker. |
 
 ---
 
-## Server-Driven UI Configuration (`sbui`)
+## Field Types (`FieldDefinition`)
 
-In addition to admin settings, manifests can define declarative layouts for customer dashboards via the **`sbui`** block:
+Each field in `settings_form` or `client_order_form` is defined as an object inside the array:
+
+- **`text`**: Single-line text input.
+- **`password`**: Encrypted sensitive credential field.
+- **`number`**: Integer or floating-point input with optional `min`, `max`, `step`.
+- **`range`**: Slider control for intuitive numeric input.
+- **`select`**: Dropdown with `options` array (`[{ "value": "val", "label": "Label" }]`).
+- **`toggle`**: Boolean switch (`true` / `false`).
+- **`textarea`**: Multi-line input for configs, SSH keys, or certificates.
+- **`datetime`**: Date and time picker.
+
+### Reactive Conditions (`depends_on`)
+
+Fields can conditionally show or hide based on other field values:
 
 ```json
 {
-  "sbui": {
-    "version": "1.0",
-    "service_card": {
-      "type": "card",
-      "variant": "elevated",
-      "header": "VLESS Subscription Access",
-      "children": [
-        {
-          "type": "qr",
-          "value": "{{public.subscription_url}}",
-          "size": 130,
-          "qrStyle": "liquid"
-        }
-      ]
-    }
+  "id": "vat_code",
+  "type": "select",
+  "label": "VAT Rate",
+  "default": "1",
+  "options": [
+    { "value": "1", "label": "0% VAT" },
+    { "value": "2", "label": "20% VAT" }
+  ],
+  "depends_on": {
+    "field": "send_receipt",
+    "equals": true
   }
 }
 ```
 
-- **`service_card`**: Card layout rendered in `SBPersonalAccountClient` with variable interpolation (`{{public.field}}`).
-- For component schemas and reactivity, see the [Server-Driven UI (sbuiSDK) Components](/en/docs/sbuisdk-components) documentation.
+---
+
+## Accessing Settings in Lua
+
+- **Admin/Provider settings:** `ctx.service.settings[id]` (with fallback to `ctx.lua.settings[id]`).
+- **Customer order form:** `ctx.order.form[id]`.
+
+---
+
+## Server-Driven UI (`view_layout`)
+
+Define the component tree directly at root level via `view_layout`:
+- Supports automatic variable interpolation from Lua's `public` table using `{{public.field}}`.
+- Uses `props` for component-specific configurations (such as `qr`, `copy_field`).
+- For the complete component reference, see [Server-Driven UI (sbuiSDK) Components](/en/docs/sbuisdk-components).
 
 ---
 

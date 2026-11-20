@@ -1,4 +1,5 @@
 {
+  "slug": "marzban-vless",
   "id": "marzban-vless",
   "name": "Marzban VLESS VPN Delivery",
   "category": "VPN & Proxies",
@@ -7,32 +8,37 @@
   "status": "not-stable",
   "description": "Автоматическая выдача и продление VLESS-подписок через REST API панели Marzban. Создание пользователя, продление срока действия, заморозка и отзыв доступа.",
   "actions": ["create", "renew", "stop", "delete", "freeze"],
-  "settings": {
-    "marzban_domain": {
-      "type": "string",
+  "settings_form": [
+    {
+      "id": "marzban_domain",
+      "type": "text",
       "label": "Домен панели Marzban",
       "placeholder": "panel.example.com",
       "required": true,
-      "help": "Домен панели без протокола https://"
+      "description": "Домен панели без протокола https://"
     },
-    "marzban_user": {
-      "type": "string",
+    {
+      "id": "marzban_user",
+      "type": "text",
       "label": "Логин администратора",
       "placeholder": "admin",
       "required": true
     },
-    "marzban_pass": {
+    {
+      "id": "marzban_pass",
       "type": "password",
       "label": "Пароль администратора",
       "required": true
     },
-    "data_limit_gb": {
+    {
+      "id": "data_limit_gb",
       "type": "number",
       "label": "Лимит трафика (ГБ)",
       "default": 0,
-      "help": "0 — безлимитный трафик"
+      "description": "0 — безлимитный трафик"
     },
-    "reset_strategy": {
+    {
+      "id": "reset_strategy",
       "type": "select",
       "label": "Стратегия сброса трафика",
       "default": "no_reset",
@@ -42,59 +48,52 @@
         { "value": "year", "label": "Ежегодно" }
       ]
     }
-  },
-  "sbui": {
-    "version": "1.0",
-    "title": "VLESS Subscription Card",
-    "service_card": {
-      "type": "card",
-      "variant": "elevated",
-      "header": "Подключение VLESS (Xray / Reality)",
-      "children": [
-        {
-          "type": "row",
-          "justify": "between",
-          "align": "center",
-          "children": [
-            { "type": "text", "variant": "caption", "color": "#a1a1aa", "content": "VLESS • Reality • TCP Vision" },
-            { "type": "badge", "variant": "success", "content": "Активен" }
-          ]
-        },
-        {
-          "type": "row",
-          "gap": 16,
-          "align": "center",
-          "children": [
-            {
-              "type": "qr",
+  ],
+  "view_trigger_label": "Инструкция и QR-код",
+  "view_layout": {
+    "type": "card",
+    "variant": "elevated",
+    "content": "Подключение VLESS (Xray / Reality)",
+    "children": [
+      {
+        "type": "row",
+        "align": "center",
+        "children": [
+          { "type": "text", "variant": "caption", "content": "VLESS • Reality • TCP Vision" },
+          { "type": "badge", "variant": "success", "content": "Активен" }
+        ]
+      },
+      {
+        "type": "row",
+        "gap": 16,
+        "align": "center",
+        "children": [
+          {
+            "type": "qr",
+            "props": {
               "value": "{{public.subscription_url}}",
               "size": 130,
               "plateRadius": 18,
               "qrStyle": "liquid",
               "logo": "UNVIDark"
-            },
-            {
-              "type": "column",
-              "gap": 8,
-              "children": [
-                { "type": "text", "variant": "caption", "bold": true, "content": "Ссылка на подписку:" },
-                {
-                  "type": "input",
-                  "name": "sub_url",
-                  "defaultValue": "{{public.subscription_url}}",
-                  "readOnly": true
-                },
-                {
-                  "type": "button",
-                  "label": "Скопировать ссылку",
-                  "variant": "primary",
-                  "action": "copy"
-                }
-              ]
             }
-          ]
-        }
-      ]
-    }
+          },
+          {
+            "type": "column",
+            "gap": 8,
+            "children": [
+              { "type": "text", "variant": "caption", "content": "Ссылка на подписку:" },
+              {
+                "type": "copy_field",
+                "props": {
+                  "value": "{{public.subscription_url}}",
+                  "label": "Скопировать ссылку"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 }

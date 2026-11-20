@@ -1,4 +1,5 @@
 {
+  "slug": "yookassa-payment",
   "id": "yookassa-payment",
   "name": "ЮKassa Payment Gateway",
   "category": "Payments",
@@ -6,50 +7,59 @@
   "version": "1.3.0",
   "description": "Официальная интеграция с API ЮKassa v3: генерация ссылок на оплату (карты, СБП, SberPay, ЮMoney), server-to-server верификация вебхуков, поддержка чеков 54-ФЗ и автоматический polling статуса.",
   "actions": ["create", "callback", "check", "refund"],
-  "settings": {
-    "shop_id": {
-      "type": "string",
+  "settings_form": [
+    {
+      "id": "shop_id",
+      "type": "text",
       "label": "Идентификатор магазина (shopId)",
       "placeholder": "123456",
       "required": true,
-      "help": "shopId из личного кабинета ЮKassa"
+      "description": "shopId из личного кабинета ЮKassa"
     },
-    "secret_key": {
+    {
+      "id": "secret_key",
       "type": "password",
       "label": "Секретный ключ (secret_key)",
       "placeholder": "live_...",
       "required": true,
-      "help": "Секретный ключ API из раздела Интеграция → Ключи API"
+      "description": "Секретный ключ API из раздела Интеграция → Ключи API"
     },
-    "return_url": {
-      "type": "string",
+    {
+      "id": "return_url",
+      "type": "text",
       "label": "URL возврата по умолчанию",
       "placeholder": "https://billing.example.com/payment/success",
       "required": false,
-      "help": "Страница, на которую перенаправляется покупатель после успешной оплаты"
+      "description": "Страница, на которую перенаправляется покупатель после успешной оплаты"
     },
-    "send_receipt": {
-      "type": "boolean",
+    {
+      "id": "send_receipt",
+      "type": "toggle",
       "label": "Формировать чек по 54-ФЗ (Онлайн-касса)",
       "default": false,
-      "help": "Включите, если в ЮKassa подключена онлайн-касса (отправка чеков в ФНС)"
+      "description": "Включите, если в ЮKassa подключена онлайн-касса (отправка чеков в ФНС)"
     },
-    "vat_code": {
+    {
+      "id": "vat_code",
       "type": "select",
       "label": "Ставка НДС",
-      "default": 1,
+      "default": "1",
       "options": [
-        { "value": 1, "label": "1 — Без НДС" },
-        { "value": 2, "label": "2 — НДС 0%" },
-        { "value": 3, "label": "3 — НДС 10%" },
-        { "value": 4, "label": "4 — НДС 20%" },
-        { "value": 5, "label": "5 — НДС 10/110" },
-        { "value": 6, "label": "6 — НДС 20/120" }
+        { "value": "1", "label": "1 — Без НДС" },
+        { "value": "2", "label": "2 — НДС 0%" },
+        { "value": "3", "label": "3 — НДС 10%" },
+        { "value": "4", "label": "4 — НДС 20%" },
+        { "value": "5", "label": "5 — НДС 10/110" },
+        { "value": "6", "label": "6 — НДС 20/120" }
       ],
-      "depends_on": { "send_receipt": true },
-      "help": "Код ставки НДС для позиций чека (1 - без НДС)"
+      "depends_on": {
+        "field": "send_receipt",
+        "equals": true
+      },
+      "description": "Код ставки НДС для позиций чека (1 - без НДС)"
     },
-    "payment_subject": {
+    {
+      "id": "payment_subject",
       "type": "select",
       "label": "Признак предмета расчета",
       "default": "service",
@@ -59,10 +69,14 @@
         { "value": "job", "label": "Работа (job)" },
         { "value": "payment", "label": "Платеж / Аванс (payment)" }
       ],
-      "depends_on": { "send_receipt": true },
-      "help": "Тег 1212 по 54-ФЗ"
+      "depends_on": {
+        "field": "send_receipt",
+        "equals": true
+      },
+      "description": "Тег 1212 по 54-ФЗ"
     },
-    "payment_mode": {
+    {
+      "id": "payment_mode",
       "type": "select",
       "label": "Признак способа расчета",
       "default": "full_payment",
@@ -71,8 +85,11 @@
         { "value": "full_prepayment", "label": "Предоплата 100% (full_prepayment)" },
         { "value": "advance", "label": "Аванс (advance)" }
       ],
-      "depends_on": { "send_receipt": true },
-      "help": "Тег 1214 по 54-ФЗ"
+      "depends_on": {
+        "field": "send_receipt",
+        "equals": true
+      },
+      "description": "Тег 1214 по 54-ФЗ"
     }
-  }
+  ]
 }

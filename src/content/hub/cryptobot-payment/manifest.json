@@ -1,4 +1,5 @@
 {
+  "slug": "cryptobot-payment",
   "id": "cryptobot-payment",
   "name": "CryptoBot (CryptoPay) Gateway",
   "category": "Payments",
@@ -6,15 +7,17 @@
   "version": "1.0.0",
   "description": "Прием криптоплатежей через Telegram CryptoBot (CryptoPay API): оплата в USDT, TON, BTC, ETH, LTC с криптографической HMAC-SHA256 валидацией вебхуков.",
   "actions": ["create", "callback", "check"],
-  "settings": {
-    "api_token": {
+  "settings_form": [
+    {
+      "id": "api_token",
       "type": "password",
       "label": "API Token CryptoBot",
       "placeholder": "12345:AA...",
       "required": true,
-      "help": "Токен приложения, полученный в @CryptoBot (/pay → Create App)"
+      "description": "Токен приложения, полученный в @CryptoBot (/pay → Create App)"
     },
-    "network": {
+    {
+      "id": "network",
       "type": "select",
       "label": "Сеть (Network)",
       "default": "mainnet",
@@ -23,7 +26,8 @@
         { "value": "testnet", "label": "Testnet (@CryptoTestnetBot)" }
       ]
     },
-    "currency_type": {
+    {
+      "id": "currency_type",
       "type": "select",
       "label": "Тип базовой валюты",
       "default": "fiat",
@@ -32,11 +36,12 @@
         { "value": "crypto", "label": "Криптовалюта напрямую (USDT, TON)" }
       ]
     },
-    "accepted_assets": {
-      "type": "string",
+    {
+      "id": "accepted_assets",
+      "type": "text",
       "label": "Разрешенные криптовалюты",
       "default": "USDT,TON,BTC,ETH,LTC,TRX",
-      "help": "Список тикеров через запятую"
+      "description": "Список тикеров через запятую"
     }
-  }
+  ]
 }
