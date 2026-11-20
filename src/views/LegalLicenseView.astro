@@ -1,0 +1,109 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getLocalePath } from '../i18n/ui';
+
+interface Props {
+  lang: 'ru' | 'en';
+}
+
+const { lang } = Astro.props;
+
+const title = lang === 'ru' ? 'Правовая информация и лицензия' : 'Legal & License';
+const description = lang === 'ru'
+  ? 'Условия использования исходного кода, лицензия SaviorBill Source-Available и коммерческие условия.'
+  : 'Terms of use, SaviorBill Source-Available licensing, and commercial usage guidelines.';
+---
+
+<BaseLayout title={title} description={description} lang={lang}>
+  <div class="px-3 sm:px-4 py-16">
+    <div class="max-w-4xl mx-auto space-y-10">
+      
+      <!-- Header -->
+      <div class="space-y-3">
+        <div class="flex items-center gap-2 text-xs font-mono text-[oklch(0.55_0_0)] mb-2">
+          <a href={getLocalePath('/', lang)} class="hover:text-[#009080] transition-colors">SaviorBill</a>
+          <span>/</span>
+          <span class="text-[#009080]">{title}</span>
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          {title}
+        </h1>
+        <p class="text-sm sm:text-base text-[oklch(0.65_0_0)]">
+          {description}
+        </p>
+      </div>
+
+      <!-- Content Cards -->
+      <div class="space-y-6">
+        
+        <!-- Summary Card -->
+        <div class="card-surface p-6 sm:p-8 space-y-4">
+          <h2 class="text-xl font-bold text-white flex items-center gap-2.5">
+            <span class="size-2 rounded-full bg-[#009080]"></span>
+            <span>{lang === 'ru' ? 'Модель лицензирования SaviorBill' : 'SaviorBill Licensing Model'}</span>
+          </h2>
+          <p class="text-sm text-[oklch(0.7_0_0)] leading-relaxed">
+            {lang === 'ru'
+              ? 'SaviorBill распространяется по лицензии Source-Available. Это означает, что исходный код ядра и компонентов открыт для изучения, аудита безопасности, локальной модификации и самостоятельного хостинга (Self-Hosted).'
+              : 'SaviorBill is distributed under a Source-Available license model. The source code is openly available for audit, local modification, and self-hosted deployments.'}
+          </p>
+        </div>
+
+        <!-- Permissions & Restrictions -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="card-surface p-6 space-y-3">
+            <h3 class="text-base font-bold text-emerald-400 flex items-center gap-2">
+              <span>✓</span>
+              <span>{lang === 'ru' ? 'Что разрешено' : 'Allowed'}</span>
+            </h3>
+            <ul class="space-y-2 text-xs sm:text-sm text-[oklch(0.7_0_0)]">
+              <li class="flex items-start gap-2">
+                <span class="text-[#009080] font-bold">•</span>
+                <span>{lang === 'ru' ? 'Установка на свои серверы для собственных коммерческих или некоммерческих проектов.' : 'Deploying on your own servers for commercial or non-commercial internal projects.'}</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-[#009080] font-bold">•</span>
+                <span>{lang === 'ru' ? 'Модификация кода, создание собственных Lua-модулей и адаптеров.' : 'Modifying the source code, authoring custom Lua extensions and adapters.'}</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-[#009080] font-bold">•</span>
+                <span>{lang === 'ru' ? 'Публикация расширений и скриптов в открытый каталог SaviorBill Hub.' : 'Publishing extensions to the open SaviorBill Hub catalog.'}</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card-surface p-6 space-y-3">
+            <h3 class="text-base font-bold text-rose-400 flex items-center gap-2">
+              <span>✕</span>
+              <span>{lang === 'ru' ? 'Ограничения' : 'Restrictions'}</span>
+            </h3>
+            <ul class="space-y-2 text-xs sm:text-sm text-[oklch(0.7_0_0)]">
+              <li class="flex items-start gap-2">
+                <span class="text-rose-400 font-bold">•</span>
+                <span>{lang === 'ru' ? 'Перепродажа SaviorBill под видом собственного SaaS биллинг-сервиса третьим лицам (White-labeling как сервис) без коммерческой лицензии.' : 'Reselling SaviorBill as a managed SaaS billing service to third parties without a commercial license.'}</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-rose-400 font-bold">•</span>
+                <span>{lang === 'ru' ? 'Удаление копирайтов и авторских упоминаний ядра платформы SaviorBill.' : 'Removing copyright notices and author attributions from the core codebase.'}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Trademark and Disclaimer -->
+        <div class="card-surface p-6 sm:p-8 space-y-4 text-xs sm:text-sm text-[oklch(0.6_0_0)] leading-relaxed">
+          <h3 class="text-base font-bold text-white">
+            {lang === 'ru' ? 'Отказ от ответственности (Disclaimer)' : 'Disclaimer of Warranty'}
+          </h3>
+          <p>
+            {lang === 'ru'
+              ? 'ПРОГРАММНОЕ ОБЕСПЕЧЕНИЕ ПРЕДОСТАВЛЯЕТСЯ «КАК ЕСТЬ» (AS IS), БЕЗ КАКИХ-ЛИБО ЯВНЫХ ИЛИ ПОДРАЗУМЕВАЕМЫХ ГАРАНТИЙ, ВКЛЮЧАЯ, НО НЕ ОГРАНИЧИВАЯСЬ ГАРАНТИЯМИ ТОВАРНОЙ ПРИГОДНОСТИ, СООТВЕТСТВИЯ ОПРЕДЕЛЕННОЙ ЦЕЛИ И ОТСУТСТВИЯ НАРУШЕНИЙ. АВТОРЫ НЕ НЕСУТ ОТВЕТСТВЕННОСТИ ЗА ЛЮБЫЕ ПРЯМЫЕ ИЛИ КОСВЕННЫЕ УБЫТКИ, СВЯЗАННЫЕ С ИСПОЛЬЗОВАНИЕМ БИЛЛИНГОВОЙ СИСТЕМЫ ИЛИ ПРОВЕДЕНИЕМ ФИНАНСОВЫХ ОПЕРАЦИЙ.'
+              : 'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY.'}
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>

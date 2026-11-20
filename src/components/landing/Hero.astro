@@ -1,7 +1,7 @@
 ---
 import TerminalBlock from './TerminalBlock';
 import RealAdminMockup from './RealAdminMockup';
-import { useTranslations } from '../../i18n/ui';
+import { useTranslations, getLocalePath } from '../../i18n/ui';
 
 interface Props {
   lang: 'ru' | 'en';
@@ -42,7 +42,7 @@ const t = useTranslations(lang);
 
       <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 pt-1">
         <a 
-          href={`/${lang}/docs/quickstart`} 
+          href={getLocalePath('/docs/quickstart', lang)} 
           class="h-9 px-4 sm:px-5 rounded-xl bg-[#009080] hover:bg-[#0c5e53] text-white text-xs sm:text-sm font-semibold inline-flex items-center justify-center transition-colors shadow-sm"
         >
           {t('hero.btn.docs')}

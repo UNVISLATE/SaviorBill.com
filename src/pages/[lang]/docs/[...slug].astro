@@ -5,17 +5,18 @@ import DocsLayout from '../../../layouts/DocsLayout.astro';
 export async function getStaticPaths() {
   const allDocs = await getCollection('docs');
 
-  return allDocs.map((doc) => {
-    // id is like "ru/quickstart.md" or "en/architecture.md"
-    const parts = doc.id.split('/');
-    const lang = parts[0] as 'ru' | 'en';
-    const slug = parts.slice(1).join('/').replace(/\.(md|mdx)$/, '');
+  return allDocs
+    .filter((doc) => !doc.id.startsWith('ru/'))
+    .map((doc) => {
+      const parts = doc.id.split('/');
+      const lang = parts[0] as 'ru' | 'en';
+      const slug = parts.slice(1).join('/').replace(/\.(md|mdx)$/, '');
 
-    return {
-      params: { lang, slug },
-      props: { doc }
-    };
-  });
+      return {
+        params: { lang, slug },
+        props: { doc }
+      };
+    });
 }
 
 const { doc } = Astro.props;

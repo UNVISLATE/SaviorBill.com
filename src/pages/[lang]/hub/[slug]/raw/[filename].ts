@@ -3,11 +3,11 @@ import path from 'node:path';
 import type { APIRoute } from 'astro';
 
 export function getStaticPaths() {
-  const languages: ('ru' | 'en')[] = ['ru', 'en'];
+  const languages: ('en')[] = ['en'];
   const hubDir = path.resolve('src/content/hub');
   if (!fs.existsSync(hubDir)) return [];
 
-  const paths: { params: { lang: 'ru' | 'en'; slug: string; filename: string } }[] = [];
+  const paths: { params: { lang: 'en'; slug: string; filename: string } }[] = [];
 
   const dirs = fs.readdirSync(hubDir, { withFileTypes: true });
   for (const d of dirs) {
@@ -49,9 +49,7 @@ export const GET: APIRoute = ({ params }) => {
     status: 200,
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
-      'X-Content-Type-Options': 'nosniff',
-      'X-Robots-Tag': 'noindex, nofollow, noarchive',
-      'Cache-Control': 'public, max-age=3600'
+      'Cache-Control': 'public, max-age=86400'
     }
   });
 };

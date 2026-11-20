@@ -75,3 +75,12 @@ export function useTranslations(lang: keyof typeof ui) {
     return ui[lang]?.[key] || ui[defaultLang][key];
   };
 }
+
+export function getLocalePath(path: string, lang: 'ru' | 'en' = 'ru'): string {
+  // Normalize path and remove leading /(ru|en) if already present
+  const clean = path.replace(/^\/(ru|en)(\/|$)/, '/').replace(/\/+$/, '') || '/';
+  if (lang === 'ru') {
+    return clean;
+  }
+  return clean === '/' ? `/${lang}` : `/${lang}${clean}`;
+}

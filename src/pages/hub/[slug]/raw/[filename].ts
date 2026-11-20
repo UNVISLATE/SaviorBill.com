@@ -1,0 +1,51 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import type { APIRoute } from 'astro';
+
+export function getStaticPaths() {
+  const hubDir = path.resolve('src/content/hub');
+  if (!fs.existsSync(hubDir)) return [];
+
+  const paths: { params: { slug: string; filename: string } }[] = [];
+
+  const dirs = fs.readdirSync(hubDir, { withFileTypes: true });
+  for (const d of dirs) {
+    if (!d.isDirectory()) continue;
+    const slug = d.name;
+    const scriptDir = path.join(hubDir, slug);
+    const files = fs.readdirSync(scriptDir)
+      .filter((f) => !f.toLowerCase().startsWith('readme') && !f.startsWith('.') && !f.endsWith('.zip'));
+
+    for (const filename of files) {
+      paths.push({
+        params: { slug, filename }
+      });
+    }
+  }
+
+  return paths;
+}
+
+export const GET: APIRoute = ({ params }) => {
+  const { slug, filename } = params;
+  if (!slug || !filename) {
+    return new Response('File not found', { status: 404 });
+  }
+
+  const safeFile = path.basename(filename);
+  const filePath = path.resolve('src/content/hub', slug, safeFile);
+
+  if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
+    return new Response('File not found', { status: 404 });
+  }
+
+  const content = fs.readFileSync(filePath, 'utf-8');
+
+  return new Response(content, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Cache-Control': 'public, max-age=86400'
+    }
+  });
+};

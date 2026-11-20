@@ -1,5 +1,5 @@
 ---
-import { useTranslations } from '../../i18n/ui';
+import { useTranslations, getLocalePath } from '../../i18n/ui';
 
 interface Props {
   lang: 'ru' | 'en';
@@ -25,7 +25,7 @@ const year = new Date().getFullYear();
     <div class="relative z-10 grid gap-8 sm:grid-cols-2 md:grid-cols-3">
       <!-- Col 1: Brand -->
       <div class="space-y-3">
-        <a href={`/${lang}`} class="inline-flex items-center gap-2.5 font-bold tracking-tight text-white">
+        <a href={getLocalePath('/', lang)} class="inline-flex items-center gap-2.5 font-bold tracking-tight text-white">
           <img src="/logo.svg" alt="SaviorBill" class="size-7 object-contain" />
           <span class="text-base font-bold tracking-tight footer-brand-text">
             Savior<span class="text-[#009080]">Bill</span>
@@ -44,10 +44,10 @@ const year = new Date().getFullYear();
           {t('nav.docs')}
         </p>
         <ul class="space-y-2 text-[oklch(0.7_0_0)] footer-links">
-          <li><a href={`/${lang}/docs/quickstart`} class="hover:text-[#009080] transition-colors">{lang === 'ru' ? 'Быстрый старт' : 'Quickstart'}</a></li>
-          <li><a href={`/${lang}/docs/lua-contracts`} class="hover:text-[#009080] transition-colors">{lang === 'ru' ? 'Контракты Lua-скриптов' : 'Lua Contracts'}</a></li>
-          <li><a href={`/${lang}/hub`} class="hover:text-[#009080] transition-colors">{t('nav.hub')}</a></li>
-          <li><a href={`/${lang}/blog`} class="hover:text-[#009080] transition-colors">{t('nav.blog')}</a></li>
+          <li><a href={getLocalePath('/docs/quickstart', lang)} class="hover:text-[#009080] transition-colors">{lang === 'ru' ? 'Быстрый старт' : 'Quickstart'}</a></li>
+          <li><a href={getLocalePath('/docs/lua-contracts', lang)} class="hover:text-[#009080] transition-colors">{lang === 'ru' ? 'Контракты Lua-скриптов' : 'Lua Contracts'}</a></li>
+          <li><a href={getLocalePath('/hub', lang)} class="hover:text-[#009080] transition-colors">{t('nav.hub')}</a></li>
+          <li><a href={getLocalePath('/blog', lang)} class="hover:text-[#009080] transition-colors">{t('nav.blog')}</a></li>
         </ul>
       </div>
 
@@ -60,7 +60,7 @@ const year = new Date().getFullYear();
           <li><a href="https://github.com/UNVISLATE/SaviorBill" target="_blank" rel="noopener noreferrer" class="hover:text-[#009080] transition-colors">SaviorBill Core (Backend & Admin)</a></li>
           <li><a href="https://github.com/UNVISLATE/SBPersonalAccountClient" target="_blank" rel="noopener noreferrer" class="hover:text-[#009080] transition-colors">SBPersonalAccountClient (Storefront)</a></li>
           <li><a href="https://github.com/UNVISLATE/sbuiSDK" target="_blank" rel="noopener noreferrer" class="hover:text-[#009080] transition-colors">sbuiSDK (Server-Driven UI)</a></li>
-          <li><a href={`/${lang}/legal/license`} class="hover:text-[#009080] transition-colors text-xs opacity-90">{lang === 'ru' ? 'Лицензия и условия' : 'License & Terms'}</a></li>
+          <li><a href={getLocalePath('/legal/license', lang)} class="hover:text-[#009080] transition-colors text-xs opacity-90">{lang === 'ru' ? 'Лицензия и условия' : 'License & Terms'}</a></li>
         </ul>
       </div>
     </div>
@@ -85,7 +85,7 @@ const year = new Date().getFullYear();
           </span>
         </a>
         <span class="opacity-40">•</span>
-        <a href={`/${lang}/legal/license`} class="hover:text-white transition-colors">
+        <a href={getLocalePath('/legal/license', lang)} class="hover:text-white transition-colors">
           {lang === 'ru' ? 'Лицензия' : 'License'}
         </a>
       </div>

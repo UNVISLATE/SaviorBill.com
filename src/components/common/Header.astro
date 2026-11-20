@@ -1,5 +1,5 @@
 ---
-import { useTranslations } from '../../i18n/ui';
+import { useTranslations, getLocalePath } from '../../i18n/ui';
 import ThemeToggle from './ThemeToggle.astro';
 
 interface Props {
@@ -9,10 +9,10 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const currentPath = Astro.url.pathname;
-const cleanPath = currentPath.replace(/^\/(ru|en)/, '') || '/';
+const cleanPath = currentPath.replace(/^\/(ru|en)(\/|$)/, '/').replace(/\/+$/, '') || '/';
 
 const targetLang = lang === 'ru' ? 'en' : 'ru';
-const switchLangUrl = `/${targetLang}${cleanPath === '/' ? '' : cleanPath}`;
+const switchLangUrl = getLocalePath(cleanPath, targetLang);
 ---
 
 <header class="sticky top-3 z-50 px-3 sm:px-4">
@@ -21,7 +21,7 @@ const switchLangUrl = `/${targetLang}${cleanPath === '/' ? '' : cleanPath}`;
     <div class="header-island flex items-center justify-between gap-2 sm:gap-4 rounded-2xl px-3 sm:px-6 py-2 shadow-xl backdrop-blur-md transition-colors">
       
       <!-- Brand Logo -->
-      <a href={`/${lang}`} class="inline-flex items-center gap-2 sm:gap-2.5 font-bold tracking-tight text-white hover:opacity-90 transition-opacity shrink-0">
+      <a href={getLocalePath('/', lang)} class="inline-flex items-center gap-2 sm:gap-2.5 font-bold tracking-tight text-white hover:opacity-90 transition-opacity shrink-0">
         <img 
           src="/logo.svg" 
           alt="SaviorBill" 
@@ -34,13 +34,13 @@ const switchLangUrl = `/${targetLang}${cleanPath === '/' ? '' : cleanPath}`;
 
       <!-- Center Navigation (Desktop) -->
       <nav class="hidden md:flex items-center gap-8 text-sm font-medium header-nav-links">
-        <a href={`/${lang}/docs/quickstart`} class="hover:text-[#009080] transition-colors py-1">
+        <a href={getLocalePath('/docs/quickstart', lang)} class="hover:text-[#009080] transition-colors py-1">
           {t('nav.docs')}
         </a>
-        <a href={`/${lang}/blog`} class="hover:text-[#009080] transition-colors py-1">
+        <a href={getLocalePath('/blog', lang)} class="hover:text-[#009080] transition-colors py-1">
           {t('nav.blog')}
         </a>
-        <a href={`/${lang}/hub`} class="hover:text-[#009080] transition-colors py-1">
+        <a href={getLocalePath('/hub', lang)} class="hover:text-[#009080] transition-colors py-1">
           {t('nav.hub')}
         </a>
       </nav>
@@ -74,7 +74,7 @@ const switchLangUrl = `/${targetLang}${cleanPath === '/' ? '' : cleanPath}`;
 
         <!-- Quickstart Button (Desktop & Tablets) -->
         <a 
-          href={`/${lang}/docs/quickstart`} 
+          href={getLocalePath('/docs/quickstart', lang)} 
           class="h-9 px-3.5 sm:px-4 rounded-xl bg-[#009080] hover:bg-[#0c5e53] text-white text-xs font-semibold hidden sm:flex items-center justify-center transition-colors shadow-sm shrink-0"
         >
           {lang === 'ru' ? 'Быстрый старт' : 'Quickstart'}
@@ -105,7 +105,7 @@ const switchLangUrl = `/${targetLang}${cleanPath === '/' ? '' : cleanPath}`;
     >
       <nav class="flex flex-col space-y-1 text-sm font-medium">
         <a 
-          href={`/${lang}/docs/quickstart`} 
+          href={getLocalePath('/docs/quickstart', lang)} 
           class="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-[oklch(0.24_0_0)] text-white hover:text-[#009080] transition-colors"
         >
           <span class="flex items-center gap-2.5">
@@ -117,7 +117,7 @@ const switchLangUrl = `/${targetLang}${cleanPath === '/' ? '' : cleanPath}`;
           <span class="text-xs font-mono text-[oklch(0.55_0_0)]">→</span>
         </a>
         <a 
-          href={`/${lang}/blog`} 
+          href={getLocalePath('/blog', lang)} 
           class="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-[oklch(0.24_0_0)] text-white hover:text-[#009080] transition-colors"
         >
           <span class="flex items-center gap-2.5">
@@ -129,7 +129,7 @@ const switchLangUrl = `/${targetLang}${cleanPath === '/' ? '' : cleanPath}`;
           <span class="text-xs font-mono text-[oklch(0.55_0_0)]">→</span>
         </a>
         <a 
-          href={`/${lang}/hub`} 
+          href={getLocalePath('/hub', lang)} 
           class="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-[oklch(0.24_0_0)] text-white hover:text-[#009080] transition-colors"
         >
           <span class="flex items-center gap-2.5">
@@ -144,7 +144,7 @@ const switchLangUrl = `/${targetLang}${cleanPath === '/' ? '' : cleanPath}`;
 
       <div class="pt-2 border-t border-[oklch(1_0_0/6%)] flex flex-col gap-2">
         <a 
-          href={`/${lang}/docs/quickstart`} 
+          href={getLocalePath('/docs/quickstart', lang)} 
           class="w-full h-10 px-4 rounded-xl bg-[#009080] hover:bg-[#0c5e53] text-white text-xs font-semibold flex items-center justify-center transition-colors shadow-sm"
         >
           {lang === 'ru' ? 'Быстрый старт' : 'Quickstart'}

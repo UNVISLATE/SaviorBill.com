@@ -1,0 +1,78 @@
+---
+import { getCollection } from 'astro:content';
+import fs from 'node:fs';
+import path from 'node:path';
+import communityScripts from '../../data/community-scripts.json';
+
+export async function getStaticPaths() {
+  const paths: { params: { path: string | undefined } }[] = [
+    { params: { path: undefined } },
+    { params: { path: 'blog' } },
+    { params: { path: 'hub' } },
+    { params: { path: 'legal/license' } },
+  ];
+
+  // Blog posts
+  const allPosts = await getCollection('blog');
+  for (const post of allPosts) {
+    if (post.id.startsWith('ru/')) {
+      const slug = post.id.replace('ru/', '').replace(/\.(md|mdx)$/, '');
+      paths.push({ params: { path: `blog/${slug}` } });
+    }
+  }
+
+  // Docs
+  const allDocs = await getCollection('docs');
+  for (const doc of allDocs) {
+    if (doc.id.startsWith('ru/')) {
+      const slug = doc.id.replace('ru/', '').replace(/\.(md|mdx)$/, '');
+      paths.push({ params: { path: `docs/${slug}` } });
+    }
+  }
+
+  // Hub items & files
+  const hubDir = path.resolve('src/content/hub');
+  if (fs.existsSync(hubDir)) {
+    const dirs = fs.readdirSync(hubDir, { withFileTypes: true });
+    for (const d of dirs) {
+      if (d.isDirectory()) {
+        const slug = d.name;
+        paths.push({ params: { path: `hub/${slug}` } });
+
+        const scriptDir = path.join(hubDir, slug);
+        const files = fs.readdirSync(scriptDir)
+          .filter((f) => !f.toLowerCase().startsWith('readme') && !f.startsWith('.') && !f.endsWith('.zip'));
+
+        for (const file of files) {
+          paths.push({ params: { path: `hub/${slug}/${file}` } });
+        }
+      }
+    }
+  }
+
+  for (const comm of communityScripts) {
+    paths.push({ params: { path: `hub/${comm.id}` } });
+  }
+
+  return paths;
+}
+
+const { path: subPath } = Astro.params;
+const targetUrl = subPath ? `/${subPath}` : '/';
+---
+
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting...</title>
+    <link rel="canonical" href={targetUrl} />
+    <meta http-equiv="refresh" content={`0;url=${targetUrl}`} />
+    <script is:inline define:vars={{ targetUrl }}>
+      window.location.replace(targetUrl);
+    </script>
+  </head>
+  <body style="background:#121212;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
+    <p>Перенаправление на <a href={targetUrl} style="color:#009080;">{targetUrl}</a>...</p>
+  </body>
+</html>

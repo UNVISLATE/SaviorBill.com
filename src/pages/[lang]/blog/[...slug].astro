@@ -5,16 +5,18 @@ import BlogLayout from '../../../layouts/BlogLayout.astro';
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog');
 
-  return allPosts.map((post) => {
-    const parts = post.id.split('/');
-    const lang = parts[0] as 'ru' | 'en';
-    const slug = parts.slice(1).join('/').replace(/\.(md|mdx)$/, '');
+  return allPosts
+    .filter((post) => !post.id.startsWith('ru/'))
+    .map((post) => {
+      const parts = post.id.split('/');
+      const lang = parts[0] as 'ru' | 'en';
+      const slug = parts.slice(1).join('/').replace(/\.(md|mdx)$/, '');
 
-    return {
-      params: { lang, slug },
-      props: { post }
-    };
-  });
+      return {
+        params: { lang, slug },
+        props: { post }
+      };
+    });
 }
 
 const { post } = Astro.props;

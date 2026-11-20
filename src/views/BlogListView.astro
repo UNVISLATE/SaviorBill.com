@@ -1,0 +1,253 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getLocalePath } from '../i18n/ui';
+
+interface Props {
+  lang: 'ru' | 'en';
+}
+
+const { lang } = Astro.props;
+
+const allPosts = await getCollection('blog');
+const langPosts = allPosts
+  .filter((post) => post.id.startsWith(`${lang}/`))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+const title = lang === 'ru' ? 'Блог и статьи' : 'Blog & Engineering Notes';
+const description = lang === 'ru'
+  ? 'Инженерные разборы, архитектура биллинга, гайды по интеграции и новости платформы SaviorBill.'
+  : 'Engineering deep-dives, billing architecture, integration guides, and platform updates.';
+
+const featuredPost = langPosts[0];
+const remainingPosts = langPosts.slice(1);
+---
+
+<BaseLayout title={title} description={description} lang={lang}>
+  <!-- Aligned strictly to max-w-6xl like Header -->
+  <div class="px-3 sm:px-4 py-12 sm:py-16">
+    <div class="max-w-6xl mx-auto space-y-10">
+      
+      <!-- Top Title Group -->
+      <div class="text-center max-w-2xl mx-auto">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-3 blog-index-title">
+          {title}
+        </h1>
+        <p class="text-sm sm:text-base blog-index-desc">
+          {description}
+        </p>
+      </div>
+
+      <!-- Instant Blog Search Bar -->
+      <div class="max-w-md mx-auto relative">
+        <input
+          type="text"
+          id="blog-search-input"
+          placeholder={lang === 'ru' ? 'Поиск по статьям и тегам...' : 'Search articles and tags...'}
+          autocomplete="off"
+          class="w-full h-11 pl-10 pr-4 rounded-xl bg-[oklch(0.20_0_0)] text-sm text-white placeholder-[oklch(0.55_0_0)] focus:outline-none focus:ring-1 focus:ring-[#009080] transition-all shadow-sm"
+        />
+        <svg class="size-4 text-[oklch(0.55_0_0)] absolute left-3.5 top-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+
+      <!-- Empty Results Notification -->
+      <div id="blog-no-results" class="hidden text-center py-16 space-y-2">
+        <p class="text-base font-semibold text-white">
+          {lang === 'ru' ? 'Ничего не найдено' : 'No articles found'}
+        </p>
+        <p class="text-xs text-[oklch(0.6_0_0)]">
+          {lang === 'ru' ? 'Попробуйте изменить запрос или поискать по другим ключевым словам.' : 'Try adjusting your search terms.'}
+        </p>
+      </div>
+
+      <!-- Blog Posts Container -->
+      <div id="blog-posts-list" class="space-y-10">
+
+      {featuredPost && (() => {
+        const parts = featuredPost.id.split('/');
+        const slug = parts.slice(1).join('/').replace(/\.(md|mdx)$/, '');
+        const dateStr = typeof featuredPost.data.date === 'string' ? featuredPost.data.date : featuredPost.data.date.toISOString().split('T')[0];
+        const coverImg = featuredPost.data.cover || `/images/og/${lang}-${slug}.png`;
+        const author = featuredPost.data.author || 'Andrey UNVI';
+        const authorAvatar = featuredPost.data.authorAvatar || '/images/avatars/andrey-unvi.jpg';
+
+        return (
+          <!-- Featured Wide Card (Arayas style data-variant="wide") -->
+          <a
+            href={getLocalePath(`/blog/${slug}`, lang)}
+            data-search-card
+            data-search-text={`${featuredPost.data.title} ${featuredPost.data.description} ${(featuredPost.data.tags || []).join(' ')}`.toLowerCase()}
+            class="group card-interactive p-5 sm:p-7 block rounded-2xl transition-all duration-300"
+          >
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+              <!-- Left Cover (cols 1..6) -->
+              <div class="md:col-span-6 aspect-video w-full rounded-xl overflow-hidden bg-[oklch(0.14_0_0)] relative">
+                <img
+                  src={coverImg}
+                  alt={featuredPost.data.title}
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="eager"
+                />
+              </div>
+
+              <!-- Right Content (cols 7..12) -->
+              <div class="md:col-span-6 space-y-3 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center gap-2 mb-2.5">
+                    {featuredPost.data.tags.slice(0, 2).map((tag: string) => (
+                      <span class="badge-pill px-2.5 py-0.5 rounded text-[11px] font-mono font-semibold">
+                        #{tag}
+                      </span>
+                    ))}
+                    <span class="text-xs font-mono text-[#009080] font-semibold ml-auto flex items-center gap-1.5">
+                      <span class="size-1.5 rounded-full bg-[#009080] animate-pulse"></span>
+                      {lang === 'ru' ? 'Свежее' : 'Featured'}
+                    </span>
+                  </div>
+
+                  <h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-2 group-hover:text-[#009080] transition-colors leading-snug">
+                    {featuredPost.data.title}
+                  </h2>
+
+                  <p class="text-xs sm:text-sm text-[oklch(0.65_0_0)] leading-relaxed line-clamp-3">
+                    {featuredPost.data.description}
+                  </p>
+                </div>
+
+                <div class="flex items-center justify-between pt-3 border-t border-[oklch(1_0_0/5%)] text-xs font-mono text-[oklch(0.55_0_0)]">
+                  <div class="flex items-center gap-2">
+                    {authorAvatar ? (
+                      <img src={authorAvatar} alt={author} class="size-5 rounded-full object-cover shrink-0 ring-1 ring-[#009080]/30 shadow-xs" />
+                    ) : (
+                      <span class="size-6 rounded-full bg-[#009080] text-white flex items-center justify-center font-bold text-[10px]">
+                        {author[0]}
+                      </span>
+                    )}
+                    <span class="font-medium blog-card-author">{author}</span>
+                    <span>•</span>
+                    <time datetime={dateStr}>{dateStr}</time>
+                  </div>
+                  <span class="text-[#009080] font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                    {lang === 'ru' ? 'Читать' : 'Read'} →
+                  </span>
+                </div>
+              </div>
+            </div>
+          </a>
+        );
+      })()}
+
+      <!-- Remaining Posts Grid -->
+      {remainingPosts.length > 0 && (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+          {remainingPosts.map((post) => {
+            const parts = post.id.split('/');
+            const slug = parts.slice(1).join('/').replace(/\.(md|mdx)$/, '');
+            const dateStr = typeof post.data.date === 'string' ? post.data.date : post.data.date.toISOString().split('T')[0];
+            const coverImg = post.data.cover || `/images/og/${lang}-${slug}.png`;
+            const author = post.data.author || 'Andrey UNVI';
+            const authorAvatar = post.data.authorAvatar || '/images/avatars/andrey-unvi.jpg';
+
+            return (
+              <a
+                href={getLocalePath(`/blog/${slug}`, lang)}
+                data-search-card
+                data-search-text={`${post.data.title} ${post.data.description} ${(post.data.tags || []).join(' ')}`.toLowerCase()}
+                class="group card-interactive p-5 flex flex-col justify-between rounded-xl"
+              >
+                <div>
+                  <!-- Cover Image (16:9) with zoom on hover -->
+                  <div class="aspect-video w-full rounded-xl overflow-hidden bg-[oklch(0.14_0_0)] relative mb-4">
+                    <img
+                      src={coverImg}
+                      alt={post.data.title}
+                      class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <!-- Meta bar -->
+                  <div class="flex items-center justify-between text-xs font-mono text-[oklch(0.55_0_0)] mb-2.5">
+                    <div class="flex items-center gap-2">
+                      {authorAvatar ? (
+                        <img src={authorAvatar} alt={author} class="size-4.5 rounded-full object-cover shrink-0 ring-1 ring-[#009080]/30 shadow-xs" />
+                      ) : null}
+                      <span class="text-white dark:text-white light:text-slate-900 font-medium">{author}</span>
+                      <span>•</span>
+                      <time datetime={dateStr}>{dateStr}</time>
+                    </div>
+                    {post.data.tags.length > 0 && (
+                      <span class="badge-pill text-[11px] font-mono font-semibold px-2 py-0.5 rounded">
+                        #{post.data.tags[0]}
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 class="text-base font-bold tracking-tight mb-2 group-hover:text-[#009080] transition-colors leading-snug line-clamp-2">
+                    {post.data.title}
+                  </h3>
+
+                  <p class="text-xs text-[oklch(0.65_0_0)] leading-relaxed line-clamp-2 mb-4">
+                    {post.data.description}
+                  </p>
+                </div>
+
+                <div class="pt-3 border-t border-[oklch(1_0_0/5%)] flex items-center justify-between text-xs font-mono">
+                  <span class="text-[oklch(0.5_0_0)]">
+                    ~{Math.ceil(post.body.split(/\s+/).length / 180)} {lang === 'ru' ? 'мин чтения' : 'min read'}
+                  </span>
+                  <span class="text-[#009080] font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                    {lang === 'ru' ? 'Читать' : 'Read'} →
+                  </span>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      )}
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  (function() {
+    function setupBlogSearch() {
+      const input = document.getElementById('blog-search-input');
+      const cards = document.querySelectorAll('[data-search-card]');
+      const noResults = document.getElementById('blog-no-results');
+
+      if (!input || cards.length === 0 || input.dataset.bound) return;
+      input.dataset.bound = 'true';
+
+      input.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+          const text = card.getAttribute('data-search-text') || '';
+          if (query === '' || text.includes(query)) {
+            card.style.display = '';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        if (noResults) {
+          if (visibleCount === 0 && query !== '') {
+            noResults.classList.remove('hidden');
+          } else {
+            noResults.classList.add('hidden');
+          }
+        }
+      });
+    }
+
+    setupBlogSearch();
+    document.addEventListener('astro:after-swap', setupBlogSearch);
+  })();
+</script>

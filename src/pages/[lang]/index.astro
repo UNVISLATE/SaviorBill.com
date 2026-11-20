@@ -1,59 +1,13 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Hero from '../../components/landing/Hero.astro';
-import FeatureBento from '../../components/landing/FeatureBento.astro';
-import UseCases from '../../components/landing/UseCases.astro';
-import Comparison from '../../components/landing/Comparison.astro';
+import LandingView from '../../views/LandingView.astro';
 
 export function getStaticPaths() {
   return [
-    { params: { lang: 'ru' } },
     { params: { lang: 'en' } }
   ];
 }
 
 const { lang } = Astro.params as { lang: 'ru' | 'en' };
-
-const title = lang === 'ru' 
-  ? 'Self-Hosted биллинг и витрина цифровых товаров'
-  : 'Self-Hosted Billing & Digital Storefront Engine';
-
-const description = lang === 'ru'
-  ? 'SaviorBill — событийно-ориентированная self-hosted платформа биллинга и движок магазина: мультивалютный баланс, Server-Driven UI (sbuiSDK) и изолированная Lua-песочница.'
-  : 'SaviorBill is an event-driven self-hosted billing engine & digital commerce storefront with multi-currency balance, Server-Driven UI, and isolated Lua runtime.';
-
-const jsonLd = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    'name': 'SaviorBill',
-    'applicationCategory': 'BusinessApplication',
-    'operatingSystem': 'Linux, Docker',
-    'offers': {
-      '@type': 'Offer',
-      'price': '0',
-      'priceCurrency': 'USD'
-    },
-    'description': description,
-    'url': 'https://saviorbill.com'
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    'name': 'SaviorBill',
-    'url': 'https://saviorbill.com',
-    'logo': 'https://saviorbill.com/logo.png',
-    'sameAs': [
-      'https://github.com/UNVISLATE/SaviorBill',
-      'https://unvi.xyz'
-    ]
-  }
-];
 ---
 
-<BaseLayout title={title} description={description} lang={lang} jsonLd={jsonLd}>
-  <Hero lang={lang} />
-  <FeatureBento lang={lang} />
-  <UseCases lang={lang} />
-  <Comparison lang={lang} />
-</BaseLayout>
+<LandingView lang={lang} />

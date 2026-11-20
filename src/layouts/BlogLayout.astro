@@ -4,6 +4,7 @@ import TableOfContents from '../components/docs/TableOfContents.astro';
 import MediaLightbox from '../components/blog/MediaLightbox';
 import HubCardMount from '../components/hub/HubCardMount';
 import ArticleQuoteAndAnchors from '../components/common/ArticleQuoteAndAnchors.astro';
+import { getLocalePath } from '../i18n/ui';
 
 interface Heading {
   depth: number;
@@ -55,7 +56,7 @@ const {
 } = Astro.props;
 
 const dateStr = typeof date === 'string' ? date : date.toISOString().split('T')[0];
-const postUrl = `https://saviorbill.com/${lang}/blog/${slug}`;
+const postUrl = `https://saviorbill.com${getLocalePath(`/blog/${slug}`, lang)}`;
 const resolvedCover = cover || `/images/og/${lang}-${slug}.png`;
 const absoluteCoverUrl = resolvedCover.startsWith('http') ? resolvedCover : `https://saviorbill.com${resolvedCover}`;
 
@@ -88,13 +89,13 @@ const jsonLd: Array<Record<string, any>> = [
         '@type': 'ListItem',
         'position': 1,
         'name': 'SaviorBill',
-        'item': `https://saviorbill.com/${lang}`
+        'item': `https://saviorbill.com${getLocalePath('/', lang)}`
       },
       {
         '@type': 'ListItem',
         'position': 2,
         'name': lang === 'ru' ? 'Блог' : 'Blog',
-        'item': `https://saviorbill.com/${lang}/blog`
+        'item': `https://saviorbill.com${getLocalePath('/blog', lang)}`
       },
       {
         '@type': 'ListItem',
@@ -138,9 +139,9 @@ if (faq && faq.length > 0) {
       <article class="flex-1 min-w-0 max-w-3xl" id="blog-article-content">
         <!-- Breadcrumbs -->
         <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs font-mono text-[oklch(0.55_0_0)] mb-4 article-breadcrumbs">
-          <a href={`/${lang}`} class="hover:text-[#009080] transition-colors">SaviorBill</a>
+          <a href={getLocalePath('/', lang)} class="hover:text-[#009080] transition-colors">SaviorBill</a>
           <span>/</span>
-          <a href={`/${lang}/blog`} class="hover:text-[#009080] transition-colors">
+          <a href={getLocalePath('/blog', lang)} class="hover:text-[#009080] transition-colors">
             {lang === 'ru' ? 'Блог' : 'Blog'}
           </a>
           <span>/</span>

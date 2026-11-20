@@ -1,0 +1,33 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import HubFileView from '../../../views/HubFileView.astro';
+
+export function getStaticPaths() {
+  const hubDir = path.resolve('src/content/hub');
+  if (!fs.existsSync(hubDir)) return [];
+
+  const paths: { params: { slug: string; filename: string } }[] = [];
+
+  const dirs = fs.readdirSync(hubDir, { withFileTypes: true });
+  for (const d of dirs) {
+    if (!d.isDirectory()) continue;
+    const slug = d.name;
+    const scriptDir = path.join(hubDir, slug);
+    const files = fs.readdirSync(scriptDir)
+      .filter((f) => !f.toLowerCase().startsWith('readme') && !f.startsWith('.') && !f.endsWith('.zip'));
+
+    for (const filename of files) {
+      paths.push({
+        params: { slug, filename }
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { slug, filename } = Astro.params as { slug: string; filename: string };
+---
+
+<HubFileView lang="ru" slug={slug} filename={filename} />

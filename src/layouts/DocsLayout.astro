@@ -5,6 +5,7 @@ import TableOfContents from '../components/docs/TableOfContents.astro';
 import MediaLightbox from '../components/blog/MediaLightbox';
 import HubCardMount from '../components/hub/HubCardMount';
 import ArticleQuoteAndAnchors from '../components/common/ArticleQuoteAndAnchors.astro';
+import { getLocalePath } from '../i18n/ui';
 
 interface Heading {
   depth: number;
@@ -51,7 +52,7 @@ const jsonLd = {
   '@type': 'TechArticle',
   'headline': title,
   'description': description,
-  'url': `https://saviorbill.com/${lang}/docs/${currentSlug}`
+  'url': `https://saviorbill.com${getLocalePath(`/docs/${currentSlug}`, lang)}`
 };
 ---
 
@@ -69,9 +70,9 @@ const jsonLd = {
       <article class="flex-1 py-6 sm:py-8 min-w-0 max-w-full">
         <!-- Breadcrumbs -->
         <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs font-mono text-[oklch(0.55_0_0)] dark:text-[oklch(0.55_0_0)] light:text-slate-500 mb-4">
-          <a href={`/${lang}`} class="hover:text-white dark:hover:text-white light:hover:text-slate-900 transition-colors">SaviorBill</a>
+          <a href={getLocalePath('/', lang)} class="hover:text-white dark:hover:text-white light:hover:text-slate-900 transition-colors">SaviorBill</a>
           <span>/</span>
-          <a href={`/${lang}/docs/quickstart`} class="hover:text-white dark:hover:text-white light:hover:text-slate-900 transition-colors">Docs</a>
+          <a href={getLocalePath('/docs/quickstart', lang)} class="hover:text-white dark:hover:text-white light:hover:text-slate-900 transition-colors">Docs</a>
           <span>/</span>
           <span class="text-[#009080] truncate max-w-[160px] sm:max-w-none">{title}</span>
         </div>
@@ -117,7 +118,7 @@ const jsonLd = {
                     </div>
                     <ul class="space-y-1">
                       {catDocs.map((doc) => {
-                        const href = `/${lang}/docs/${doc.slug}`;
+                        const href = getLocalePath(`/docs/${doc.slug}`, lang);
                         const isActive = doc.slug === currentSlug;
                         return (
                           <li>
@@ -161,7 +162,7 @@ const jsonLd = {
         <div class="mt-12 pt-6 border-t border-[oklch(1_0_0/6%)] grid grid-cols-1 sm:grid-cols-2 gap-4">
           {prevDoc ? (
             <a 
-              href={`/${lang}/docs/${prevDoc.slug}`}
+              href={getLocalePath(`/docs/${prevDoc.slug}`, lang)}
               class="flex flex-col p-4 rounded-xl bg-[oklch(0.18_0_0)] hover:bg-[oklch(0.22_0_0)] border border-[oklch(1_0_0/4%)] transition-all group"
             >
               <span class="text-[11px] font-mono text-[oklch(0.55_0_0)] mb-1 flex items-center gap-1 group-hover:text-[#009080]">
@@ -175,7 +176,7 @@ const jsonLd = {
 
           {nextDoc ? (
             <a 
-              href={`/${lang}/docs/${nextDoc.slug}`}
+              href={getLocalePath(`/docs/${nextDoc.slug}`, lang)}
               class="flex flex-col p-4 rounded-xl bg-[oklch(0.18_0_0)] hover:bg-[oklch(0.22_0_0)] border border-[oklch(1_0_0/4%)] transition-all group text-right sm:text-right"
             >
               <span class="text-[11px] font-mono text-[oklch(0.55_0_0)] mb-1 flex items-center justify-end gap-1 group-hover:text-[#009080]">

@@ -3,13 +3,13 @@
 > Self-hosted billing platform with Lua 5.4 extensions, modern Admin UI, and automated client onboarding.
 
 ## Documentation
-- [Quickstart & Installation](https://saviorbill.com/ru/docs/quickstart/): Fast installation and Docker deployment
-- [Lua API Reference](https://saviorbill.com/ru/docs/lua-api/): Lua 5.4 sandbox context, crypto, and Redis cache methods
-- [Manifest Schema](https://saviorbill.com/ru/docs/lua-manifest/): Extension manifest JSON schema and fields
-- [Lua Contracts](https://saviorbill.com/ru/docs/lua-contracts/): Payment gateways, service provisioners, and event triggers
-- [sbuiSDK Components](https://saviorbill.com/ru/docs/sbuisdk-components/): Server-Driven UI components for customer storefronts
-- [Extensions Hub](https://saviorbill.com/ru/hub/): Ready-to-use Lua extensions for Marzban, YooKassa, CryptoBot
+- [Quickstart & Installation](https://saviorbill.com/docs/quickstart/): Fast installation and Docker deployment
+- [Lua API Reference](https://saviorbill.com/docs/lua-api/): Lua 5.4 sandbox context, crypto, and Redis cache methods
+- [Manifest Schema](https://saviorbill.com/docs/lua-manifest/): Extension manifest JSON schema and fields
+- [Lua Contracts](https://saviorbill.com/docs/lua-contracts/): Payment gateways, service provisioners, and event triggers
+- [sbuiSDK Components](https://saviorbill.com/docs/sbuisdk-components/): Server-Driven UI components for customer storefronts
+- [Extensions Hub](https://saviorbill.com/hub/): Ready-to-use Lua extensions for Marzban, YooKassa, CryptoBot
 
 ## Optional
-- [Blog](https://saviorbill.com/ru/blog/): Tutorials and architecture articles
+- [Blog](https://saviorbill.com/blog/): Tutorials and architecture articles
 - [GitHub Repository](https://github.com/UNVISLATE/SaviorBill): Source code and issue tracker

@@ -2,7 +2,7 @@
   "specVersion": "1.0",
   "host": {
     "displayName": "SaviorBill",
-    "documentationUrl": "https://saviorbill.com/ru/docs/quickstart/"
+    "documentationUrl": "https://saviorbill.com/docs/quickstart/"
   },
   "entries": [
     {
@@ -21,7 +21,7 @@
       "identifier": "urn:air:saviorbill.com:hub:extensions",
       "displayName": "SaviorBill Hub Extensions Catalog",
       "type": "application/json",
-      "url": "https://saviorbill.com/ru/hub/",
+      "url": "https://saviorbill.com/hub/",
       "description": "Official and community Lua payment and service extensions for SaviorBill."
     }
   ]

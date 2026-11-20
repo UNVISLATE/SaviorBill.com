@@ -1,0 +1,35 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import HubDetailView from '../../views/HubDetailView.astro';
+import communityScripts from '../../data/community-scripts.json';
+
+export function getStaticPaths() {
+  const hubDir = path.resolve('src/content/hub');
+  const officialSlugs: string[] = [];
+
+  if (fs.existsSync(hubDir)) {
+    const dirs = fs.readdirSync(hubDir, { withFileTypes: true });
+    for (const d of dirs) {
+      if (d.isDirectory()) {
+        officialSlugs.push(d.name);
+      }
+    }
+  }
+
+  const paths: { params: { slug: string } }[] = [];
+
+  for (const slug of officialSlugs) {
+    paths.push({ params: { slug } });
+  }
+  for (const comm of communityScripts) {
+    paths.push({ params: { slug: comm.id } });
+  }
+
+  return paths;
+}
+
+const { slug } = Astro.params as { slug: string };
+---
+
+<HubDetailView lang="ru" slug={slug} />
