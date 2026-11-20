@@ -23,6 +23,54 @@ const { slug } = Astro.params as { slug: string };
 const lang = 'ru';
 
 const { Content, headings } = await render(post);
+
+// All Russian posts sorted by date descending
+const allPosts = await getCollection('blog');
+const langPosts = allPosts
+  .filter((p) => p.id.startsWith('ru/'))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+const currentIndex = langPosts.findIndex((p) => p.id === post.id);
+
+function toPostMeta(p: any) {
+  if (!p) return null;
+  const parts = p.id.split('/');
+  const s = parts.slice(1).join('/').replace(/\.(md|mdx)$/, '');
+  const coverImg = p.data.cover || `/images/og/${lang}-${s}.png`;
+  return {
+    slug: s,
+    title: p.data.title,
+    description: p.data.description,
+    cover: coverImg,
+    date: p.data.date,
+    author: p.data.author || 'Andrey UNVI',
+    authorAvatar: p.data.authorAvatar || '/images/avatars/andrey-unvi.jpg',
+    tags: p.data.tags || []
+  };
+}
+
+const prevPost = currentIndex > 0 ? toPostMeta(langPosts[currentIndex - 1]) : null;
+const nextPost = currentIndex < langPosts.length - 1 ? toPostMeta(langPosts[currentIndex + 1]) : null;
+
+// Related posts: matching tags + recency
+const currentTags = post.data.tags || [];
+const otherPosts = langPosts.filter((p) => p.id !== post.id);
+
+const scored = otherPosts.map((p) => {
+  const pTags = p.data.tags || [];
+  const shared = pTags.filter((t: string) => currentTags.includes(t)).length;
+  let score = shared * 10;
+  const daysDiff = Math.abs(new Date(p.data.date).getTime() - new Date(post.data.date).getTime()) / (1000 * 60 * 60 * 24);
+  if (daysDiff < 60) score += 2;
+  return { post: p, score };
+});
+
+scored.sort((a, b) => {
+  if (b.score !== a.score) return b.score - a.score;
+  return new Date(b.post.data.date).getTime() - new Date(a.post.data.date).getTime();
+});
+
+const relatedPosts = scored.slice(0, 3).map((item) => toPostMeta(item.post));
 ---
 
 <BlogLayout
@@ -37,6 +85,9 @@ const { Content, headings } = await render(post);
   headings={headings}
   faq={post.data.faq}
   cover={post.data.cover}
+  prevPost={prevPost}
+  nextPost={nextPost}
+  relatedPosts={relatedPosts}
 >
   <Content />
 </BlogLayout>

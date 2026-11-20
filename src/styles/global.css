@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+@custom-variant light (&:where(.light, .light *));
+@custom-variant dark (&:where(.dark, .dark *));
+
 @font-face {
   font-family: 'Onder';
   src: url('/fonts/Onder.woff2') format('woff2'),
@@ -944,14 +947,30 @@ html[data-curtain-active="true"]::view-transition-new(*) {
   height: 100vh !important;
   position: fixed !important;
   inset: 0 !important;
+  view-transition-name: none !important;
 }
 
 #lunoweb-curve-svg {
   z-index: 2147483646 !important;
+  view-transition-name: none !important;
 }
 
 #lunoweb-curve-route {
   z-index: 2147483647 !important;
+  view-transition-name: none !important;
+}
+
+/* Suppress native View Transition top-layer pseudo elements when curtain is active so content never bleeds on top */
+html[data-curtain-active="true"]::view-transition {
+  display: none !important;
+}
+html[data-curtain-active="true"]::view-transition-group(*),
+html[data-curtain-active="true"]::view-transition-old(*),
+html[data-curtain-active="true"]::view-transition-new(*) {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  animation: none !important;
 }
 
 ::view-transition-old(root),
@@ -1000,3 +1019,132 @@ html.light .sidebar-scroll::-webkit-scrollbar-thumb {
   border-bottom: 2px solid #009080;
   box-shadow: 0 0 10px rgba(0, 144, 128, 0.2);
 }
+
+/* ============================================================
+   COMPREHENSIVE LIGHT THEME CONTRAST & ACCENTS
+   ============================================================ */
+
+/* 1. Universal Headings & Titles in Light Mode */
+html.light h1:not(.sb-admin-mockup-root *):not(.terminal-block *),
+html.light h2:not(.sb-admin-mockup-root *):not(.terminal-block *),
+html.light h3:not(.sb-admin-mockup-root *):not(.terminal-block *),
+html.light h4:not(.sb-admin-mockup-root *):not(.terminal-block *),
+html.light h5:not(.sb-admin-mockup-root *):not(.terminal-block *),
+html.light h6:not(.sb-admin-mockup-root *):not(.terminal-block *) {
+  color: #0f172a !important;
+}
+
+/* Card titles and text */
+html.light .card-surface h1,
+html.light .card-surface h2,
+html.light .card-surface h3,
+html.light .card-surface h4,
+html.light .card-interactive h1,
+html.light .card-interactive h2,
+html.light .card-interactive h3,
+html.light .card-interactive h4 {
+  color: #0f172a !important;
+}
+
+html.light .card-surface p,
+html.light .card-interactive p {
+  color: #475569 !important;
+}
+
+/* 2. Light Mode Search Inputs (Blog & Lua Hub) */
+html.light #blog-search-input,
+html.light #hub-search-input {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(148, 163, 184, 0.35) !important;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05) !important;
+}
+html.light #blog-search-input::placeholder,
+html.light #hub-search-input::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* 3. Segmented Tab Bar in Lua Hub */
+html.light #tab-btn-official.parentElement,
+html.light div:has(> #tab-btn-official) {
+  background-color: #e2e8f0 !important;
+  border: 1px solid rgba(148, 163, 184, 0.3) !important;
+}
+html.light #tab-btn-community:not(.bg-\[\#009080\]) {
+  color: #475569 !important;
+}
+html.light #tab-btn-community:not(.bg-\[\#009080\]):hover {
+  color: #0f172a !important;
+}
+html.light #tab-btn-official:not(.bg-\[\#009080\]) {
+  color: #475569 !important;
+}
+html.light #tab-btn-official:not(.bg-\[\#009080\]):hover {
+  color: #0f172a !important;
+}
+
+/* 4. Lua Hub Cards: Action Pills & Zip Download Buttons */
+html.light .hub-list span[class*="bg-[oklch(0.16_0_0)]"] {
+  background-color: #f1f5f9 !important;
+  color: #334155 !important;
+  border: 1px solid rgba(148, 163, 184, 0.25) !important;
+}
+html.light .hub-direct-download-btn {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(148, 163, 184, 0.25) !important;
+}
+html.light .hub-direct-download-btn:hover {
+  background-color: #009080 !important;
+  color: #ffffff !important;
+}
+
+/* 5. Docs Prev/Next Navigation Cards */
+html.light article > div.mt-12 a {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(148, 163, 184, 0.25) !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
+}
+html.light article > div.mt-12 a span.text-white {
+  color: #0f172a !important;
+}
+html.light article > div.mt-12 a:hover span.text-white {
+  color: #009080 !important;
+}
+
+/* 6. Lua Code Viewer in Hub & Detail Pages */
+html.light .card-surface .article-content pre {
+  background-color: #f8fafc !important;
+  border: 1px solid rgba(148, 163, 184, 0.25) !important;
+}
+html.light div.card-surface:has(> .article-content) {
+  background-color: #f8fafc !important;
+  border: 1px solid rgba(148, 163, 184, 0.25) !important;
+}
+html.light a[href*="/raw/"] {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(148, 163, 184, 0.25) !important;
+}
+html.light a[href*="/raw/"]:hover {
+  background-color: #e2e8f0 !important;
+}
+html.light a[href*="/hub/"][class*="bg-[oklch(0.16_0_0)]"] {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(148, 163, 184, 0.25) !important;
+}
+html.light a[href*="/hub/"][class*="bg-[oklch(0.16_0_0)]"]:hover {
+  border-color: #009080 !important;
+}
+html.light div[class*="bg-[oklch(0.12_0_0)]"]:not(.feature-code-box):not(.terminal-block *) {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(148, 163, 184, 0.25) !important;
+}
+
+/* 7. Legal & License Page */
+html.light .card-surface ul li span {
+  color: #334155 !important;
+}
+

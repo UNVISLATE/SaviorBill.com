@@ -17,10 +17,15 @@ interface FaqItem {
   answer: string;
 }
 
-interface SiblingPost {
-  title: string;
+export interface PostMeta {
   slug: string;
-  cover?: string;
+  title: string;
+  description: string;
+  cover: string;
+  date: string | Date;
+  author?: string;
+  authorAvatar?: string;
+  tags?: string[];
 }
 
 interface Props {
@@ -35,8 +40,9 @@ interface Props {
   headings: Heading[];
   faq?: FaqItem[];
   cover?: string;
-  prevPost?: SiblingPost;
-  nextPost?: SiblingPost;
+  prevPost?: PostMeta | null;
+  nextPost?: PostMeta | null;
+  relatedPosts?: PostMeta[];
 }
 
 const {
@@ -52,7 +58,8 @@ const {
   faq = [],
   cover,
   prevPost,
-  nextPost
+  nextPost,
+  relatedPosts = []
 } = Astro.props;
 
 const dateStr = typeof date === 'string' ? date : date.toISOString().split('T')[0];
@@ -222,44 +229,126 @@ if (faq && faq.length > 0) {
           </div>
         )}
 
-        <!-- Sibling / Related Posts (Links to other articles at bottom) -->
-        <div class="mt-14 pt-8 border-t border-[oklch(1_0_0/6%)] related-posts-container">
-          <div class="font-mono text-xs uppercase tracking-wider mb-4 font-semibold related-posts-header">
-            {lang === 'ru' ? 'Другие статьи в блоге' : 'More from the blog'}
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {slug === 'self-hosted-billing-fastapi-lua' ? (
+        <!-- Prev / Next Navigation with Small Thumbnails -->
+        {(prevPost || nextPost) && (
+          <div class="mt-14 pt-8 border-t border-[oklch(1_0_0/6%)] grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {prevPost ? (
               <a
-                href={`/${lang}/blog/vpn-sales-yookassa-marzban`}
-                class="card-interactive p-4 flex flex-col justify-between"
+                href={getLocalePath(`/blog/${prevPost.slug}`, lang)}
+                class="card-interactive p-3.5 sm:p-4 flex items-center gap-3.5 group rounded-xl"
               >
-                <span class="text-xs text-[#009080] font-mono mb-1">{lang === 'ru' ? 'Следующая статья →' : 'Next article →'}</span>
-                <span class="text-sm font-semibold leading-snug related-post-title">
-                  {lang === 'ru' ? 'Как запустить продажи VPN через ЮKassa и Marzban' : 'How to Launch a VPN Service with YooKassa and Marzban'}
-                </span>
+                <div class="size-14 sm:size-16 rounded-lg overflow-hidden bg-[oklch(0.14_0_0)] shrink-0 relative">
+                  <img
+                    src={prevPost.cover}
+                    alt={prevPost.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="min-w-0 flex-1">
+                  <span class="text-[11px] font-mono text-[#009080] font-semibold flex items-center gap-1 mb-1">
+                    ← {lang === 'ru' ? 'Предыдущая статья' : 'Previous article'}
+                  </span>
+                  <div class="text-xs sm:text-sm font-bold group-hover:text-[#009080] transition-colors line-clamp-2 leading-snug">
+                    {prevPost.title}
+                  </div>
+                </div>
               </a>
-            ) : (
+            ) : <div class="hidden sm:block"></div>}
+
+            {nextPost ? (
               <a
-                href={`/${lang}/blog/self-hosted-billing-fastapi-lua`}
-                class="card-interactive p-4 flex flex-col justify-between"
+                href={getLocalePath(`/blog/${nextPost.slug}`, lang)}
+                class="card-interactive p-3.5 sm:p-4 flex items-center justify-between gap-3.5 group rounded-xl text-right sm:text-right"
               >
-                <span class="text-xs text-[#009080] font-mono mb-1">{lang === 'ru' ? '← Архитектура биллинга' : '← Billing Architecture'}</span>
-                <span class="text-sm font-semibold leading-snug related-post-title">
-                  {lang === 'ru' ? 'Изоляция логики на Lua и Server-Driven UI' : 'Isolating Logic in Lua and Server-Driven UI'}
-                </span>
+                <div class="min-w-0 flex-1">
+                  <span class="text-[11px] font-mono text-[#009080] font-semibold flex items-center justify-end gap-1 mb-1">
+                    {lang === 'ru' ? 'Следующая статья' : 'Next article'} →
+                  </span>
+                  <div class="text-xs sm:text-sm font-bold group-hover:text-[#009080] transition-colors line-clamp-2 leading-snug">
+                    {nextPost.title}
+                  </div>
+                </div>
+                <div class="size-14 sm:size-16 rounded-lg overflow-hidden bg-[oklch(0.14_0_0)] shrink-0 relative">
+                  <img
+                    src={nextPost.cover}
+                    alt={nextPost.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                </div>
               </a>
-            )}
-            <a
-              href={`/${lang}/docs/quickstart`}
-              class="card-interactive p-4 flex flex-col justify-between"
-            >
-              <span class="text-xs text-[#009080] font-mono mb-1">{lang === 'ru' ? 'Документация →' : 'Documentation →'}</span>
-              <span class="text-sm font-semibold leading-snug related-post-title">
-                {lang === 'ru' ? 'Быстрый старт и развертывание SaviorBill' : 'Quickstart and Deploying SaviorBill'}
-              </span>
-            </a>
+            ) : <div></div>}
           </div>
-        </div>
+        )}
+
+        <!-- Related Posts Section (Похожие статьи) -->
+        {relatedPosts && relatedPosts.length > 0 && (
+          <div class="mt-14 pt-8 border-t border-[oklch(1_0_0/6%)] space-y-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-xl sm:text-2xl font-bold tracking-tight mb-1">
+                  {lang === 'ru' ? 'Похожие статьи' : 'Related Articles'}
+                </h3>
+                <p class="text-xs sm:text-sm text-[oklch(0.65_0_0)]">
+                  {lang === 'ru' ? 'Материалы по смежным темам, архитектуре и практике внедрения.' : 'More articles on related topics, architecture, and guides.'}
+                </p>
+              </div>
+              <a
+                href={getLocalePath('/blog', lang)}
+                class="text-xs font-mono font-semibold text-[#009080] hover:text-[#0c5e53] transition-colors hidden sm:inline-flex items-center gap-1"
+              >
+                <span>{lang === 'ru' ? 'Все статьи' : 'All articles'}</span>
+                <span>→</span>
+              </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {relatedPosts.map((rPost) => {
+                const dateText = typeof rPost.date === 'string' ? rPost.date : rPost.date.toISOString().split('T')[0];
+                return (
+                  <a
+                    href={getLocalePath(`/blog/${rPost.slug}`, lang)}
+                    class="group card-interactive p-4 sm:p-5 flex flex-col justify-between rounded-xl"
+                  >
+                    <div>
+                      <div class="aspect-video w-full rounded-lg overflow-hidden bg-[oklch(0.14_0_0)] mb-3 relative">
+                        <img
+                          src={rPost.cover}
+                          alt={rPost.title}
+                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          loading="lazy"
+                        />
+                      </div>
+                      {rPost.tags && rPost.tags.length > 0 && (
+                        <div class="flex flex-wrap items-center gap-1.5 mb-2">
+                          {rPost.tags.slice(0, 2).map((tag: string) => (
+                            <span class="badge-pill px-2 py-0.5 rounded text-[10px] font-mono font-semibold">
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <h4 class="text-sm sm:text-base font-bold group-hover:text-[#009080] transition-colors line-clamp-2 leading-snug mb-2">
+                        {rPost.title}
+                      </h4>
+                      <p class="text-xs text-[oklch(0.65_0_0)] line-clamp-2 leading-relaxed mb-4">
+                        {rPost.description}
+                      </p>
+                    </div>
+
+                    <div class="pt-3 border-t border-[oklch(1_0_0/5%)] flex items-center justify-between text-xs font-mono text-[oklch(0.55_0_0)]">
+                      <time datetime={dateText}>{dateText}</time>
+                      <span class="text-[#009080] font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                        {lang === 'ru' ? 'Читать' : 'Read'} →
+                      </span>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
       </article>
 
