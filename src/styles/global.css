@@ -469,9 +469,18 @@ html.light .comparison-table td:first-child {
   font-weight: 600 !important;
 }
 
-html.light .comparison-table td:nth-child(2) {
+html.light .comparison-table .table-highlight {
   color: #007a6d !important;
+  font-weight: 600 !important;
+}
+
+html.light .comparison-table td:nth-child(2).table-highlight {
   font-weight: 700 !important;
+}
+
+html.light .comparison-table .table-danger {
+  color: #e11d48 !important;
+  font-weight: 600 !important;
 }
 
 html.light .comparison-table tr:hover {

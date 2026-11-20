@@ -40,45 +40,45 @@ const { lang } = Astro.props;
           <tbody class="divide-y divide-[oklch(1_0_0/4%)] font-normal">
             <tr>
               <td class="py-3.5 sm:py-4 pr-4 sm:pr-5 font-medium text-white">{lang === 'ru' ? 'Комиссия с оборота' : 'Platform Fee / Cut'}</td>
-              <td class="py-3.5 sm:py-4 px-4 sm:px-5 font-bold text-[#009080]">0% (Source Available)</td>
-              <td class="py-3.5 sm:py-4 px-4 sm:px-5 text-[oklch(0.65_0_0)]">0% (Open Source)</td>
-              <td class="py-3.5 sm:py-4 px-4 sm:px-5 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Платная лицензия' : 'Paid license fee'}</td>
-              <td class="py-3.5 sm:py-4 pl-4 sm:pl-5 text-rose-400">5% – 10% + fee</td>
+              <td class="py-3.5 sm:py-4 px-4 sm:px-5 font-bold text-[#009080] table-highlight">0% (Source Available)</td>
+              <td class="py-3.5 sm:py-4 px-4 sm:px-5 font-medium text-[#009080] table-highlight">0% (Open Source)</td>
+              <td class="py-3.5 sm:py-4 px-4 sm:px-5 font-medium text-rose-400 table-danger">{lang === 'ru' ? 'Платная лицензия' : 'Paid license fee'}</td>
+              <td class="py-3.5 sm:py-4 pl-4 sm:pl-5 font-medium text-rose-400 table-danger">5% – 10% + fee</td>
             </tr>
             <tr>
               <td class="py-3.5 sm:py-4 pr-4 sm:pr-5 font-medium text-white">{lang === 'ru' ? 'Бизнес-логика' : 'Custom Logic Runtime'}</td>
-              <td class="py-3.5 sm:py-4 px-4 sm:px-5 font-medium text-[#009080]">Изолированный Lua 5.4</td>
+              <td class="py-3.5 sm:py-4 px-4 sm:px-5 font-medium text-[#009080] table-highlight">Изолированный Lua 5.4</td>
               <td class="py-3.5 sm:py-4 px-4 sm:px-5 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Bash-скрипты и SSH' : 'Bash scripts & SSH'}</td>
               <td class="py-3.5 sm:py-4 px-4 sm:px-5 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'PHP в ядре сервера' : 'PHP in server core'}</td>
               <td class="py-3.5 sm:py-4 pl-4 sm:pl-5 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Только вебхуки' : 'Webhooks only'}</td>
             </tr>
             <tr>
               <td class="py-3.5 sm:py-4 pr-4 sm:pr-5 font-medium text-white">{lang === 'ru' ? 'Витрина / UI' : 'Storefront / UI'}</td>
-              <td class="py-3.5 sm:py-4 px-4 sm:px-5 font-medium text-[#009080]">{lang === 'ru' ? 'Легко настраиваемые формы' : 'Easily customizable forms'}</td>
+              <td class="py-3.5 sm:py-4 px-4 sm:px-5 font-medium text-[#009080] table-highlight">{lang === 'ru' ? 'Легко настраиваемые формы' : 'Easily customizable forms'}</td>
               <td class="py-3.5 sm:py-4 px-4 sm:px-5 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Заготовленный React UI' : 'Pre-built React UI'}</td>
               <td class="py-3.5 sm:py-4 px-4 sm:px-5 text-[oklch(0.65_0_0)]">Legacy Bootstrap / Smarty</td>
               <td class="py-3.5 sm:py-4 pl-4 sm:pl-5 text-[oklch(0.65_0_0)]">Hosted Checkout</td>
             </tr>
             <tr>
               <td class="py-3.5 sm:py-4 pr-4 sm:pr-5 font-medium text-white">{lang === 'ru' ? 'Платежные шлюзы' : 'Payment Gateways'}</td>
-              <td class="py-3.5 sm:py-4 px-4 sm:px-5 font-medium text-[#009080]">{lang === 'ru' ? 'Любые (Lua за 10 мин)' : 'Any via Lua script'}</td>
+              <td class="py-3.5 sm:py-4 px-4 sm:px-5 font-medium text-[#009080] table-highlight">{lang === 'ru' ? 'Любые (Lua за 10 мин)' : 'Any via Lua script'}</td>
               <td class="py-3.5 sm:py-4 px-4 sm:px-5 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Встроенные (Perl)' : 'Built-in (Perl)'}</td>
               <td class="py-3.5 sm:py-4 px-4 sm:px-5 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Сложные PHP-модули' : 'Complex PHP modules'}</td>
               <td class="py-3.5 sm:py-4 pl-4 sm:pl-5 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Только их шлюз' : 'Locked-in gateway'}</td>
             </tr>
             <tr>
               <td class="py-3.5 sm:py-4 pr-4 sm:pr-5 font-medium text-white">{lang === 'ru' ? 'Развертывание' : 'Deployment & Stack'}</td>
-              <td class="py-3.5 sm:py-4 px-4 sm:px-5 font-medium text-[#009080]">{lang === 'ru' ? 'Установка в 1 клик' : '1-click install'}</td>
+              <td class="py-3.5 sm:py-4 px-4 sm:px-5 font-medium text-[#009080] table-highlight">{lang === 'ru' ? 'Установка в 1 клик' : '1-click install'}</td>
               <td class="py-3.5 sm:py-4 px-4 sm:px-5 text-[oklch(0.65_0_0)]">Docker (Perl + Postgres)</td>
               <td class="py-3.5 sm:py-4 px-4 sm:px-5 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Сложная настройка VM' : 'Complex VM setup'}</td>
-              <td class="py-3.5 sm:py-4 pl-4 sm:pl-5 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Быстрая регистрация' : 'Quick signup'}</td>
+              <td class="py-3.5 sm:py-4 pl-4 sm:pl-5 font-medium text-[#009080] table-highlight">{lang === 'ru' ? 'Быстрая регистрация' : 'Quick signup'}</td>
             </tr>
             <tr>
               <td class="py-3.5 sm:py-4 pr-4 sm:pr-5 font-medium text-white">{lang === 'ru' ? 'Зрелость' : 'Maturity'}</td>
               <td class="py-3.5 sm:py-4 px-4 sm:px-5 text-[oklch(0.65_0_0)]">{lang === 'ru' ? 'Молодой проект' : 'Young project'}</td>
-              <td class="py-3.5 sm:py-4 px-4 sm:px-5 text-[oklch(0.65_0_0)]">{lang === 'ru' ? '5+ лет в Open Source' : '5+ years Open Source'}</td>
-              <td class="py-3.5 sm:py-4 px-4 sm:px-5 text-[oklch(0.65_0_0)]">{lang === 'ru' ? '15+ лет на рынке' : '15+ years on market'}</td>
-              <td class="py-3.5 sm:py-4 pl-4 sm:pl-5 text-[oklch(0.65_0_0)]">{lang === 'ru' ? '14+ лет экосистема' : '14+ years ecosystem'}</td>
+              <td class="py-3.5 sm:py-4 px-4 sm:px-5 font-medium text-[#009080] table-highlight">{lang === 'ru' ? '5+ лет в Open Source' : '5+ years Open Source'}</td>
+              <td class="py-3.5 sm:py-4 px-4 sm:px-5 font-medium text-[#009080] table-highlight">{lang === 'ru' ? '15+ лет на рынке' : '15+ years on market'}</td>
+              <td class="py-3.5 sm:py-4 pl-4 sm:pl-5 font-medium text-[#009080] table-highlight">{lang === 'ru' ? '14+ лет экосистема' : '14+ years ecosystem'}</td>
             </tr>
           </tbody>
         </table>
