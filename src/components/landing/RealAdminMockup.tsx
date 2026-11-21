@@ -66,7 +66,11 @@ const PERIOD_DATA: Record<string, PeriodData> = {
   }
 };
 
-export default function RealAdminMockup() {
+interface RealAdminMockupProps {
+  lang?: 'ru' | 'en';
+}
+
+export default function RealAdminMockup({ lang = 'ru' }: RealAdminMockupProps) {
   const [period, setPeriod] = useState<'7' | '30' | '90'>('30');
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
@@ -88,7 +92,7 @@ export default function RealAdminMockup() {
   return (
     /* Outer Window Container:
        Fixed full height, rounded top-left border, integrates seamlessly into hero background. */
-    <div className="sb-admin-mockup-root w-full h-full text-left select-none font-sans rounded-tl-2xl rounded-bl-none border-t border-l border-white/10 bg-[#0f0f11] shadow-2xl overflow-hidden flex antialiased">
+    <div className="sb-admin-mockup-root group relative w-full h-full text-left select-none font-sans rounded-tl-2xl rounded-bl-none border-t border-l border-white/10 bg-[#0f0f11] shadow-2xl overflow-hidden flex antialiased">
       
       {/* ================= SIDEBAR (Outer Shell) ================= */}
       <aside 
@@ -535,6 +539,47 @@ export default function RealAdminMockup() {
         </div>
 
       </main>
+
+      {/* ================= RIGHT RADIAL LIVE DEMO SHUTTER ================= */}
+      <a
+        href="https://demo.saviorbill.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={lang === 'ru' ? 'Открыть демо-стенд SaviorBill Admin' : 'Open SaviorBill Admin live demo'}
+        className="absolute top-0 right-0 bottom-0 w-64 xl:w-72 2xl:w-80 z-30 pointer-events-none opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 ease-out flex flex-col justify-center items-end pr-8 pl-12 text-right cursor-pointer select-none"
+        style={{
+          background: 'radial-gradient(ellipse 120% 90% at 100% 50%, rgba(15, 15, 17, 0.96) 0%, rgba(15, 15, 17, 0.85) 50%, rgba(15, 15, 17, 0.35) 75%, transparent 100%)',
+          backdropFilter: 'blur(3px)'
+        }}
+      >
+        <div className="flex flex-col items-end gap-2 translate-x-4 group-hover:translate-x-0 transition-transform duration-300 ease-out">
+          {/* Live Indicator Badge */}
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#009080]/20 border border-[#009080]/40 text-[#009080] text-[11px] font-mono font-medium shadow-xs">
+            <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Live Demo</span>
+          </div>
+
+          {/* Heading */}
+          <div className="text-sm 2xl:text-base font-bold text-white tracking-tight leading-snug">
+            {lang === 'ru' ? 'Админ панель' : 'Admin panel'}
+          </div>
+
+          {/* Subtitle */}
+          <p className="text-[11px] text-[oklch(0.7_0_0)] max-w-[190px] leading-relaxed">
+            {lang === 'ru' 
+              ? 'Полноэкранный стенд с реальным REST API' 
+              : 'Full-screen stand with real REST API'}
+          </p>
+
+          {/* Action Link Button */}
+          <div className="mt-1 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#009080] hover:bg-[#0c5e53] text-white text-xs font-semibold shadow-md transition-colors">
+            <span>demo.saviorbill.com</span>
+            <svg className="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </div>
+        </div>
+      </a>
 
     </div>
   );

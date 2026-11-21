@@ -22,7 +22,7 @@ const year = new Date().getFullYear();
       aria-hidden="true"
     />
 
-    <div class="relative z-10 grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+    <div class="relative z-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
       <!-- Col 1: Brand -->
       <div class="space-y-3">
         <a href={getLocalePath('/', lang)} class="inline-flex items-center gap-2.5 font-bold tracking-tight text-white">
@@ -51,7 +51,29 @@ const year = new Date().getFullYear();
         </ul>
       </div>
 
-      <!-- Col 3: Repositories -->
+      <!-- Col 3: Live Demo -->
+      <div class="space-y-2 text-xs">
+        <p class="font-semibold text-white uppercase tracking-wider font-mono mb-3 footer-col-title flex items-center gap-1.5">
+          <span class="size-1.5 rounded-full bg-[#009080]"></span>
+          {t('footer.demo')}
+        </p>
+        <ul class="space-y-2 text-[oklch(0.7_0_0)] footer-links">
+          <li>
+            <a href="https://demo.saviorbill.com/" target="_blank" rel="noopener noreferrer" class="hover:text-[#009080] transition-colors inline-flex items-center gap-1">
+              <span>{t('nav.demo.admin')}</span>
+              <span class="text-[10px] opacity-60">↗</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://my.demo.saviorbill.com/" target="_blank" rel="noopener noreferrer" class="hover:text-[#009080] transition-colors inline-flex items-center gap-1">
+              <span>{t('nav.demo.client')}</span>
+              <span class="text-[10px] opacity-60">↗</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Repositories -->
       <div class="space-y-2 text-xs">
         <p class="font-semibold text-white uppercase tracking-wider font-mono mb-3 footer-col-title">
           {lang === 'ru' ? 'Репозитории и код' : 'Ecosystem'}
