@@ -76,17 +76,8 @@ const t = useTranslations(lang);
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Live Demo"
-      class="hero-demo-shutter absolute top-0 right-0 bottom-0 w-32 2xl:w-36 z-30 pointer-events-none opacity-0 translate-x-8 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-x-0 transition-all duration-300 ease-out flex flex-col justify-center items-center text-center pl-4 pr-3 select-none cursor-pointer"
+      class="hero-demo-shutter absolute top-0 right-0 bottom-0 w-56 2xl:w-64 z-30 pointer-events-none opacity-0 translate-x-8 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-x-0 transition-all duration-300 ease-out flex flex-col justify-center items-end text-center pr-10 2xl:pr-12 select-none cursor-pointer"
     >
-      <!-- Solid black base at the right edge -->
-      <div class="absolute inset-y-0 right-0 w-20 pointer-events-none bg-black"></div>
-
-      <!-- Heavily blurred black oval curtain -->
-      <div 
-        class="absolute -top-8 -bottom-8 -right-8 left-0 pointer-events-none"
-        style="border-radius: 100% 0 0 100% / 50% 0 0 50%; background: #000000; filter: blur(28px);"
-      ></div>
-
       <!-- Crisp Logo & Label -->
       <div class="relative z-10 flex flex-col items-center justify-center gap-1.5 transition-transform duration-200 group-hover:scale-105">
         <img src="/logo.svg" alt="" class="size-6 object-contain" aria-hidden="true" />
@@ -96,3 +87,12 @@ const t = useTranslations(lang);
   </div>
 
 </section>
+
+<style>
+  .hero-demo-shutter {
+    background: radial-gradient(ellipse 100% 60% at 100% 50%, #000000 0%, #000000 55%, rgba(0, 0, 0, 0.88) 72%, rgba(0, 0, 0, 0.35) 90%, transparent 100%);
+  }
+  :global(html:not(.dark)) .hero-demo-shutter {
+    background: radial-gradient(ellipse 100% 60% at 100% 50%, #031c18 0%, #031c18 55%, rgba(3, 28, 24, 0.88) 72%, rgba(3, 28, 24, 0.35) 90%, transparent 100%);
+  }
+</style>
