@@ -82,44 +82,35 @@ The manifest serves several key purposes:
   "view_layout": {
     "type": "card",
     "variant": "elevated",
+    "header": "VLESS Subscription Connection",
     "content": "VLESS Subscription Connection",
     "children": [
       {
         "type": "row",
         "align": "center",
+        "justify": "between",
         "children": [
           { "type": "text", "variant": "caption", "content": "VLESS • Reality • TCP Vision" },
           { "type": "badge", "variant": "success", "content": "Active" }
         ]
       },
       {
-        "type": "row",
+        "type": "column",
         "gap": 16,
         "align": "center",
         "children": [
           {
             "type": "qr",
-            "props": {
-              "value": "{{public.subscription_url}}",
-              "size": 130,
-              "plateRadius": 18,
-              "qrStyle": "liquid",
-              "logo": "UNVIDark"
-            }
+            "value": "{{public.subscription_url}}",
+            "size": 180,
+            "plateRadius": 18,
+            "qrStyle": "liquid",
+            "logo": "UNVIDark"
           },
           {
-            "type": "column",
-            "gap": 8,
-            "children": [
-              { "type": "text", "variant": "caption", "content": "Subscription URL:" },
-              {
-                "type": "copy_field",
-                "props": {
-                  "value": "{{public.subscription_url}}",
-                  "label": "Copy Link"
-                }
-              }
-            ]
+            "type": "copy_field",
+            "label": "Subscription Link",
+            "value": "{{public.subscription_url}}"
           }
         ]
       }

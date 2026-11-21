@@ -56,22 +56,13 @@
       ]
     }
   ],
-  "view_trigger_label": "Инструкция и QR-код",
+  "view_trigger_label": "Subscription",
   "view_layout": {
     "type": "card",
     "variant": "elevated",
-    "header": "Подключение VLESS (Xray / Reality)",
-    "content": "Подключение VLESS (Xray / Reality)",
+    "header": "Subscription",
+    "content": "Subscription URL",
     "children": [
-      {
-        "type": "row",
-        "align": "center",
-        "justify": "between",
-        "children": [
-          { "type": "text", "variant": "caption", "content": "VLESS • Reality • TCP Vision" },
-          { "type": "badge", "variant": "success", "content": "Активен" }
-        ]
-      },
       {
         "type": "column",
         "gap": 16,
@@ -87,7 +78,7 @@
           },
           {
             "type": "copy_field",
-            "label": "Ссылка на подписку",
+            "label": "Subscription URL",
             "value": "{{public.subscription_url}}"
           }
         ]

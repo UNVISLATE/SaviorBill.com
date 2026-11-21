@@ -143,6 +143,22 @@ CSS Grid контейнер.
 - **`logo`**: встроенные пресеты `"UNVI"`, `"UNVIDark"`, `"UNVILight"` либо произвольный URL SVG-изображения;
 - **`plateRadius`**: радиус скругления подложки QR-кода.
 
+### `copy_field` (Поле с кнопкой копирования и скрытием секрета)
+Специализированный виджет для вывода ключей доступа, ссылок на подписку, токенов и реквизитов. Включает одно нажатие для копирования в буфер обмена с мгновенной визуальной индикацией («Скопировано»), поддержку маскирования секретов точками и переключатель показа/скрытия значения (иконка глаза).
+
+```json
+{
+  "type": "copy_field",
+  "label": "Ссылка на подписку",
+  "value": "{{public.subscription_url}}",
+  "secret": false
+}
+```
+- **`label`** (`string`, опционально): текстовый заголовок над полем;
+- **`value`** (`string`, обязательно): копируемое значение или строковый шаблон интерполяции контекста (например, `{{public.subscription_url}}` или `{{public.key}}`);
+- **`secret`** (`boolean`, по умолчанию `false`): если `true` (или при использовании синонима `"type": "secret"`), маскирует значение точками и отображает кнопку показа/скрытия;
+- **`placeholder`** (`string`, опционально): текст-заполнитель на случай, если данные ещё не сформированы.
+
 ### `datepicker` (Выбор даты и времени)
 Мощный компонент календаря с поддержкой единичных дат, диапазонов, выбора времени и быстрых пресетов.
 
@@ -307,25 +323,22 @@ CSS Grid контейнер.
         ]
       },
       {
-        "type": "row",
+        "type": "column",
         "gap": 16,
         "align": "center",
         "children": [
           {
             "type": "qr",
             "value": "vless://e83a91b4-42b7-4a0b-8d59-3a3f5a5c7c2e@de.saviorvpn.net:443?security=reality&fp=chrome#SaviorVPN-DE",
-            "size": 130,
+            "size": 180,
+            "plateRadius": 18,
             "qrStyle": "liquid",
             "logo": "UNVIDark"
           },
           {
-            "type": "column",
-            "gap": 8,
-            "children": [
-              { "type": "text", "variant": "caption", "bold": true, "content": "Ключ подключения:" },
-              { "type": "input", "name": "key_display", "defaultValue": "vless://e83a91b4-...", "readOnly": true },
-              { "type": "button", "label": "Копировать ключ", "variant": "primary", "action": "copy" }
-            ]
+            "type": "copy_field",
+            "label": "Ссылка на подписку",
+            "value": "{{public.subscription_url}}"
           }
         ]
       }
