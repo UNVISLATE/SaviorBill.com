@@ -301,6 +301,11 @@ html.light .hero-subtitle {
 }
 
 /* Real SaviorBill Admin Mockup: Strict Isolation & Zero Theme Leakage */
+.hero-mockup-wrapper {
+  mask-image: linear-gradient(to bottom, black calc(100% - 48px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 48px), transparent 100%);
+}
+
 .sb-admin-mockup-root {
   color: #f4f4f5 !important;
   color-scheme: dark !important;
