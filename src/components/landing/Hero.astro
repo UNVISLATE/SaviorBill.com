@@ -75,36 +75,19 @@ const t = useTranslations(lang);
       href="https://demo.saviorbill.com/"
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={lang === 'ru' ? 'Открыть демо-стенд SaviorBill Admin' : 'Open SaviorBill Admin live demo'}
-      class="hero-demo-shutter absolute top-0 right-0 bottom-0 w-80 2xl:w-96 z-30 pointer-events-none opacity-0 translate-x-12 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-x-0 transition-all duration-300 ease-out flex flex-col justify-center items-center text-center pl-10 pr-6 select-none cursor-pointer"
-      style="border-radius: 100% 0 0 100% / 50% 0 0 50%; background: #060608; border-left: 2px solid rgba(0, 144, 128, 0.6); box-shadow: -25px 0 60px rgba(0, 0, 0, 0.95), -2px 0 25px rgba(0, 144, 128, 0.35);"
+      aria-label="Live Demo"
+      class="hero-demo-shutter absolute top-0 right-0 bottom-0 w-32 2xl:w-36 z-30 pointer-events-none opacity-0 translate-x-8 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-x-0 transition-all duration-300 ease-out flex flex-col justify-center items-center text-center pl-4 pr-3 select-none cursor-pointer"
+      style="border-radius: 100% 0 0 100% / 50% 0 0 50%; background: rgba(8, 8, 10, 0.68); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: -12px 0 35px rgba(0, 0, 0, 0.6);"
     >
-      <div class="flex flex-col items-center gap-2.5 max-w-[210px]">
-        <!-- Live Indicator Badge -->
-        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#009080]/20 border border-[#009080]/40 text-[#009080] text-xs font-mono font-medium shadow-sm">
-          <span class="size-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>Live Demo</span>
-        </div>
-
-        <!-- Heading -->
-        <div class="text-base 2xl:text-lg font-bold text-white tracking-tight leading-snug">
-          {lang === 'ru' ? 'Админ панель' : 'Admin panel'}
-        </div>
-
-        <!-- Subtitle -->
-        <p class="text-xs text-[oklch(0.75_0_0)] leading-relaxed">
-          {lang === 'ru' 
-            ? 'Полноэкранный стенд с реальным REST API' 
-            : 'Full-screen stand with real REST API'}
-        </p>
-
-        <!-- Action Link Button -->
-        <div class="mt-1.5 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#009080] hover:bg-[#0c5e53] text-white text-xs font-semibold shadow-lg transition-colors">
-          <span>demo.saviorbill.com</span>
-          <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
-        </div>
+      <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/15 text-white text-xs font-medium backdrop-blur-md transition-all group-hover:scale-105 shadow-md">
+        <span class="relative flex size-2 shrink-0">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full size-2 bg-emerald-400"></span>
+        </span>
+        <span class="whitespace-nowrap font-semibold tracking-tight">Live Demo</span>
+        <svg class="size-3 text-[#009080] group-hover:translate-x-0.5 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+        </svg>
       </div>
     </a>
   </div>
