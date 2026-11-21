@@ -341,11 +341,6 @@ export default function RealAdminMockup({ lang = 'ru' }: RealAdminMockupProps) {
             <span className="h-3.5 w-px bg-white/10" />
             <span className="text-xs font-medium text-white/90">Дашборд</span>
           </div>
-
-          <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-white/[0.08] bg-white/[0.03] text-[11px] font-mono text-[#a1a1aa]">
-            <span className="size-1.5 rounded-full bg-emerald-500" />
-            <span>v0.0.0-dev</span>
-          </div>
         </header>
 
         {/* Dashboard Body Page */}
