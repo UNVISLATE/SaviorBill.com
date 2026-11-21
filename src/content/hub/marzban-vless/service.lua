@@ -17,8 +17,20 @@ local function panel_url(s)
 end
 
 local function duration_seconds(ctx)
-  local svc = ctx.service or {}
-  return tonumber(svc.duration) or tonumber(get_settings(ctx).duration) or 0
+  local usvc_dur = ((ctx.user or {}).service or {}).duration
+  local tier_dur = (((ctx.order or {}).tier or {}).duration_seconds)
+  local svc_dur = (ctx.service or {}).duration
+  local set_dur = get_settings(ctx).duration
+
+  return tonumber(usvc_dur)
+      or tonumber(tier_dur)
+      or tonumber(svc_dur)
+      or tonumber(set_dur)
+      or 0
+end
+
+local function is_mock(s)
+  return s.mock_mode == true or s.mock_mode == "true" or s.marzban_domain == "mock" or s.marzban_domain == "mock-panel.example.com"
 end
 
 local function calc_expire_ts(ctx)
@@ -167,9 +179,48 @@ end
 function M.handle(ctx)
   local act = ctx.action or "create"
   local s = get_settings(ctx)
-  assert(s.marzban_domain and s.marzban_user and s.marzban_pass, "Missing required Marzban panel credentials")
-
   local username = resolve_username(ctx)
+
+  if is_mock(s) then
+    if act == "create" or act == "renew" then
+      local exp = calc_expire_ts(ctx)
+      local domain = (s.marzban_domain and s.marzban_domain ~= "" and s.marzban_domain ~= "mock")
+        and tostring(s.marzban_domain):gsub("^https?://", ""):gsub("/+$", "")
+        or "mock-vless.saviorbill.com"
+      local sub_url = string.format("https://%s/sub/%s", domain, gen_random_suffix(username, 24))
+      return {
+        public = {
+          subscription_url = sub_url,
+          username = username,
+          node_type = "VLESS",
+        },
+        private = {
+          username = username,
+          marzban_status = "active",
+          data_limit = data_limit_bytes(s),
+          is_mock = true,
+        },
+        state = "active",
+        expires_at = (exp and exp > 0) and exp or nil,
+      }
+    elseif act == "stop" or act == "freeze" then
+      return {
+        public = { username = username },
+        private = { username = username, marzban_status = "disabled", is_mock = true },
+        state = "suspended",
+      }
+    elseif act == "delete" then
+      return {
+        public = {},
+        private = { username = username, deleted = true, is_mock = true },
+        state = "terminated",
+      }
+    else
+      error("Unsupported service action: " .. tostring(act))
+    end
+  end
+
+  assert(s.marzban_domain and s.marzban_user and s.marzban_pass, "Missing required Marzban panel credentials")
 
   if act == "create" then
     local payload, exp = build_user_payload(ctx, s, username)

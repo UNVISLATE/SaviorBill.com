@@ -10,25 +10,32 @@
   "actions": ["create", "renew", "stop", "delete", "freeze"],
   "settings_form": [
     {
+      "id": "mock_mode",
+      "type": "checkbox",
+      "label": "Режим демонстрации (Mock / Sandbox)",
+      "default": false,
+      "description": "Эмуляция работы Marzban без подключения к реальной панели (для демостендов и тестирования)"
+    },
+    {
       "id": "marzban_domain",
       "type": "text",
       "label": "Домен панели Marzban",
       "placeholder": "panel.example.com",
-      "required": true,
-      "description": "Домен панели без протокола https://"
+      "required": false,
+      "description": "Домен панели без протокола https:// (или 'mock' для демонстрации)"
     },
     {
       "id": "marzban_user",
       "type": "text",
       "label": "Логин администратора",
       "placeholder": "admin",
-      "required": true
+      "required": false
     },
     {
       "id": "marzban_pass",
       "type": "password",
       "label": "Пароль администратора",
-      "required": true
+      "required": false
     },
     {
       "id": "data_limit_gb",

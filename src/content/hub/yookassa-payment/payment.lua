@@ -61,6 +61,23 @@ end
 local function do_create(ctx)
   local pay = ctx.payment or {}
   local s = get_secrets(ctx)
+
+  if s.shop_id == "mock" or s.mock_mode == true then
+    local return_target = pay.return_url or s.return_url or "https://demo.saviorbill.com"
+    return {
+      public = {
+        pay_url = return_target,
+        payment_url = return_target,
+        confirmation_url = return_target,
+      },
+      private = {
+        external_id = "mock_yk_" .. tostring(pay.id or 0),
+        payment_id = pay.id,
+        is_mock = true,
+      },
+    }
+  end
+
   assert(s.shop_id and s.secret_key, "YooKassa requires shop_id and secret_key")
 
   local amount_val = string.format("%.2f", tonumber(pay.amount) or 0)
@@ -153,9 +170,15 @@ local function do_create(ctx)
   end
 
   return {
-    confirmation_url = redirect_url,
-    external_id = data.id,
-    payment_id = pay.id,
+    public = {
+      pay_url = redirect_url,
+      payment_url = redirect_url,
+      confirmation_url = redirect_url,
+    },
+    private = {
+      external_id = data.id,
+      payment_id = pay.id,
+    },
   }
 end
 
@@ -225,10 +248,17 @@ local function do_refund(ctx)
   end
 
   local data = json.decode(resp.body) or {}
+  local is_refunded = (data.status == "succeeded")
+  local is_failed = (data.status == "canceled")
   return {
-    ok = true,
-    refund_id = data.id,
-    status = data.status,
+    public = {},
+    private = {
+      ok = true,
+      refunded = is_refunded,
+      failed = is_failed,
+      refund_id = data.id,
+      status = data.status,
+    },
   }
 end
 

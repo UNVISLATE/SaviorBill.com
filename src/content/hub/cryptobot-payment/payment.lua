@@ -54,6 +54,23 @@ end
 local function do_create(ctx)
   local pay = ctx.payment or {}
   local s = get_secrets(ctx)
+
+  if s.api_token == "mock" or s.mock_mode == true then
+    local mock_url = "https://t.me/CryptoBot?start=mock_" .. tostring(pay.id or 0)
+    return {
+      public = {
+        pay_url = mock_url,
+        payment_url = mock_url,
+        confirmation_url = mock_url,
+      },
+      private = {
+        external_id = "mock_inv_" .. tostring(pay.id or 0),
+        payment_id = pay.id,
+        is_mock = true,
+      },
+    }
+  end
+
   assert(s.api_token, "CryptoBot requires api_token")
 
   local amount_val = string.format("%.2f", tonumber(pay.amount) or 0)
@@ -89,9 +106,15 @@ local function do_create(ctx)
   end
 
   return {
-    confirmation_url = pay_url,
-    external_id = tostring(invoice_id),
-    payment_id = pay.id,
+    public = {
+      pay_url = pay_url,
+      payment_url = pay_url,
+      confirmation_url = pay_url,
+    },
+    private = {
+      external_id = tostring(invoice_id),
+      payment_id = pay.id,
+    },
   }
 end
 
@@ -120,6 +143,7 @@ local function do_callback(ctx)
 
   local is_paid = (update_type == "invoice_paid" or status == "paid")
   local is_failed = (status == "expired")
+  local reported_amount = (payload.currency_type == "fiat" and payload.amount) or payload.paid_amount
 
   return {
     public = {},
@@ -131,7 +155,7 @@ local function do_callback(ctx)
       external_id = invoice_id,
       status = status,
       paid_asset = payload.paid_asset,
-      paid_amount = payload.paid_amount,
+      paid_amount = reported_amount,
     },
   }
 end
