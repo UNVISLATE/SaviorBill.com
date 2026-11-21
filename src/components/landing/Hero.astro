@@ -64,8 +64,49 @@ const t = useTranslations(lang);
   </div>
 
   <!-- Background Interactive Real Admin Mockup (strictly >= 1536px) -->
-  <div class="hero-mockup-wrapper hidden min-[1536px]:block absolute left-[calc(50%+490px)] 2xl:left-[calc(50%+520px)] bottom-0 w-[940px] 2xl:w-[1020px] h-[660px] 2xl:h-[700px] z-0 pointer-events-auto opacity-85 hover:opacity-100 transition-opacity duration-300">
-    <RealAdminMockup client:load lang={lang} />
+  <div class="hero-mockup-wrapper group hidden min-[1536px]:block absolute left-[calc(50%+490px)] 2xl:left-[calc(50%+520px)] right-0 bottom-0 h-[660px] 2xl:h-[700px] z-0 pointer-events-auto overflow-hidden">
+    <!-- Inner mockup container (fixed desktop dimensions, starts from left border) -->
+    <div class="w-[940px] 2xl:w-[1020px] h-full shrink-0 opacity-85 group-hover:opacity-100 transition-opacity duration-300">
+      <RealAdminMockup client:load />
+    </div>
+
+    <!-- Right Oval Live Demo Shutter (Pinned to the exact right edge of the screen) -->
+    <a
+      href="https://demo.saviorbill.com/"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={lang === 'ru' ? 'Открыть демо-стенд SaviorBill Admin' : 'Open SaviorBill Admin live demo'}
+      class="hero-demo-shutter absolute top-0 right-0 bottom-0 w-80 2xl:w-96 z-30 pointer-events-none opacity-0 translate-x-12 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-x-0 transition-all duration-300 ease-out flex flex-col justify-center items-center text-center pl-10 pr-6 select-none cursor-pointer"
+      style="border-radius: 100% 0 0 100% / 50% 0 0 50%; background: #060608; border-left: 2px solid rgba(0, 144, 128, 0.6); box-shadow: -25px 0 60px rgba(0, 0, 0, 0.95), -2px 0 25px rgba(0, 144, 128, 0.35);"
+    >
+      <div class="flex flex-col items-center gap-2.5 max-w-[210px]">
+        <!-- Live Indicator Badge -->
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#009080]/20 border border-[#009080]/40 text-[#009080] text-xs font-mono font-medium shadow-sm">
+          <span class="size-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Live Demo</span>
+        </div>
+
+        <!-- Heading -->
+        <div class="text-base 2xl:text-lg font-bold text-white tracking-tight leading-snug">
+          {lang === 'ru' ? 'Админ панель' : 'Admin panel'}
+        </div>
+
+        <!-- Subtitle -->
+        <p class="text-xs text-[oklch(0.75_0_0)] leading-relaxed">
+          {lang === 'ru' 
+            ? 'Полноэкранный стенд с реальным REST API' 
+            : 'Full-screen stand with real REST API'}
+        </p>
+
+        <!-- Action Link Button -->
+        <div class="mt-1.5 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#009080] hover:bg-[#0c5e53] text-white text-xs font-semibold shadow-lg transition-colors">
+          <span>demo.saviorbill.com</span>
+          <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </div>
+      </div>
+    </a>
   </div>
 
 </section>
