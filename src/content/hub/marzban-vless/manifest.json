@@ -60,44 +60,35 @@
   "view_layout": {
     "type": "card",
     "variant": "elevated",
+    "header": "Подключение VLESS (Xray / Reality)",
     "content": "Подключение VLESS (Xray / Reality)",
     "children": [
       {
         "type": "row",
         "align": "center",
+        "justify": "between",
         "children": [
           { "type": "text", "variant": "caption", "content": "VLESS • Reality • TCP Vision" },
           { "type": "badge", "variant": "success", "content": "Активен" }
         ]
       },
       {
-        "type": "row",
+        "type": "column",
         "gap": 16,
         "align": "center",
         "children": [
           {
             "type": "qr",
-            "props": {
-              "value": "{{public.subscription_url}}",
-              "size": 130,
-              "plateRadius": 18,
-              "qrStyle": "liquid",
-              "logo": "UNVIDark"
-            }
+            "value": "{{public.subscription_url}}",
+            "size": 180,
+            "plateRadius": 18,
+            "qrStyle": "liquid",
+            "logo": "UNVIDark"
           },
           {
-            "type": "column",
-            "gap": 8,
-            "children": [
-              { "type": "text", "variant": "caption", "content": "Ссылка на подписку:" },
-              {
-                "type": "copy_field",
-                "props": {
-                  "value": "{{public.subscription_url}}",
-                  "label": "Скопировать ссылку"
-                }
-              }
-            ]
+            "type": "copy_field",
+            "label": "Ссылка на подписку",
+            "value": "{{public.subscription_url}}"
           }
         ]
       }
