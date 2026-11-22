@@ -4,8 +4,8 @@
   "name": "ЮKassa Payment Gateway",
   "category": "Payments",
   "author": "Andrey UNVI",
-  "version": "1.3.0",
-  "description": "Официальная интеграция с API ЮKassa v3: генерация ссылок на оплату (карты, СБП, SberPay, ЮMoney), server-to-server верификация вебхуков, поддержка чеков 54-ФЗ и автоматический polling статуса.",
+  "version": "1.0.1",
+  "description": "Интеграция с API ЮKassa v3",
   "actions": ["create", "callback", "check", "refund"],
   "settings_form": [
     {

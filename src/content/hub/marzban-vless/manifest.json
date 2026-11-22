@@ -1,17 +1,17 @@
 {
-  "slug": "marzban-vless",
-  "id": "marzban-vless",
-  "name": "Marzban VLESS VPN Delivery",
-  "category": "VPN & Proxies",
+  "slug": "marzban-vless-beta",
+  "id": "marzban-vless-beta",
+  "name": "Marzban (Only VLESS) | Beta",
+  "category": "VPN",
   "author": "Andrey UNVI",
-  "version": "0.9.8-beta",
+  "version": "0.0.2-beta",
   "status": "not-stable",
-  "description": "Автоматическая выдача и продление VLESS-подписок через REST API панели Marzban. Создание пользователя, продление срока действия, заморозка и отзыв доступа.",
+  "description": "Автоматическая выдача и продление VLESS-подписок через REST API панели Marzban.",
   "actions": ["create", "renew", "stop", "delete", "freeze"],
   "settings_form": [
     {
       "id": "mock_mode",
-      "type": "checkbox",
+      "type": "toggle",
       "label": "Режим демонстрации (Mock / Sandbox)",
       "default": false,
       "description": "Эмуляция работы Marzban без подключения к реальной панели (для демостендов и тестирования)"

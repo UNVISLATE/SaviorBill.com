@@ -1,11 +1,11 @@
 {
   "slug": "cryptobot-payment",
   "id": "cryptobot-payment",
-  "name": "CryptoBot (CryptoPay) Gateway",
+  "name": "CryptoBot (CryptoPay)",
   "category": "Payments",
   "author": "Andrey UNVI",
   "version": "1.0.0",
-  "description": "Прием криптоплатежей через Telegram CryptoBot (CryptoPay API): оплата в USDT, TON, BTC, ETH, LTC с криптографической HMAC-SHA256 валидацией вебхуков.",
+  "description": "Прием криптоплатежей через Telegram CryptoBot (CryptoPay API)",
   "actions": ["create", "callback", "check"],
   "settings_form": [
     {
