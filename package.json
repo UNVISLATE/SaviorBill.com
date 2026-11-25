@@ -7,18 +7,20 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "node scripts/pack-hub.js && node scripts/generate-og-covers.js && astro build && pagefind --site dist",
+    "build": "node scripts/pack-hub.js && node scripts/generate-og-covers.js && node scripts/fetch-releases.js && astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.1",
+    "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.2.1",
     "@tailwindcss/vite": "^4.0.0",
     "archiver": "^7.0.1",
     "astro": "^5.4.2",
     "clsx": "^2.1.1",
     "lucide-react": "^1.24.0",
+    "marked": "^18.3.0",
     "motion": "^12.4.7",
     "pagefind": "^1.3.0",
     "react": "^19.0.0",

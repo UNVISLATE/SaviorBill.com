@@ -1,0 +1,225 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import repositories from '../data/repositories.json';
+import releasesCache from '../data/releases-cache.json';
+import { getLocalePath } from '../i18n/ui';
+
+interface Props {
+  lang: 'ru' | 'en';
+}
+
+const { lang } = Astro.props;
+
+const title = lang === 'ru' ? 'Релизы и сборки' : 'Releases & Builds';
+const description =
+  lang === 'ru'
+    ? 'Каталог релизов всех репозиториев экосистемы SaviorBill, списки изменений и связанные Docker-образы из GHCR.'
+    : 'Release catalog for all SaviorBill ecosystem repositories, changelogs, and linked GHCR container builds.';
+
+type RepoEntry = (typeof repositories)[number];
+type CachedRepo = {
+  id: string;
+  owner: string;
+  repo: string;
+  htmlUrl: string;
+  stars: number;
+  releases: Array<{
+    tagName: string;
+    name: string;
+    publishedAt: string;
+    prerelease: boolean;
+    containers: Array<{ name: string; label: string; image: string; tag: string }>;
+  }>;
+  fetchedAt: string | null;
+};
+
+const cacheMap = (releasesCache as { repositories?: Record<string, CachedRepo> }).repositories || {};
+
+function enrichRepo(cfg: RepoEntry) {
+  const cached = cacheMap[cfg.id];
+  const releases = cached?.releases || [];
+  const latestRelease = releases[0] || null;
+  const totalContainers = releases.reduce((acc, r) => acc + (r.containers?.length || 0), 0);
+  return {
+    ...cfg,
+    htmlUrl: cached?.htmlUrl || `https://github.com/${cfg.owner}/${cfg.repo}`,
+    stars: cached?.stars || 0,
+    releasesCount: releases.length,
+    latestRelease,
+    totalContainers,
+  };
+}
+
+const enriched = repositories.map(enrichRepo);
+const featuredRepos = enriched.filter((r) => r.featured);
+const otherRepos = enriched.filter((r) => !r.featured);
+
+function formatDate(iso: string | undefined) {
+  if (!iso) return '';
+  return iso.split('T')[0];
+}
+---
+
+<BaseLayout title={title} description={description} lang={lang}>
+  <div class="px-3 sm:px-4 py-12 sm:py-16">
+    <div class="max-w-6xl mx-auto space-y-10">
+
+      <!-- Top Title Group -->
+      <div class="text-center max-w-2xl mx-auto space-y-3">
+        <div class="badge-pill inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold">
+          GitHub Releases
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight blog-index-title">
+          {title}
+        </h1>
+        <p class="text-sm sm:text-base blog-index-desc leading-relaxed">
+          {description}
+        </p>
+      </div>
+
+      <!-- Featured Full-Width Repositories (e.g. SaviorBill) -->
+      {featuredRepos.length > 0 && (
+        <div class="space-y-5">
+          {featuredRepos.map((repo) => (
+            <a
+              href={getLocalePath(`/releases/${repo.id}`, lang)}
+              class="group card-interactive block w-full rounded-2xl p-6 sm:p-8 transition-all duration-300"
+            >
+              <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <div class="space-y-3 flex-1 min-w-0">
+                  <div class="flex flex-wrap items-center gap-2.5">
+                    <span class="badge-pill px-2.5 py-0.5 rounded text-[11px] font-mono font-semibold">
+                      {repo.badge[lang]}
+                    </span>
+                    <span class="text-xs font-mono text-[oklch(0.6_0_0)]">
+                      {repo.owner}/{repo.repo}
+                    </span>
+                    {repo.latestRelease && (
+                      <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#009080]/15 text-[#009080] text-[11px] font-mono font-semibold">
+                        <span class="size-1.5 rounded-full bg-[#009080]"></span>
+                        {repo.latestRelease.tagName}
+                      </span>
+                    )}
+                  </div>
+
+                  <h2 class="text-2xl sm:text-3xl font-extrabold text-white group-hover:text-[#009080] transition-colors tracking-tight">
+                    {repo.name}
+                  </h2>
+
+                  <p class="text-sm text-[oklch(0.7_0_0)] leading-relaxed max-w-3xl">
+                    {repo.description[lang]}
+                  </p>
+
+                  {repo.containers.length > 0 && (
+                    <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                      <span class="text-[11px] font-mono text-[oklch(0.55_0_0)] mr-1">
+                        {lang === 'ru' ? 'Контейнеры:' : 'Containers:'}
+                      </span>
+                      {repo.containers.map((c) => (
+                        <span class="px-2 py-0.5 rounded-md bg-[oklch(0.16_0_0)] text-[11px] font-mono text-[oklch(0.78_0_0)]">
+                          {c.name}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div class="flex flex-row lg:flex-col items-center lg:items-end justify-between gap-4 shrink-0 pt-4 lg:pt-0 border-t lg:border-t-0 border-[oklch(1_0_0/6%)]">
+                  <div class="flex items-center gap-5 text-xs font-mono text-[oklch(0.65_0_0)]">
+                    <div class="text-left lg:text-right">
+                      <div class="text-lg font-bold text-amber-400 inline-flex items-center gap-1">
+                        <svg class="size-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                        <span>{repo.stars}</span>
+                      </div>
+                      <div class="text-[11px]">{lang === 'ru' ? 'звёзд' : 'stars'}</div>
+                    </div>
+                    <div class="text-left lg:text-right">
+                      <div class="text-lg font-bold text-white">{repo.releasesCount}</div>
+                      <div class="text-[11px]">{lang === 'ru' ? 'релизов' : 'releases'}</div>
+                    </div>
+                    {repo.latestRelease?.publishedAt && (
+                      <div class="text-left lg:text-right hidden sm:block">
+                        <div class="text-sm font-semibold text-white">{formatDate(repo.latestRelease.publishedAt)}</div>
+                        <div class="text-[11px]">{lang === 'ru' ? 'последний' : 'latest'}</div>
+                      </div>
+                    )}
+                  </div>
+
+                  <span class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#009080] group-hover:bg-[#0c5e53] text-white text-xs font-semibold transition-colors shadow-sm">
+                    <span>{lang === 'ru' ? 'Смотреть релизы' : 'View releases'}</span>
+                    <span class="font-mono transition-transform group-hover:translate-x-0.5">→</span>
+                  </span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+
+      <!-- Secondary Repositories Grid -->
+      {otherRepos.length > 0 && (
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {otherRepos.map((repo) => (
+            <a
+              href={getLocalePath(`/releases/${repo.id}`, lang)}
+              class="group card-interactive flex flex-col justify-between rounded-2xl p-6 transition-all duration-300"
+            >
+              <div class="space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <div class="flex items-center gap-2">
+                    <span class="badge-pill px-2.5 py-0.5 rounded text-[11px] font-mono font-semibold">
+                      {repo.badge[lang]}
+                    </span>
+                    <span class="text-xs font-mono text-[oklch(0.55_0_0)]">
+                      {repo.owner}/{repo.repo}
+                    </span>
+                  </div>
+                  {repo.latestRelease ? (
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#009080]/15 text-[#009080] text-[11px] font-mono font-semibold">
+                      <span class="size-1.5 rounded-full bg-[#009080]"></span>
+                      {repo.latestRelease.tagName}
+                    </span>
+                  ) : (
+                    <span class="text-[11px] font-mono text-[oklch(0.5_0_0)]">
+                      {lang === 'ru' ? 'нет релизов' : 'no releases'}
+                    </span>
+                  )}
+                </div>
+
+                <h2 class="text-xl font-bold text-white group-hover:text-[#009080] transition-colors tracking-tight">
+                  {repo.name}
+                </h2>
+
+                <p class="text-xs sm:text-sm text-[oklch(0.68_0_0)] leading-relaxed">
+                  {repo.description[lang]}
+                </p>
+              </div>
+
+              <div class="mt-6 pt-4 border-t border-[oklch(1_0_0/6%)] flex items-center justify-between text-xs font-mono">
+                <div class="flex items-center gap-3 text-[oklch(0.6_0_0)]">
+                  <span class="inline-flex items-center gap-1 text-amber-400 font-semibold">
+                    <svg class="size-3.5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    <span>{repo.stars}</span>
+                  </span>
+                  <span class="opacity-40">•</span>
+                  <span>
+                    {repo.releasesCount} {lang === 'ru' ? 'релизов' : 'releases'}
+                  </span>
+                </div>
+                <span class="text-[#009080] font-semibold inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                  <span>{lang === 'ru' ? 'Открыть' : 'Open'}</span>
+                  <span>→</span>
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+
+    </div>
+  </div>
+</BaseLayout>

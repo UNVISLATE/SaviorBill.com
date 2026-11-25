@@ -1,0 +1,82 @@
+[
+  {
+    "id": "saviorbill",
+    "owner": "UNVISLATE",
+    "repo": "SaviorBill",
+    "featured": true,
+    "name": "SaviorBill",
+    "badge": {
+      "ru": "Основной репозиторий",
+      "en": "Core Repository"
+    },
+    "description": {
+      "ru": "Ядро биллинга на FastAPI и Lua 5.4, админ-панель, планировщик, медиа- и Lua-воркеры. Все сервисы поставляются готовыми контейнерами в GHCR.",
+      "en": "Core billing engine on FastAPI & Lua 5.4, admin panel, scheduler, media & Lua workers. All services are shipped as GHCR container images."
+    },
+    "containers": [
+      {
+        "name": "billing",
+        "label": "Billing API",
+        "image": "ghcr.io/unvislate/saviorbill/billing"
+      },
+      {
+        "name": "adminui",
+        "label": "Admin UI",
+        "image": "ghcr.io/unvislate/saviorbill/adminui"
+      },
+      {
+        "name": "scheduler",
+        "label": "Scheduler",
+        "image": "ghcr.io/unvislate/saviorbill/scheduler"
+      },
+      {
+        "name": "luaworker",
+        "label": "Lua Worker",
+        "image": "ghcr.io/unvislate/saviorbill/luaworker"
+      },
+      {
+        "name": "mediaworker",
+        "label": "Media Worker",
+        "image": "ghcr.io/unvislate/saviorbill/mediaworker"
+      }
+    ]
+  },
+  {
+    "id": "sb-personal-account-client",
+    "owner": "UNVISLATE",
+    "repo": "SBPersonalAccountClient",
+    "featured": false,
+    "name": "SBPersonalAccountClient",
+    "badge": {
+      "ru": "Личный кабинет",
+      "en": "Client Storefront"
+    },
+    "description": {
+      "ru": "Витрина и личный кабинет клиента на React + Server-Driven UI (sbuiSDK). Собирается в единый runtime Docker-образ.",
+      "en": "Customer storefront and personal account built with React & Server-Driven UI (sbuiSDK). Packaged as a runtime Docker image."
+    },
+    "containers": [
+      {
+        "name": "client",
+        "label": "Client Storefront",
+        "image": "ghcr.io/unvislate/sbpersonalaccountclient"
+      }
+    ]
+  },
+  {
+    "id": "sbuisdk",
+    "owner": "UNVISLATE",
+    "repo": "sbuiSDK",
+    "featured": false,
+    "name": "sbuiSDK",
+    "badge": {
+      "ru": "UI SDK",
+      "en": "UI SDK"
+    },
+    "description": {
+      "ru": "Декларативный Server-Driven UI движок, векторный генератор QR-кодов и компоненты интерфейса для витрины SaviorBill.",
+      "en": "Declarative Server-Driven UI engine, vector QR generator, and storefront components for SaviorBill."
+    },
+    "containers": []
+  }
+]

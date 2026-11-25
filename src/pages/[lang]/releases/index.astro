@@ -1,0 +1,11 @@
+---
+import ReleasesCatalogView from '../../../views/ReleasesCatalogView.astro';
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'en' } }];
+}
+
+const { lang } = Astro.params as { lang: 'ru' | 'en' };
+---
+
+<ReleasesCatalogView lang={lang} />

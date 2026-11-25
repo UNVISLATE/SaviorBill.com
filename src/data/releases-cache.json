@@ -1,0 +1,604 @@
+{
+  "generatedAt": "2026-11-25T22:46:10.546Z",
+  "repositories": {
+    "saviorbill": {
+      "id": "saviorbill",
+      "owner": "UNVISLATE",
+      "repo": "SaviorBill",
+      "htmlUrl": "https://github.com/UNVISLATE/SaviorBill",
+      "stars": 3,
+      "defaultBranch": "master",
+      "releases": [
+        {
+          "id": 458710328,
+          "tagName": "v0.2.4-rc.1",
+          "name": "v0.2.4-rc.1",
+          "body": "**Pre-release** (`v0.2.4-rc.1`)\r\n\r\n> тестовый релиз-кандидат (`nightly` канал). Перед обновлением рекомендуется сделать бэкап БД.\r\n\r\n**Full Changelog**: https://github.com/UNVISLATE/SaviorBill/compare/v0.2.3...v0.2.4-rc.1",
+          "htmlUrl": "https://github.com/UNVISLATE/SaviorBill/releases/tag/v0.2.4-rc.1",
+          "publishedAt": "2026-11-25T22:17:53Z",
+          "prerelease": true,
+          "author": {
+            "login": "UNVISLATE",
+            "avatarUrl": "https://avatars.githubusercontent.com/u/78644133?v=4",
+            "htmlUrl": "https://github.com/UNVISLATE"
+          },
+          "assets": [],
+          "containers": [
+            {
+              "name": "billing",
+              "label": "Billing API",
+              "image": "ghcr.io/unvislate/saviorbill/billing",
+              "tag": "v0.2.4-rc.1",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/billing:v0.2.4-rc.1",
+              "digest": "sha256:880a22a84a4c5c522e9b782324ab4b4c4c425a010a06f11fe36339d9db5820e0",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/billing",
+              "aliases": [
+                "nightly"
+              ]
+            },
+            {
+              "name": "adminui",
+              "label": "Admin UI",
+              "image": "ghcr.io/unvislate/saviorbill/adminui",
+              "tag": "v0.2.4-rc.1",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/adminui:v0.2.4-rc.1",
+              "digest": "sha256:4571174ff04e95bca53a7c734ab435b51970006473e2d22ef9d2af76a5305178",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/adminui",
+              "aliases": [
+                "nightly"
+              ]
+            },
+            {
+              "name": "scheduler",
+              "label": "Scheduler",
+              "image": "ghcr.io/unvislate/saviorbill/scheduler",
+              "tag": "v0.2.4-rc.1",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/scheduler:v0.2.4-rc.1",
+              "digest": "sha256:acebcf4c1d166a4a248f1bfe5195fff92b8918fea8377c041287ead4ca3dfd30",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/scheduler",
+              "aliases": [
+                "nightly"
+              ]
+            },
+            {
+              "name": "luaworker",
+              "label": "Lua Worker",
+              "image": "ghcr.io/unvislate/saviorbill/luaworker",
+              "tag": "v0.2.4-rc.1",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/luaworker:v0.2.4-rc.1",
+              "digest": "sha256:0077a7350c1354cd17f82a67a664eff43aa5cd0cd024a5167fa541771fd37d01",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/luaworker",
+              "aliases": [
+                "nightly"
+              ]
+            },
+            {
+              "name": "mediaworker",
+              "label": "Media Worker",
+              "image": "ghcr.io/unvislate/saviorbill/mediaworker",
+              "tag": "v0.2.4-rc.1",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/mediaworker:v0.2.4-rc.1",
+              "digest": "sha256:e3400bce043f1d07b027ce5979b1cc03f5a219017f7bda2607a720874afbfae0",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/mediaworker",
+              "aliases": [
+                "nightly"
+              ]
+            }
+          ]
+        },
+        {
+          "id": 454083527,
+          "tagName": "v0.2.3",
+          "name": "v0.2.3",
+          "body": "### 🚀 Что нового в v0.2.3\r\n\r\n#### 🎨 Admin панель\r\n* **Манифесты скриптов**: добавлены 3 постоянные вкладки предпросмотра («Настройки интеграции», «Форма заказа», «Карточка в ЛК»).\r\n* **Monaco Diff**: улучшен экран сравнения версий скриптов\r\n* **Редактор каталога**: блок переключателей товара («Активность», «Рекомендуем», «Участие в акциях») объединён в компактную аккуратную карточку.\r\n* **Инструкции (Markdown)**: улучшен редактор описаний и инструкций, добавлено контекстное меню вставки загруженных медиафайлов и корректный перенос строк.\r\n* **Аудит**: исправлено отображение технических деталей (meta) — длинные хэши и JSON больше не выходят за границы модального окна.\r\n\r\n#### ⚙️ Core (billing)\r\n* **Автоматическое наследование манифеста**: при привязке или смене скрипта автоматизации услуга автоматически подтягивает манифест скрипта в конфигурацию.\r\n* **Кастомизация цен и акций**: поддержка персональной наценки (`price_markup`), возможность отключить товар от участия в акциях (нельзя купить за бонусный баланс, или использовать промокоды).\r\n\r\n#### 📦 sbuiSDK\r\n* Добавлена поддержка компонентов `copy_field`, `key`, `secret` и `markdown`.\r\n\r\n**Full Changelog**: https://github.com/UNVISLATE/SaviorBill/compare/v0.2.2...v0.2.3",
+          "htmlUrl": "https://github.com/UNVISLATE/SaviorBill/releases/tag/v0.2.3",
+          "publishedAt": "2026-11-22T00:24:13Z",
+          "prerelease": false,
+          "author": {
+            "login": "UNVISLATE",
+            "avatarUrl": "https://avatars.githubusercontent.com/u/78644133?v=4",
+            "htmlUrl": "https://github.com/UNVISLATE"
+          },
+          "assets": [],
+          "containers": [
+            {
+              "name": "billing",
+              "label": "Billing API",
+              "image": "ghcr.io/unvislate/saviorbill/billing",
+              "tag": "v0.2.3",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/billing:v0.2.3",
+              "digest": "sha256:7e3a3217fc05b18f7d35497c779d87c35cd88ab6d144e42d383186f1bc25bb73",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/billing",
+              "aliases": [
+                "latest"
+              ]
+            },
+            {
+              "name": "adminui",
+              "label": "Admin UI",
+              "image": "ghcr.io/unvislate/saviorbill/adminui",
+              "tag": "v0.2.3",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/adminui:v0.2.3",
+              "digest": "sha256:d927b3721fab5509a409a7278f9a94b759c9a9242040d63b5cc763c86327118d",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/adminui",
+              "aliases": [
+                "latest"
+              ]
+            },
+            {
+              "name": "luaworker",
+              "label": "Lua Worker",
+              "image": "ghcr.io/unvislate/saviorbill/luaworker",
+              "tag": "v0.2.3",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/luaworker:v0.2.3",
+              "digest": "sha256:4169592d71e22e5eb8fd0874805939499868a4e9da908435fd0d0d6843f04820",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/luaworker",
+              "aliases": [
+                "latest"
+              ]
+            },
+            {
+              "name": "mediaworker",
+              "label": "Media Worker",
+              "image": "ghcr.io/unvislate/saviorbill/mediaworker",
+              "tag": "v0.2.3",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/mediaworker:v0.2.3",
+              "digest": "sha256:8b8d63a3ba3c496de5ee370d4f787509711bd7384b6b51330f1c321c57b6c5a8",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/mediaworker",
+              "aliases": [
+                "latest"
+              ]
+            }
+          ]
+        },
+        {
+          "id": 453337460,
+          "tagName": "v0.2.2",
+          "name": "v0.2.2",
+          "body": "## Что нового в v0.2.2\r\n\r\n### 🎬 Медиасистема и фоновые процессы\r\n* **Отмена задач и процессов**: добавлена возможность отмены конвертации/обработки видео и задач.\r\n* **Модальное окно управления инстансами**: в «Система -> Инстансы» клик по воркеру открывает диалог с метриками CPU/RAM, активной задачей и таблицей дочерних процессов FFmpeg/FFprobe с возможностью их принудительного завершения.\r\n* **Поиск потерянных файлов (Orphan Scanner)**: сканирование и автоиндексация файлов в хранилище (S3/FS), загруженных вручную или оказавшихся там иными способами.\r\n\r\n### ⚙️ Админ-панель и брендинг\r\n* **Редизайн страницы брендинга**: разделение настроек на две независимые зоны (AdminUI и ClientUI).\r\n* **Кастомные анонсы при входе**: возможность настроить глобальное информационное сообщение/баннер, отображаемое всем пользователям на форме входа.\r\n\r\n### 🛡️ Безопасность и ядро биллинга\r\n* **Аудит телеметрии**: извлечение идентификатора пользователя из JWT/refresh-токенов при ошибках 401, исключая ложные записи «Анонимный клиент» в журнале ошибок.\r\n* **Финансовые гонки и блокировки**: устранена проблема PostgreSQL `FOR UPDATE` на outer join в цикле биллинга, защита от гонок в возвратах и погашениях.\r\n* **FX курсы ЦБ РФ**: исправлен асинхронный хук проверки безопасных редиректов в HTTPX-клиенте.\r\n* **Стабильность настроек**: строгая нормализация строковых типов параметров для предотвращения `asyncpg DataError`.\r\n\r\n**Full Changelog**: https://github.com/UNVISLATE/SaviorBill/compare/v0.2.1...v0.2.2",
+          "htmlUrl": "https://github.com/UNVISLATE/SaviorBill/releases/tag/v0.2.2",
+          "publishedAt": "2026-11-21T00:54:10Z",
+          "prerelease": false,
+          "author": {
+            "login": "UNVISLATE",
+            "avatarUrl": "https://avatars.githubusercontent.com/u/78644133?v=4",
+            "htmlUrl": "https://github.com/UNVISLATE"
+          },
+          "assets": [],
+          "containers": [
+            {
+              "name": "billing",
+              "label": "Billing API",
+              "image": "ghcr.io/unvislate/saviorbill/billing",
+              "tag": "v0.2.2",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/billing:v0.2.2",
+              "digest": "sha256:189dac6ad4cf72e790c01f893b32a933cba56a732f85f0eee444accc1d691039",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/billing",
+              "aliases": []
+            },
+            {
+              "name": "adminui",
+              "label": "Admin UI",
+              "image": "ghcr.io/unvislate/saviorbill/adminui",
+              "tag": "v0.2.2",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/adminui:v0.2.2",
+              "digest": "sha256:c19705bc52deb12c5663164623459aef665632e76bdbfc8fe70ad69b1436295a",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/adminui",
+              "aliases": []
+            },
+            {
+              "name": "luaworker",
+              "label": "Lua Worker",
+              "image": "ghcr.io/unvislate/saviorbill/luaworker",
+              "tag": "v0.2.2",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/luaworker:v0.2.2",
+              "digest": "sha256:ea3d056e9b60b04d9536002540252e8dd9e4de8d4646598000a5d679907dbb8b",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/luaworker",
+              "aliases": []
+            },
+            {
+              "name": "mediaworker",
+              "label": "Media Worker",
+              "image": "ghcr.io/unvislate/saviorbill/mediaworker",
+              "tag": "v0.2.2",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/mediaworker:v0.2.2",
+              "digest": "sha256:8202807d1e82be467d62fff4b95c08128d2975ce4e0559e922ddbfb6484b2a4f",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/mediaworker",
+              "aliases": []
+            }
+          ]
+        },
+        {
+          "id": 446376909,
+          "tagName": "v0.2.1",
+          "name": "v0.2.1 - Interactive Deploy, Lua Mail & Security Hardening",
+          "body": "Релиз **SaviorBill v0.2.1** — обновление стабильности, безопасности и удобства развёртывания платформы. Включает полностью интерактивный мастер установки, отправку почты через изолированный Lua-драйвер, защиту от атак на ценообразование и SSRF, а также генеральную очистку кодовой базы.\r\n\r\n### Что нового\r\n\r\n#### 🚀 Интерактивный деплой и минимальные системные требования\r\n- **Мастер развёртывания (`deploy/setup.sh`):** полный отказ от ручной правки `.env`. Скрипт задаёт понятные вопросы, автоматически генерирует криптографически стойкие ключи/пароли и проверяет окружение.\r\n- **Готовые сценарии установки:**\r\n  - `Production`: развёртывание на боевом домене с автоматическим выпуском SSL-сертификатов Let's Encrypt через Caddy.\r\n  - `Localhost`: запуск для локальной разработки (`http://localhost` для админки и `http://shop.localhost` для витрины). (или по лоальному IP)\r\n\r\n#### ✉️ Почтовый транспорт на Lua и рассылки\r\n- **Драйвер `lua` для SMTP:** отправка писем через изолированную песочницу `luaworker` (`ScriptKind.EMAIL`) со встроенным API `billing.send_email`.\r\n- **Автоматический TLS:** определение защищённого соединения по портам (порт `465` — implicit TLS, порт `587` — STARTTLS), таймауты подключения и кнопка сброса настроек.\r\n- **Версионирование шаблонов:** выбор конкретной ревизии Lua-скрипта отправки прямо в интерфейсе настроек SMTP с подсветкой активной версии.\r\n\r\n#### 🛡️ Безопасность и надёжность\r\n- **Защита ценообразования (`pricing.py`):** строгая проверка отрицательных значений компонентов, защита от нулевых и отрицательных итоговых сумм заказов.\r\n- **Предотвращение утечек данных:** внутренние исключения скрыты за стандартизированными кодами.\r\n- **Блокировка SSRF в LuaWorker:** функция `is_private_host` теперь корректно снимает `user:pass@` auth-префиксы, парсит IPv6-адреса `[::1]` и блокирует внутренние хосты `.localhost`.\r\n- **Лимиты схем данных:** добавлены строгие ограничения `max_length` (Pydantic) для полей шаблонов писем, каталогов, ролей, промокодов и настроек.\r\n- **Отказоустойчивость MediaWorker:** таймауты ffmpeg и ffprobe вынесены в настройки окружения, вывод консоли переведён на структурированный логгер.\r\n\r\n#### 🎨 Улучшения Admin UI\r\n- **Адаптивный бейдж версий:** корректное отображение длинных хешей коммитов на кнопке в шапке (с защитой от переполнения) и на странице «О системе» с кнопкой копирования в один клик.\r\n- **Стандартный вид Swagger UI и ReDoc:** маршруты `/api/docs` и `/api/redoc` возвращены к официальному стандарту документации OpenAPI без сторонних искажающих CSS-стилей.\r\n- **Drag-and-Drop, медиа и другое** поддержка перетаскивания источников курсов валют (`@dnd-kit`) и переделан диалог настройки медиафайлов для услуг, и другие незначительные изменения\r\n\r\n### Docker-образы (GHCR)\r\n\r\n- `ghcr.io/unvislate/saviorbill/billing:0.2.1`\r\n- `ghcr.io/unvislate/saviorbill/luaworker:0.2.1`\r\n- `ghcr.io/unvislate/saviorbill/mediaworker:0.2.1`\r\n- `ghcr.io/unvislate/saviorbill/adminui:0.2.1`\r\n\r\n**Full Changelog**: https://github.com/UNVISLATE/SaviorBill/compare/v0.2.0...v0.2.1",
+          "htmlUrl": "https://github.com/UNVISLATE/SaviorBill/releases/tag/v0.2.1",
+          "publishedAt": "2026-11-15T21:23:19Z",
+          "prerelease": false,
+          "author": {
+            "login": "UNVISLATE",
+            "avatarUrl": "https://avatars.githubusercontent.com/u/78644133?v=4",
+            "htmlUrl": "https://github.com/UNVISLATE"
+          },
+          "assets": [],
+          "containers": [
+            {
+              "name": "billing",
+              "label": "Billing API",
+              "image": "ghcr.io/unvislate/saviorbill/billing",
+              "tag": "v0.2.1",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/billing:v0.2.1",
+              "digest": "sha256:e2348b8130d98ecc3f60d1d4071f9e582e414c452e030769c4ef01cf799b66be",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/billing",
+              "aliases": []
+            },
+            {
+              "name": "adminui",
+              "label": "Admin UI",
+              "image": "ghcr.io/unvislate/saviorbill/adminui",
+              "tag": "v0.2.1",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/adminui:v0.2.1",
+              "digest": "sha256:1f650a2f78157db92bcfa36fd0e71d1d1f73f65744bb2f7133bf4934d9949ab9",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/adminui",
+              "aliases": []
+            },
+            {
+              "name": "luaworker",
+              "label": "Lua Worker",
+              "image": "ghcr.io/unvislate/saviorbill/luaworker",
+              "tag": "v0.2.1",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/luaworker:v0.2.1",
+              "digest": "sha256:65c7be3c054e2c5b35d1af20bbb767e2018c318313d979bd596a82fe0fd64b7c",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/luaworker",
+              "aliases": []
+            },
+            {
+              "name": "mediaworker",
+              "label": "Media Worker",
+              "image": "ghcr.io/unvislate/saviorbill/mediaworker",
+              "tag": "v0.2.1",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/mediaworker:v0.2.1",
+              "digest": "sha256:4b598b55513a935d93bcaaea3c068f09181125f7fcac688c18370caefabd28b4",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/mediaworker",
+              "aliases": []
+            }
+          ]
+        },
+        {
+          "id": 440983125,
+          "tagName": "v0.2.0",
+          "name": "v0.2.0 - Public Release",
+          "body": "Первый публичный релиз **SaviorBill** — self-hosted платформы биллинга и магазина цифровых товаров и услуг на базе FastAPI, PostgreSQL, Valkey, Lua-песочницы, FFmpeg-медиаворкера и React Admin UI.\r\n\r\n### Основные возможности\r\n\r\n- **Каталоги и биллинг услуг:** модели ценообразования `fixed`, `custom`, `tiered` и `configurable`, пулы ключей (`SKIP LOCKED`), автоматическая выдача и продление через изолированный `luaworker`.\r\n- **Lua-песочница и IDE:** редактор Monaco в Admin UI с историей версий и diff, жизненный цикл услуг (`create`, `renew`, `freeze`, `unfreeze`, `delete`), а также обработчики платёжных провайдеров.\r\n- **Server-Driven UI (`sbuiSDK`):** декларативные JSON/Lua-манифесты для динамического рендеринга карточек выдачи, инструкций и брендированных QR-кодов на клиентской витрине.\r\n- **Платежи, FX и промо:** подключаемые Lua-провайдеры с шифрованными секретами, фоновая сверка оплат (`BillingLoop`), мультивалютные счета и курсы валют, промо-каталоги и триггеры.\r\n- **Медиа-конвейер (`mediaworker`):** оптимизация изображений и видео (WebP/WebM), генерация превью, хранение локально или в S3 / R2 / MinIO.\r\n- **Брендирование и плагины:** настройка логотипа, цветовой схемы и ссылок для клиентской витрины из админ-панели, поддержка серверных плагинов.\r\n- **Быстрая установка (`deploy/setup.sh`):** разворачивание в Docker Compose с Caddy и интерактивным выбором клиентской витрины ([SBPersonalAccountClient](https://github.com/UNVISLATE/SBPersonalAccountClient)).\r\n\r\n### Docker-образы (GHCR)\r\n\r\n- `ghcr.io/unvislate/saviorbill/billing:0.2.0`\r\n- `ghcr.io/unvislate/saviorbill/luaworker:0.2.0`\r\n- `ghcr.io/unvislate/saviorbill/mediaworker:0.2.0`\r\n- `ghcr.io/unvislate/saviorbill/adminui:0.2.0`\r\n\r\n### Примечания к обновлению и миграциям\r\n\r\n- В релизе `v0.2.0` начальные миграции базы данных объединены в единую ревизию `0001_initial`.\r\n- **Чистая установка:** никаких дополнительных действий не требуется, миграция применится автоматически.\r\n- **Обновление с `0.1.0dev`:** перед запуском выполните `alembic stamp 0001_initial` на существующей базе данных.\r\n\r\n**Full Changelog**: https://github.com/UNVISLATE/SaviorBill/compare/0.1.0dev...v0.2.0",
+          "htmlUrl": "https://github.com/UNVISLATE/SaviorBill/releases/tag/v0.2.0",
+          "publishedAt": "2026-11-10T22:17:24Z",
+          "prerelease": false,
+          "author": {
+            "login": "UNVISLATE",
+            "avatarUrl": "https://avatars.githubusercontent.com/u/78644133?v=4",
+            "htmlUrl": "https://github.com/UNVISLATE"
+          },
+          "assets": [],
+          "containers": [
+            {
+              "name": "billing",
+              "label": "Billing API",
+              "image": "ghcr.io/unvislate/saviorbill/billing",
+              "tag": "v0.2.0",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/billing:v0.2.0",
+              "digest": "sha256:89c815217e780b9b9f1afd21772e5c9bb727a183f9c8dfafe5a8a7c41678b6a8",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/billing",
+              "aliases": []
+            },
+            {
+              "name": "adminui",
+              "label": "Admin UI",
+              "image": "ghcr.io/unvislate/saviorbill/adminui",
+              "tag": "v0.2.0",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/adminui:v0.2.0",
+              "digest": "sha256:b44f5c72541cab739aff4a3f5faba084de38ddf93a765b8c3cc9f73c90a9c464",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/adminui",
+              "aliases": []
+            },
+            {
+              "name": "luaworker",
+              "label": "Lua Worker",
+              "image": "ghcr.io/unvislate/saviorbill/luaworker",
+              "tag": "v0.2.0",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/luaworker:v0.2.0",
+              "digest": "sha256:0ee473a305ba51a5c3a4654b5358e0670d1456413fdec0b150a93d811a5a1e80",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/luaworker",
+              "aliases": []
+            },
+            {
+              "name": "mediaworker",
+              "label": "Media Worker",
+              "image": "ghcr.io/unvislate/saviorbill/mediaworker",
+              "tag": "v0.2.0",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/mediaworker:v0.2.0",
+              "digest": "sha256:8419dab0c6ce85ce621e9e24c4e058cf973e8fa222f4d701c8856647931d3157",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/mediaworker",
+              "aliases": []
+            }
+          ]
+        },
+        {
+          "id": 420084872,
+          "tagName": "0.1.0dev",
+          "name": "v0.1.0-dev",
+          "body": "# SaviorBill v0.1.0-dev\r\n**Full Changelog**: https://github.com/UNVISLATE/SaviorBill/commits/0.1.0dev",
+          "htmlUrl": "https://github.com/UNVISLATE/SaviorBill/releases/tag/0.1.0dev",
+          "publishedAt": "2026-10-21T21:42:35Z",
+          "prerelease": true,
+          "author": {
+            "login": "UNVISLATE",
+            "avatarUrl": "https://avatars.githubusercontent.com/u/78644133?v=4",
+            "htmlUrl": "https://github.com/UNVISLATE"
+          },
+          "assets": [],
+          "containers": [
+            {
+              "name": "billing",
+              "label": "Billing API",
+              "image": "ghcr.io/unvislate/saviorbill/billing",
+              "tag": "0.1.0dev",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/billing:0.1.0dev",
+              "digest": "sha256:337dfd1f80a6220e0ec0cc403bdbdae5d24dd5832b03cbe71e9ec0581c46051b",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/billing",
+              "aliases": []
+            },
+            {
+              "name": "adminui",
+              "label": "Admin UI",
+              "image": "ghcr.io/unvislate/saviorbill/adminui",
+              "tag": "0.1.0dev",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/adminui:0.1.0dev",
+              "digest": "sha256:5cd28515f341825a3930dfe0f31e786105ade7e2a329531b1ff1e4294f33673f",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/adminui",
+              "aliases": []
+            },
+            {
+              "name": "luaworker",
+              "label": "Lua Worker",
+              "image": "ghcr.io/unvislate/saviorbill/luaworker",
+              "tag": "0.1.0dev",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/luaworker:0.1.0dev",
+              "digest": "sha256:80797a00a1d18f57e7e313bcadc5ea5446040553ff8437dfd4fffafbae2c8322",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/luaworker",
+              "aliases": []
+            },
+            {
+              "name": "mediaworker",
+              "label": "Media Worker",
+              "image": "ghcr.io/unvislate/saviorbill/mediaworker",
+              "tag": "0.1.0dev",
+              "pullCommand": "docker pull ghcr.io/unvislate/saviorbill/mediaworker:0.1.0dev",
+              "digest": "sha256:6e5a76093fbf410cca50d7cbfea14b3f8afbfbbba25af9a3ded13638ddf26574",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/saviorbill/mediaworker",
+              "aliases": []
+            }
+          ]
+        }
+      ],
+      "fetchedAt": "2026-11-25T22:46:10.546Z"
+    },
+    "sb-personal-account-client": {
+      "id": "sb-personal-account-client",
+      "owner": "UNVISLATE",
+      "repo": "SBPersonalAccountClient",
+      "htmlUrl": "https://github.com/UNVISLATE/SBPersonalAccountClient",
+      "stars": 0,
+      "defaultBranch": "main",
+      "releases": [
+        {
+          "id": 454087062,
+          "tagName": "v0.2.3",
+          "name": "v0.2.3",
+          "body": "### Что нового в v0.2.3\r\n\r\n#### 🖼️ Инструкции и Markdown\r\n* **Поддержка изображений**: добавлено безопасное отображение картинок в Markdown-инструкциях к услугам.\r\n* **Форматирование текста**: корректный перенос строк в Markdown инструкциях.\r\n\r\n#### ⚡ sbui и карточки выдачи (VLESS / VPN)\r\n* **Поля быстрого копирования**: полная поддержка компонентов `copy_field` с иконкой копирования в буфер обмена и скрытием чувствительных данных (`secret: true`).\r\n* **Шаблонизация параметров**: поддержка префикса `public.*` в шаблонах SDUI (`{{public.subscription_url}}`), а также обратная совместимость со свойствами QR-кода.\r\n\r\n#### 🛍️ Витрина и оформление заказа\r\n* **Детализация наценок**: отображение прозрачной разбивки стоимости с учётом кастомных наценок тарифа и условий акций.\r\n\r\n**Full Changelog**: https://github.com/UNVISLATE/SBPersonalAccountClient/compare/v0.2.2...v0.2.3",
+          "htmlUrl": "https://github.com/UNVISLATE/SBPersonalAccountClient/releases/tag/v0.2.3",
+          "publishedAt": "2026-11-22T00:31:56Z",
+          "prerelease": false,
+          "author": {
+            "login": "UNVISLATE",
+            "avatarUrl": "https://avatars.githubusercontent.com/u/78644133?v=4",
+            "htmlUrl": "https://github.com/UNVISLATE"
+          },
+          "assets": [],
+          "containers": [
+            {
+              "name": "client",
+              "label": "Client Storefront",
+              "image": "ghcr.io/unvislate/sbpersonalaccountclient",
+              "tag": "v0.2.3",
+              "pullCommand": "docker pull ghcr.io/unvislate/sbpersonalaccountclient:v0.2.3",
+              "digest": "sha256:1572e8cefc249a4503718811580af745249c92b42133aeb3ea6567dfcbaa797f",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/sbpersonalaccountclient",
+              "aliases": [
+                "latest"
+              ]
+            }
+          ]
+        },
+        {
+          "id": 453338863,
+          "tagName": "v0.2.2",
+          "name": "v0.2.2",
+          "body": "## Что нового в v0.2.2\r\n\r\n### ✨ Авторизация и брендинг\r\n* **Анонсы на странице входа**: поддержка отображения кастомных объявлений администратора (`login_notice`) на экране авторизации.\r\n* **Управление регистрацией**: автоматическое отключение вкладки и маршрута регистрации при выключении регистрации администратором (`auth.registration_enabled = false`).\r\n* **Безопасные редиректы**: валидация и нормализация `return_url` для защиты от Open Redirect.\r\n\r\n### 🛠️ Исправления и оптимизация\r\n* **React 19 & ESLint compliance**: устранены синхронные вызовы `setState` в эффектах формы аутентификации (`react-hooks/set-state-in-effect`).\r\n* **Строгая типизация API**: безопасная обработка вложенных сообщений валидации FastAPI без использования `any`.\r\n* **Превью медиа**: корректное циклическое превью файлов и отображение аватаров/баннеров каталога.\r\n\r\n**Full Changelog**: https://github.com/UNVISLATE/SBPersonalAccountClient/compare/v0.2.1...v0.2.2",
+          "htmlUrl": "https://github.com/UNVISLATE/SBPersonalAccountClient/releases/tag/v0.2.2",
+          "publishedAt": "2026-11-21T00:57:02Z",
+          "prerelease": false,
+          "author": {
+            "login": "UNVISLATE",
+            "avatarUrl": "https://avatars.githubusercontent.com/u/78644133?v=4",
+            "htmlUrl": "https://github.com/UNVISLATE"
+          },
+          "assets": [],
+          "containers": [
+            {
+              "name": "client",
+              "label": "Client Storefront",
+              "image": "ghcr.io/unvislate/sbpersonalaccountclient",
+              "tag": "v0.2.2",
+              "pullCommand": "docker pull ghcr.io/unvislate/sbpersonalaccountclient:v0.2.2",
+              "digest": "sha256:b78cdf66d16b2584f8d71883fc12217a3c6c573a662ebd80fada8db407cf1420",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/sbpersonalaccountclient",
+              "aliases": []
+            }
+          ]
+        },
+        {
+          "id": 446379928,
+          "tagName": "v0.2.1",
+          "name": "v0.2.1 - Media Previews, Return URL Hardening & Bugfixes",
+          "body": "Релиз **SBPersonalAccountClient v0.2.1** — обновление витрины и личного кабинета покупателя для платформы [SaviorBill](https://github.com/UNVISLATE/SaviorBill). Включает защиту платежных редиректов, корректную обработку ошибок валидации форм, динамические видео-превью товаров и обновление UI-библиотеки `sbuiSDK`.\r\n\r\n### Что нового\r\n\r\n#### 🔒 Безопасность и платежи\r\n- **Защита от Open-Redirect (`return_url`):** формирование строго абсолютного URL возврата (`origin + pathname`) при создании инвойсов на пополнение баланса и прямую оплату услуг.\r\n- **Валидация ссылок на оплату:** обязательная проверка протокола `https?://` перед автоматическим перенаправлением на внешние платёжные шлюзы.\r\n- **Нормализация ошибок API (FastAPI 422):** списки ошибок валидации Pydantic теперь корректно форматируются в понятные сообщения в всплывающих уведомлениях (`toast.error`) без сбоев рендера компонентов.\r\n\r\n#### 🎬 Галерея и видео-превью товаров\r\n- **Строгая типизация медиа-вложений:** баннеры услуг теперь отображаются только с тегом `banner`, а слайдер галереи формируется исключительно из медиа с тегом `gallery`.\r\n- **Живые превью в каталоге:** автоматическое воспроизведение коротких видео-превью при наведении курсора на карточку товара и циклическое переключение медиа в спящем режиме.\r\n- **Адаптивный медиа-плеер:** плавные CSS-анимации переходов и поддержка мобильных устройств.\r\n\r\n#### 🧩 Обновление компонентов Server-Driven UI (`sbuiSDK`)\r\n- **Безопасные QR-коды:** строгая валидация URL кастомных логотипов и удаление дефолтных внешних доменов из генератора матрицы.\r\n- **Очистка стилей и компонентов:** оптимизированы CSS-переменные для адаптации под темную и светлую тему брендинга.\r\n- Устранение загромождающих баннеров и неиспользуемых мета-комментариев.\r\n\r\n### Docker-образ (GHCR)\r\n\r\n```bash\r\ndocker pull ghcr.io/unvislate/sbpersonalaccountclient:0.2.1\r\n```\r\n\r\n**Full Changelog**: https://github.com/UNVISLATE/SBPersonalAccountClient/compare/v0.2.0...v0.2.1",
+          "htmlUrl": "https://github.com/UNVISLATE/SBPersonalAccountClient/releases/tag/v0.2.1",
+          "publishedAt": "2026-11-15T21:28:39Z",
+          "prerelease": false,
+          "author": {
+            "login": "UNVISLATE",
+            "avatarUrl": "https://avatars.githubusercontent.com/u/78644133?v=4",
+            "htmlUrl": "https://github.com/UNVISLATE"
+          },
+          "assets": [],
+          "containers": [
+            {
+              "name": "client",
+              "label": "Client Storefront",
+              "image": "ghcr.io/unvislate/sbpersonalaccountclient",
+              "tag": "v0.2.1",
+              "pullCommand": "docker pull ghcr.io/unvislate/sbpersonalaccountclient:v0.2.1",
+              "digest": "sha256:3ef2c6fe85906a1330d49b91c919398acac25a824f3e947c78b181be03810587",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/sbpersonalaccountclient",
+              "aliases": []
+            }
+          ]
+        },
+        {
+          "id": 440994173,
+          "tagName": "v0.2.0",
+          "name": "v0.2.0 - Public Release",
+          "body": "Публичный релиз **SBPersonalAccountClient** — личного кабинета и витрины покупателя для платформы [SaviorBill](https://github.com/UNVISLATE/SaviorBill).\r\n\r\n### Основные возможности\r\n\r\n- **Каталог и оформление заказов:** фильтрация по категориям и поиску, галерея с поддержкой видео-превью, поддержка товаров `fixed`, `tiered`, `custom` и интерактивного конструктора ресурсов `configurable`.\r\n- **Личный кабинет покупателя:** управление профилем и активными сессиями, двухфакторная аутентификация (2FA), OAuth/OIDC, история покупок, пополнение баланса, промокоды и реферальная программа.\r\n- **Server-Driven UI (`vendor/sbuiSDK`):** динамический рендеринг модальных окон выдачи услуг, инструкций в Markdown, полей копирования и векторных QR-кодов на основе манифестов от бэкенда SaviorBill.\r\n- **Динамическое брендирование и runtime-конфиг:** тема оформления, логотип и ссылки загружаются из API SaviorBill; эндпоинты (`VITE_API_BASE_URL`, `VITE_MEDIA_BASE_URL`, `VITE_AUTH_BASE_URL`) настраиваются при старте контейнера через `env-config.js`.\r\n- **Лицензия:** проект распространяется под открытой лицензией **Apache License 2.0**.\r\n\r\n### Docker-образ (GHCR)\r\n\r\n```bash\r\ndocker pull ghcr.io/unvislate/sbpersonalaccountclient:0.2.0\r\n```\r\n\r\nОбраз также автоматически подключается при установке SaviorBill через [`deploy/setup.sh`](https://github.com/UNVISLATE/SaviorBill/blob/master/deploy/setup.sh) (вариант `1 — Личный Кабинет`).",
+          "htmlUrl": "https://github.com/UNVISLATE/SBPersonalAccountClient/releases/tag/v0.2.0",
+          "publishedAt": "2026-11-10T22:23:15Z",
+          "prerelease": false,
+          "author": {
+            "login": "UNVISLATE",
+            "avatarUrl": "https://avatars.githubusercontent.com/u/78644133?v=4",
+            "htmlUrl": "https://github.com/UNVISLATE"
+          },
+          "assets": [],
+          "containers": [
+            {
+              "name": "client",
+              "label": "Client Storefront",
+              "image": "ghcr.io/unvislate/sbpersonalaccountclient",
+              "tag": "v0.2.0",
+              "pullCommand": "docker pull ghcr.io/unvislate/sbpersonalaccountclient:v0.2.0",
+              "digest": "sha256:fa84c14d6398ed2b7c341823a1fc970a32907993bf734018d967129d68d4c279",
+              "platforms": [
+                "linux/amd64"
+              ],
+              "packageUrl": "https://ghcr.io/unvislate/sbpersonalaccountclient",
+              "aliases": []
+            }
+          ]
+        }
+      ],
+      "fetchedAt": "2026-11-25T22:46:10.136Z"
+    },
+    "sbuisdk": {
+      "id": "sbuisdk",
+      "owner": "UNVISLATE",
+      "repo": "sbuiSDK",
+      "htmlUrl": "https://github.com/UNVISLATE/sbuiSDK",
+      "stars": 0,
+      "defaultBranch": "master",
+      "releases": [],
+      "fetchedAt": "2026-11-25T22:46:09.080Z"
+    }
+  }
+}

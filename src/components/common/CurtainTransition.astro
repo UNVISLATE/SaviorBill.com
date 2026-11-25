@@ -46,13 +46,15 @@
         home: 'ГЛАВНАЯ',
         blog: 'БЛОГ',
         docs: 'ДОКУМЕНТАЦИЯ',
-        hub: 'LUA ХАБ'
+        hub: 'LUA ХАБ',
+        releases: 'РЕЛИЗЫ'
       },
       en: {
         home: 'HOME',
         blog: 'BLOG',
         docs: 'DOCS',
-        hub: 'LUA HUB'
+        hub: 'LUA HUB',
+        releases: 'RELEASES'
       }
     };
 
@@ -75,6 +77,7 @@
       if (first === 'blog') return 'blog';
       if (first === 'docs') return 'docs';
       if (first === 'hub') return 'hub';
+      if (first === 'releases') return 'releases';
       return 'other';
     }
 
@@ -144,7 +147,7 @@
 
       const fromSec = getRootSection(fromPath);
       const toSec = getRootSection(toPath);
-      const validRoots = ['home', 'blog', 'docs', 'hub'];
+      const validRoots = ['home', 'blog', 'docs', 'hub', 'releases'];
 
       // Only trigger curtain when changing ROOT section
       if (fromSec !== toSec && validRoots.includes(fromSec) && validRoots.includes(toSec)) {
