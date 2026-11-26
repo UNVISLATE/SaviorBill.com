@@ -1,0 +1,25 @@
+---
+import RepoReleasesView from '../../../../views/RepoReleasesView.astro';
+import repositories from '../../../../data/repositories.json';
+import releasesCache from '../../../../data/releases-cache.json';
+import { getTotalReleasePages } from '../../../../utils/releases-pagination';
+
+export function getStaticPaths() {
+  const cacheMap = (releasesCache as { repositories?: Record<string, { releases?: any[] }> }).repositories || {};
+  const paths: Array<{ params: { repo: string; page: string } }> = [];
+
+  for (const r of repositories) {
+    const total = cacheMap[r.id]?.releases?.length || 0;
+    const totalPages = getTotalReleasePages(total);
+    for (let p = 2; p <= totalPages; p++) {
+      paths.push({ params: { repo: r.id, page: String(p) } });
+    }
+  }
+
+  return paths;
+}
+
+const { repo, page } = Astro.params as { repo: string; page: string };
+---
+
+<RepoReleasesView lang="ru" repoId={repo} page={Number(page)} />

@@ -1,0 +1,318 @@
+---
+import { marked } from 'marked';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import repositories from '../data/repositories.json';
+import releasesCache from '../data/releases-cache.json';
+import { getLocalePath } from '../i18n/ui';
+
+interface Props {
+  lang: 'ru' | 'en';
+  repoId: string;
+  tagName: string;
+}
+
+const { lang, repoId, tagName } = Astro.props;
+
+const repoConfig = repositories.find((r) => r.id === repoId);
+if (!repoConfig) {
+  throw new Error(`Unknown repository id: ${repoId}`);
+}
+
+type CachedContainer = {
+  name: string;
+  label: string;
+  image: string;
+  tag: string;
+  aliases?: string[];
+  pullCommand: string;
+  digest: string | null;
+  platforms: string[];
+  packageUrl: string;
+};
+
+type CachedAsset = {
+  name: string;
+  size: number;
+  downloadCount: number;
+  browserDownloadUrl: string;
+};
+
+type CachedRelease = {
+  id: number;
+  tagName: string;
+  name: string;
+  body: string;
+  htmlUrl: string;
+  publishedAt: string;
+  prerelease: boolean;
+  assets: CachedAsset[];
+  containers: CachedContainer[];
+};
+
+type CachedRepo = {
+  id: string;
+  owner: string;
+  repo: string;
+  htmlUrl: string;
+  stars: number;
+  releases: CachedRelease[];
+  fetchedAt: string | null;
+};
+
+const cacheMap = (releasesCache as { repositories?: Record<string, CachedRepo> }).repositories || {};
+const cached = cacheMap[repoId];
+const releases = cached?.releases || [];
+const currentIndex = releases.findIndex((r) => r.tagName === tagName);
+const release = releases[currentIndex];
+
+if (!release) {
+  throw new Error(`Release ${tagName} not found for ${repoId}`);
+}
+
+const latestStableId = releases.find((r) => !r.prerelease)?.id ?? null;
+const isLatest = release.id === latestStableId;
+const renderedBody = release.body
+  ? marked.parse(release.body, { async: false, gfm: true, breaks: true })
+  : '';
+
+const prevRelease = currentIndex > 0 ? releases[currentIndex - 1] : null;
+const nextRelease = currentIndex < releases.length - 1 ? releases[currentIndex + 1] : null;
+
+const title = `${repoConfig.name} ${release.tagName}`;
+const description =
+  lang === 'ru'
+    ? `Релиз ${release.name} (${release.tagName}) для ${repoConfig.name}: список изменений и связанные образы контейнеров.`
+    : `Release ${release.name} (${release.tagName}) for ${repoConfig.name}: changelog and linked container builds.`;
+
+function formatDate(iso: string | undefined) {
+  if (!iso) return '';
+  return iso.split('T')[0];
+}
+
+function formatBytes(bytes: number) {
+  if (!bytes) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return `${(bytes / Math.pow(k, i)).toFixed(1)} ${sizes[i]}`;
+}
+---
+
+<BaseLayout title={title} description={description} lang={lang}>
+  <div class="px-3 sm:px-4 py-10 sm:py-14">
+    <div class="max-w-4xl mx-auto space-y-8">
+
+      <!-- Breadcrumbs -->
+      <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs font-mono text-[oklch(0.55_0_0)] article-breadcrumbs">
+        <a href={getLocalePath('/', lang)} class="hover:text-[#009080] transition-colors">SaviorBill</a>
+        <span>/</span>
+        <a href={getLocalePath('/releases', lang)} class="hover:text-[#009080] transition-colors">
+          {lang === 'ru' ? 'Релизы' : 'Releases'}
+        </a>
+        <span>/</span>
+        <a href={getLocalePath(`/releases/${repoConfig.id}`, lang)} class="hover:text-[#009080] transition-colors">
+          {repoConfig.name}
+        </a>
+        <span>/</span>
+        <span class="text-[#009080]">{release.tagName}</span>
+      </div>
+
+      <!-- Release Detail Card -->
+      <article class="rounded-2xl bg-[oklch(0.19_0_0)] light:bg-white shadow-xl p-6 sm:p-8 space-y-6">
+        <header class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 pb-5 border-b border-[oklch(1_0_0/6%)]">
+          <div class="space-y-2">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-lg bg-[#009080]/15 text-[#009080] text-xs font-mono font-bold">
+                {release.tagName}
+              </span>
+              {isLatest && (
+                <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 text-[11px] font-mono font-semibold">
+                  Latest
+                </span>
+              )}
+              {release.prerelease && (
+                <span class="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-400 text-[11px] font-mono font-semibold">
+                  Pre-release
+                </span>
+              )}
+              {release.publishedAt && (
+                <time datetime={release.publishedAt} class="text-xs font-mono text-[oklch(0.6_0_0)]">
+                  {formatDate(release.publishedAt)}
+                </time>
+              )}
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+              {release.name}
+            </h1>
+          </div>
+
+          <a
+            href={release.htmlUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={lang === 'ru' ? 'Открыть релиз на GitHub' : 'Open release on GitHub'}
+            aria-label="GitHub Release"
+            class="size-9 rounded-xl bg-[oklch(0.24_0_0)] hover:bg-[oklch(0.30_0_0)] text-[oklch(0.85_0_0)] hover:text-white inline-flex items-center justify-center transition-colors shrink-0 self-start"
+          >
+            <svg class="size-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+            </svg>
+          </a>
+        </header>
+
+        <!-- Full Markdown Body -->
+        {renderedBody ? (
+          <div class="article-content text-sm" set:html={renderedBody} />
+        ) : (
+          <p class="text-xs italic text-[oklch(0.55_0_0)]">
+            {lang === 'ru' ? 'Описание релиза не указано.' : 'No release notes provided.'}
+          </p>
+        )}
+
+        <!-- Linked Container Builds -->
+        {release.containers.length > 0 && (
+          <div class="pt-5 border-t border-[oklch(1_0_0/6%)] space-y-3">
+            <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-[oklch(0.75_0_0)] flex items-center gap-2">
+              <span class="size-2 rounded-full bg-[#009080]"></span>
+              {lang === 'ru'
+                ? `Связанные сборки контейнеров (${release.containers.length})`
+                : `Linked Container Builds (${release.containers.length})`}
+            </h2>
+
+            <div class="grid grid-cols-1 gap-2.5">
+              {release.containers.map((c) => (
+                <div class="rounded-xl bg-[oklch(0.16_0_0)] p-3 sm:p-3.5 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                  <div class="space-y-1 min-w-0">
+                    <div class="flex flex-wrap items-center gap-2">
+                      <a
+                        href={c.packageUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-xs font-semibold text-white hover:text-[#009080] transition-colors"
+                      >
+                        {c.label}
+                      </a>
+                      <span class="px-2 py-0.5 rounded bg-[#009080]/15 text-[#009080] text-[10px] font-mono font-semibold">
+                        {c.tag}
+                      </span>
+                      {(c.aliases || []).map((alias) => (
+                        <span
+                          class={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold ${
+                            alias === 'latest'
+                              ? 'bg-emerald-500/15 text-emerald-400'
+                              : 'bg-purple-500/15 text-purple-400'
+                          }`}
+                        >
+                          {alias}
+                        </span>
+                      ))}
+                      {c.platforms.map((p) => (
+                        <span class="px-1.5 py-0.5 rounded bg-[oklch(0.22_0_0)] text-[10px] font-mono text-[oklch(0.7_0_0)]">
+                          {p}
+                        </span>
+                      ))}
+                      {c.digest && (
+                        <span class="text-[10px] font-mono text-[oklch(0.5_0_0)]" title={c.digest}>
+                          {c.digest.slice(0, 19)}…
+                        </span>
+                      )}
+                    </div>
+                    <code class="block text-[11px] font-mono text-[oklch(0.72_0_0)] truncate">
+                      {c.pullCommand}
+                    </code>
+                  </div>
+
+                  <button
+                    type="button"
+                    data-copy-cmd={c.pullCommand}
+                    class="copy-pull-btn h-8 px-3 rounded-lg bg-[oklch(0.24_0_0)] hover:bg-[#009080] text-white text-[11px] font-mono font-semibold transition-colors cursor-pointer shrink-0 self-start md:self-center"
+                  >
+                    {lang === 'ru' ? 'Копировать' : 'Copy'}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- Release Assets -->
+        {release.assets.length > 0 && (
+          <div class="pt-5 border-t border-[oklch(1_0_0/6%)] space-y-2.5">
+            <h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-[oklch(0.75_0_0)]">
+              {lang === 'ru' ? 'Файлы релиза' : 'Release Assets'}
+            </h2>
+            <div class="flex flex-wrap gap-2">
+              {release.assets.map((asset) => (
+                <a
+                  href={asset.browserDownloadUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[oklch(0.16_0_0)] hover:bg-[oklch(0.22_0_0)] text-xs font-mono text-[oklch(0.85_0_0)] hover:text-[#009080] transition-colors"
+                >
+                  <span>{asset.name}</span>
+                  <span class="text-[10px] text-[oklch(0.55_0_0)]">({formatBytes(asset.size)})</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </article>
+
+      <!-- Prev / Next Release Navigation -->
+      {(prevRelease || nextRelease) && (
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {prevRelease ? (
+            <a
+              href={getLocalePath(`/releases/${repoConfig.id}/${prevRelease.tagName}`, lang)}
+              class="card-interactive rounded-2xl p-4 flex flex-col gap-1 transition-all"
+            >
+              <span class="text-[11px] font-mono text-[oklch(0.55_0_0)]">
+                ← {lang === 'ru' ? 'Более новый релиз' : 'Newer release'}
+              </span>
+              <span class="text-sm font-bold text-white truncate">{prevRelease.tagName}</span>
+            </a>
+          ) : (
+            <div></div>
+          )}
+          {nextRelease && (
+            <a
+              href={getLocalePath(`/releases/${repoConfig.id}/${nextRelease.tagName}`, lang)}
+              class="card-interactive rounded-2xl p-4 flex flex-col items-end text-right gap-1 transition-all"
+            >
+              <span class="text-[11px] font-mono text-[oklch(0.55_0_0)]">
+                {lang === 'ru' ? 'Предыдущий релиз' : 'Older release'} →
+              </span>
+              <span class="text-sm font-bold text-white truncate">{nextRelease.tagName}</span>
+            </a>
+          )}
+        </div>
+      )}
+    </div>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  (function () {
+    function bindCopyButtons() {
+      document.querySelectorAll('.copy-pull-btn').forEach(function (btn) {
+        if (btn.dataset.bound) return;
+        btn.dataset.bound = 'true';
+        btn.addEventListener('click', function () {
+          const cmd = btn.getAttribute('data-copy-cmd') || '';
+          if (!cmd) return;
+          navigator.clipboard.writeText(cmd).then(function () {
+            const orig = btn.textContent;
+            btn.textContent = document.documentElement.lang === 'en' ? 'Copied!' : 'Скопировано!';
+            btn.classList.add('bg-[#009080]');
+            setTimeout(function () {
+              btn.textContent = orig;
+              btn.classList.remove('bg-[#009080]');
+            }, 1500);
+          });
+        });
+      });
+    }
+    bindCopyButtons();
+    document.addEventListener('astro:after-swap', bindCopyButtons);
+  })();
+</script>

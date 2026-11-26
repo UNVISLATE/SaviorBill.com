@@ -23,6 +23,13 @@
       "type": "application/json",
       "url": "https://saviorbill.com/hub/",
       "description": "Official and community Lua payment and service extensions for SaviorBill."
+    },
+    {
+      "identifier": "urn:air:saviorbill.com:releases:catalog",
+      "displayName": "SaviorBill Releases & GHCR Container Builds",
+      "type": "text/html",
+      "url": "https://saviorbill.com/releases/",
+      "description": "Release notes, tags, and linked GHCR container images for SaviorBill, SBPersonalAccountClient, and sbuiSDK."
     }
   ]
 }

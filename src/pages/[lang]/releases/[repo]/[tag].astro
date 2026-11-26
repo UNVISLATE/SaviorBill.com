@@ -1,0 +1,23 @@
+---
+import ReleaseDetailView from '../../../../views/ReleaseDetailView.astro';
+import repositories from '../../../../data/repositories.json';
+import releasesCache from '../../../../data/releases-cache.json';
+
+export function getStaticPaths() {
+  const cacheMap = (releasesCache as { repositories?: Record<string, { releases?: Array<{ tagName: string }> }> }).repositories || {};
+  const paths: Array<{ params: { lang: string; repo: string; tag: string } }> = [];
+
+  for (const r of repositories) {
+    const releases = cacheMap[r.id]?.releases || [];
+    for (const rel of releases) {
+      paths.push({ params: { lang: 'en', repo: r.id, tag: rel.tagName } });
+    }
+  }
+
+  return paths;
+}
+
+const { lang, repo, tag } = Astro.params as { lang: 'ru' | 'en'; repo: string; tag: string };
+---
+
+<ReleaseDetailView lang={lang} repoId={repo} tagName={tag} />

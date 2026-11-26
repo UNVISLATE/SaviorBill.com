@@ -101,7 +101,7 @@ async function checkGhcrManifest(container, tagName, token) {
 async function processRepo(repoCfg, previousRepoData) {
   const { id, owner, repo, containers = [] } = repoCfg;
   const repoApiUrl = `https://api.github.com/repos/${owner}/${repo}`;
-  const releasesApiUrl = `${repoApiUrl}/releases?per_page=30`;
+  const releasesApiUrl = `${repoApiUrl}/releases?per_page=100`;
 
   try {
     const [repoMeta, rawReleases] = await Promise.all([

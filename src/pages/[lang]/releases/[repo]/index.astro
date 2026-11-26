@@ -1,6 +1,6 @@
 ---
-import RepoReleasesView from '../../../views/RepoReleasesView.astro';
-import repositories from '../../../data/repositories.json';
+import RepoReleasesView from '../../../../views/RepoReleasesView.astro';
+import repositories from '../../../../data/repositories.json';
 
 export function getStaticPaths() {
   return repositories.map((r) => ({
@@ -11,4 +11,4 @@ export function getStaticPaths() {
 const { lang, repo } = Astro.params as { lang: 'ru' | 'en'; repo: string };
 ---
 
-<RepoReleasesView lang={lang} repoId={repo} />
+<RepoReleasesView lang={lang} repoId={repo} page={1} />

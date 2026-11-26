@@ -11,5 +11,8 @@
 - [Extensions Hub](https://saviorbill.com/hub/): Ready-to-use Lua extensions for Marzban, YooKassa, CryptoBot
 
 ## Optional
+- [Releases & Container Builds](https://saviorbill.com/releases/): GitHub releases, changelogs, and GHCR container tags for all ecosystem repositories
 - [Blog](https://saviorbill.com/blog/): Tutorials and architecture articles
+- [Blog RSS (RU)](https://saviorbill.com/rss.xml): RSS 2.0 feed for Russian blog articles
+- [Blog RSS (EN)](https://saviorbill.com/en/rss.xml): RSS 2.0 feed for English blog articles
 - [GitHub Repository](https://github.com/UNVISLATE/SaviorBill): Source code and issue tracker
