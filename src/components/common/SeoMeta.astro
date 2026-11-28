@@ -22,9 +22,11 @@ const {
 const siteUrl = 'https://saviorbill.com';
 const currentPath = Astro.url.pathname;
 const cleanPath = currentPath.replace(/^\/(ru|en)(\/|$)/, '/').replace(/\/+$/, '') || '/';
-const canonicalUrl = canonical || `${siteUrl}${currentPath}`;
-const ruUrl = `${siteUrl}${cleanPath === '/' ? '' : cleanPath}`;
-const enUrl = `${siteUrl}/en${cleanPath === '/' ? '' : cleanPath}`;
+const withTrailingSlash = cleanPath === '/' ? '/' : `${cleanPath}/`;
+const normalizedCurrent = currentPath.endsWith('/') ? currentPath : `${currentPath}/`;
+const canonicalUrl = canonical || `${siteUrl}${normalizedCurrent}`;
+const ruUrl = `${siteUrl}${withTrailingSlash}`;
+const enUrl = `${siteUrl}/en${withTrailingSlash}`;
 
 // Ensure image is always a full absolute HTTPS URL (MANDATORY for Telegram, Twitter, Discord)
 const ogImageUrl = image.startsWith('http') 

@@ -16,6 +16,13 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
+      filter: (page) => !page.startsWith('https://saviorbill.com/ru/'),
+      customPages: [
+        'https://saviorbill.com/llms.txt',
+        'https://saviorbill.com/.well-known/ai-catalog.json',
+        'https://saviorbill.com/rss.xml',
+        'https://saviorbill.com/en/rss.xml'
+      ],
       i18n: {
         defaultLocale: 'ru',
         locales: {
